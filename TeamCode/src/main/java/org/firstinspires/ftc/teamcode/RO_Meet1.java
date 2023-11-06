@@ -121,7 +121,7 @@ public class RO_Meet1 extends LinearOpMode {
 
             //Outtake 2 Servos
             //Top of D Pad - servoROT = "servo1" & servoLOT = "servo2"
-            if (gamepad1.dpad_up) {
+            if (gamepad2.dpad_up) {
                 if (servoROT.getPosition() > 0.7 && servoLOT.getPosition() > 0.7) {
                     servoROT.setPosition(0.1);
                     servoLOT.setPosition(0.1);
@@ -135,7 +135,7 @@ public class RO_Meet1 extends LinearOpMode {
 
             
             //Left of D Pad - servoLOT = "servo2"
-            if (gamepad1.dpad_left) {
+            if (gamepad2.dpad_left) {
                 if (servoLOT.getPosition() > 0.7) {
                     servoLOT.setPosition(0.1);
                     TimeUnit.MILLISECONDS.sleep(350);
@@ -147,7 +147,7 @@ public class RO_Meet1 extends LinearOpMode {
 
 
             //Right of D Pad - servoROT = "servo1"
-            if (gamepad1.dpad_right) {
+            if (gamepad2.dpad_right) {
                 if (servoROT.getPosition() > 0.7) {
                     servoROT.setPosition(0.1);
                     TimeUnit.MILLISECONDS.sleep(350);
