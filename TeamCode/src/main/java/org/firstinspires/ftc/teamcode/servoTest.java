@@ -10,21 +10,25 @@ import java.util.concurrent.TimeUnit;
 @TeleOp(group = "ZTest")
 public class servoTest extends LinearOpMode{
     public void runOpMode() throws InterruptedException {
-        Servo servo = hardwareMap.servo.get("servo1");
-        servo.setDirection(Servo.Direction.REVERSE);
+        Servo servoL = hardwareMap.servo.get("servo1");
+        servoL.setDirection(Servo.Direction.REVERSE);
+        Servo servoR = hardwareMap.servo.get("servo2");
+        servoR.setDirection(Servo.Direction.REVERSE);
         waitForStart();
         if (isStopRequested()) return;
         while (opModeIsActive()) {
             if (gamepad1.a) {
-                if (servo.getPosition()>0.7) {
-                    servo.setPosition(0.1);
+                if (servoL.getPosition()>0.7) {
+                    servoL.setPosition(0.1);
+                    servoR.setPosition(0.75);
                     TimeUnit.MILLISECONDS.sleep(350);
                 } else {
-                    servo.setPosition(0.75);
+                    servoL.setPosition(0.75);
+                    servoR.setPosition(0.1);
                     TimeUnit.MILLISECONDS.sleep(350);
                 }
             }
-            telemetry.addData("servo pos.", servo.getPosition());
+            telemetry.addData("servo pos.", servoL.getPosition());
             telemetry.update();
         }
     }

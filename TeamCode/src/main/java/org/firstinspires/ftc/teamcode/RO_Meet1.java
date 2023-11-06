@@ -24,9 +24,12 @@ public class RO_Meet1 extends LinearOpMode {
         DcMotor motorFrontLeft = hardwareMap.dcMotor.get("motor4");
         DcMotor motorBackRight = hardwareMap.dcMotor.get("motor1");
         DcMotor motorFrontRight = hardwareMap.dcMotor.get("motor2");
-        DcMotor motorLauncher = hardwareMap.dcMotor.get("motor5");
-        DcMotor motorPullUp = hardwareMap.dcMotor.get("motor6");
+        DcMotor motorSlideLeft = hardwareMap.dcMotor.get("motor5");
+        DcMotor motorSlideRight= hardwareMap.dcMotor.get("motor6");
         DcMotor motorIntake = hardwareMap.dcMotor.get("motor7");
+        //Center Odometery Wheel in Motor Port 0 (motor1 encoder)
+        //Right Odometery Wheel in Motor Port 1 (motor2 encoder)
+        //Left Odometery Wheel in Motor Port 2 (motor3 encoder)
 
 
         Servo servoROT = hardwareMap.servo.get("servo1");
@@ -159,21 +162,21 @@ public class RO_Meet1 extends LinearOpMode {
 
 
             //Flight Launcher - motorLauncher = "motor6"
-            if (gamepad1.a) {
-                motorLauncher.setPower(1);
-            } else {
-                motorLauncher.setPower(0);
-            }
+//            if (gamepad1.a) {
+//                motorLauncher.setPower(1);
+//            } else {
+//                motorLauncher.setPower(0);
+//            }
 
 
             //Pull Up - motorPullUp = "motor6"
-            if (gamepad1.x) {
-                motorPullUp.setPower(1);
-            } else if (gamepad1.y) {
-                motorPullUp.setPower(-1);
-            } else {
-                motorPullUp.setPower(0);
-            }
+//            if (gamepad1.x) {
+//                motorPullUp.setPower(1);
+//            } else if (gamepad1.y) {
+//                motorPullUp.setPower(-1);
+//            } else {
+//                motorPullUp.setPower(0);
+//            }
 
 
             //Intake - motorIntake = "motor7"
