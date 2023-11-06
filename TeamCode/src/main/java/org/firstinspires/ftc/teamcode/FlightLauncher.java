@@ -19,7 +19,9 @@ public class FlightLauncher extends LinearOpMode {
             if (gamepad1.a) {
                 launcherMotor.setPower(1);
             }
-            else {
+            else if (gamepad1.b) {
+                launcherMotor.setPower(-1);
+            } else {
                 launcherMotor.setPower(0);
             }
         }
