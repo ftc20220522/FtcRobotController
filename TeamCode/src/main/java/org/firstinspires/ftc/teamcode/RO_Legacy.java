@@ -46,8 +46,6 @@ public class RO_Legacy extends LinearOpMode {
 ////        Servo clawLeft = hardwareMap.servo.get("clawLeft");
 ////        Servo clawRight = hardwareMap.servo.get("clawRight");
 //        clawRight.setDirection(Servo.Direction.REVERSE);
-
-
 //        clawLeft.setPosition(0.1);
 //        clawRight.setPosition(0.9);
 
