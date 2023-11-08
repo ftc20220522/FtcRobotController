@@ -26,7 +26,7 @@ public class RO_Meet1 extends LinearOpMode {
         DcMotor motorFrontRight = hardwareMap.dcMotor.get("motor2");
         DcMotor motorSlideLeft = hardwareMap.dcMotor.get("motor5");
         DcMotor motorSlideRight= hardwareMap.dcMotor.get("motor6");
-        DcMotor motorIntake = hardwareMap.dcMotor.get("motor7");
+        DcMotor motorIntake = hardwareMap.dcMotor.get("motor8");
         //Center Odometery Wheel in Motor Port 0 (motor1 encoder)
         //Right Odometery Wheel in Motor Port 1 (motor2 encoder)
         //Left Odometery Wheel in Motor Port 2 (motor3 encoder)
@@ -180,6 +180,7 @@ public class RO_Meet1 extends LinearOpMode {
 
 
             //Intake - motorIntake = "motor7"
+            motorIntake.setDirection(DcMotor.Direction.REVERSE);
             if (gamepad1.left_trigger > 0) {
                 motorIntake.setPower(gamepad1.left_trigger);
             } else {
