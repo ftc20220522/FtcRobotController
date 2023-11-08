@@ -31,7 +31,6 @@ public class RO_Meet1 extends LinearOpMode {
         //Right Odometery Wheel in Motor Port 1 (motor2 encoder)
         //Left Odometery Wheel in Motor Port 2 (motor3 encoder)
 
-
         Servo servoROT = hardwareMap.servo.get("servo1");
         servoROT.setDirection(Servo.Direction.REVERSE);
         Servo servoLOT = hardwareMap.servo.get("servo2");
