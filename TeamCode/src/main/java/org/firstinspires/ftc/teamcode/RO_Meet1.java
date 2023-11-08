@@ -27,6 +27,12 @@ public class RO_Meet1 extends LinearOpMode {
         DcMotor motorSlideLeft = hardwareMap.dcMotor.get("motor5");
         DcMotor motorSlideRight= hardwareMap.dcMotor.get("motor6");
         DcMotor motorIntake = hardwareMap.dcMotor.get("motor8");
+        motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         //Center Odometery Wheel in Motor Port 0 (motor1 encoder)
         //Right Odometery Wheel in Motor Port 1 (motor2 encoder)
         //Left Odometery Wheel in Motor Port 2 (motor3 encoder)
