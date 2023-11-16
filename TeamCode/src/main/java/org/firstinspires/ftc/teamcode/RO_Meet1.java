@@ -1,8 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
+import static java.lang.Math.signum;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import java.util.concurrent.TimeUnit;
@@ -24,12 +28,14 @@ public class RO_Meet1 extends LinearOpMode {
         DcMotor motorFrontLeft = hardwareMap.dcMotor.get("motor4");
         DcMotor motorBackRight = hardwareMap.dcMotor.get("motor1");
         DcMotor motorFrontRight = hardwareMap.dcMotor.get("motor2");
-        DcMotor motorSlideLeft = hardwareMap.dcMotor.get("motor5");
-        DcMotor motorSlideRight= hardwareMap.dcMotor.get("motor6");
-        DcMotor motorIntake = hardwareMap.dcMotor.get("motor8");
+//        DcMotorEx motorSlideLeft = hardwareMap.get(DcMotorEx.class, "motor6");
+        DcMotorEx motorSlideRight= hardwareMap.get(DcMotorEx.class, "motor6");
+        DcMotor motorIntake = hardwareMap.dcMotor.get("motor5");
         motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorSlideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        motorSlideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -84,6 +90,9 @@ public class RO_Meet1 extends LinearOpMode {
         double y;
         double x;
         double rx;
+        int position = 0;
+        int prevposition = 0;
+        boolean a = false;
 
         while (opModeIsActive()) {
 
@@ -121,11 +130,56 @@ public class RO_Meet1 extends LinearOpMode {
             motorFrontRight.setPower(frontRightPower);
             motorBackRight.setPower(backRightPower);
 
-            telemetry.addData("odometer middle pos", motorBackRight.getCurrentPosition());
-            telemetry.addData("odometer right pos", motorFrontRight.getCurrentPosition());
-            telemetry.addData("odometer left pos", motorBackLeft.getCurrentPosition());
-            telemetry.update();
 
+//            telemetry.addData("odometer middle pos", motorBackRight.getCurrentPosition());
+//            telemetry.addData("odometer right pos", motorFrontRight.getCurrentPosition());
+//            telemetry.addData("odometer left pos", motorBackLeft.getCurrentPosition());
+//            telemetry.update();
+
+            //Viper Slide Preset
+            if(gamepad2.x){
+                position = 1200;
+//                goSlow = false;
+//
+            }
+            if(gamepad2.y) {
+                position =  2023;
+//                goSlow = false;
+//
+            }
+            if(gamepad2.b) {
+                position = 2850;
+//                goSlow = false;
+//
+            }
+            if(gamepad2.a) {
+//                goSlow = false;
+                position = 50;
+            }
+            if (gamepad2.left_stick_y != 0) {
+                motorSlideRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorSlideRight.setVelocity(signum(gamepad2.left_stick_y)*2000);
+                position=motorSlideRight.getCurrentPosition();
+                prevposition=motorSlideRight.getCurrentPosition();
+                a=true;
+            } else if(a){
+                motorSlideRight.setVelocity(0);
+                a=false;
+            }
+//
+            if (prevposition != position && gamepad2.left_stick_y == 0) {
+                motorSlideRight.setTargetPosition(position);
+//                LeftViperSlide.setTargetPosition(-position);
+                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                LeftViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                prevposition = position;
+                motorSlideRight.setVelocity(4000);
+//                LeftViperSlide.setVelocity(4000);
+            }
+            telemetry.addData("position", position);
+            telemetry.addData("positionReal", motorSlideRight.getCurrentPosition());
+            telemetry.addData("prevPos", prevposition);
+            telemetry.update();
 
             //Outtake 2 Servos
             //Top of D Pad - servoROT = "servo1" & servoLOT = "servo2"
