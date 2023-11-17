@@ -19,49 +19,35 @@ public class RO_Meet1 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-
-        // Declare our motors
-        // Make sure your ID's match your configuration
-
+        //Center Odometery Wheel in Motor Port 0 (motor1 encoder)
+        //Right Odometery Wheel in Motor Port 1 (motor2 encoder)
+        //Left Odometery Wheel in Motor Port 2 (motor3 encoder)
 
         DcMotor motorBackLeft = hardwareMap.dcMotor.get("motor3");
         DcMotor motorFrontLeft = hardwareMap.dcMotor.get("motor4");
         DcMotor motorBackRight = hardwareMap.dcMotor.get("motor1");
         DcMotor motorFrontRight = hardwareMap.dcMotor.get("motor2");
-//        DcMotorEx motorSlideLeft = hardwareMap.get(DcMotorEx.class, "motor6");
-        DcMotorEx motorSlideRight= hardwareMap.get(DcMotorEx.class, "motor6");
         DcMotor motorIntake = hardwareMap.dcMotor.get("motor5");
+
+        DcMotorEx motorSlideLeft = hardwareMap.get(DcMotorEx.class, "motor6");
+        motorSlideLeft.setDirection(DcMotorEx.Direction.REVERSE);
+        motorSlideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        DcMotorEx motorSlideRight= hardwareMap.get(DcMotorEx.class, "motor7");
+        motorSlideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorSlideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        motorSlideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //Center Odometery Wheel in Motor Port 0 (motor1 encoder)
-        //Right Odometery Wheel in Motor Port 1 (motor2 encoder)
-        //Left Odometery Wheel in Motor Port 2 (motor3 encoder)
 
+        Servo servoLOT = hardwareMap.servo.get("servo2");
         Servo servoROT = hardwareMap.servo.get("servo1");
         servoROT.setDirection(Servo.Direction.REVERSE);
-        Servo servoLOT = hardwareMap.servo.get("servo2");
-
-
-//        DcMotorEx RightViperSlide = hardwareMap.get(DcMotorEx.class, "vpRight");
-
-//        DcMotorEx LeftViperSlide = hardwareMap.get(DcMotorEx.class, "vpLeft");
-
-        motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-//
-//        RightViperSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//
-//
-//        RightViperSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Servo servoUpperOT =  hardwareMap.servo.get("servo3");
+        Servo servoLowerOT =  hardwareMap.servo.get("servo4");
+        Servo servoLauncher = hardwareMap.servo.get("servo5");
 
 
         /*
@@ -72,26 +58,15 @@ public class RO_Meet1 extends LinearOpMode {
         */
 
         waitForStart();
-
         if (isStopRequested()) return;
-//        long starttime = System.currentTimeMillis();
 
-
-//        boolean useIncrements = false;
-//        boolean useButtons = true;
-//        int savedPosition = 0;
-//        boolean goFast = false;
-//        boolean goSlow = false;
-//        boolean clawOpen = true;
-//        long prevInterval = starttime;
-//        int position = 0;
-//        int prevposition = 0;
-//        boolean clawfront = true;
         double y;
         double x;
         double rx;
-        int position = 0;
-        int prevposition = 0;
+        int rightPosition = 0;
+        int leftPosition = 0;
+        int rightPrevposition = 0;
+        int leftPrevposition = 0;
         boolean a = false;
 
         while (opModeIsActive()) {
@@ -138,50 +113,55 @@ public class RO_Meet1 extends LinearOpMode {
 
             //Viper Slide Preset
             if(gamepad2.x){
-                position = 1200;
-//                goSlow = false;
-//
+                rightPosition = 1200;
+                leftPosition = 1200;
             }
             if(gamepad2.y) {
-                position =  2023;
-//                goSlow = false;
-//
+                rightPosition =  2023;
+                leftPosition = 2023;
             }
             if(gamepad2.b) {
-                position = 2850;
-//                goSlow = false;
-//
+                rightPosition = 2850;
+                leftPosition = 2850;
             }
             if(gamepad2.a) {
-//                goSlow = false;
-                position = 50;
+                rightPosition = 50;
+                leftPosition = 50;
             }
             if (gamepad2.left_stick_y != 0) {
                 motorSlideRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorSlideLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 motorSlideRight.setVelocity(signum(gamepad2.left_stick_y)*2000);
-                position=motorSlideRight.getCurrentPosition();
-                prevposition=motorSlideRight.getCurrentPosition();
-                a=true;
-            } else if(a){
+                motorSlideLeft.setVelocity(signum(gamepad2.left_stick_y)*2000);
+                rightPosition = motorSlideRight.getCurrentPosition();
+                leftPosition = motorSlideLeft.getCurrentPosition();
+                rightPrevposition = motorSlideRight.getCurrentPosition();
+                leftPrevposition = motorSlideLeft.getCurrentPosition();
+                a = true;
+            } else if (a) {
                 motorSlideRight.setVelocity(0);
-                a=false;
+                motorSlideLeft.setVelocity(0);
+                a = false;
             }
 //
-            if (prevposition != position && gamepad2.left_stick_y == 0) {
-                motorSlideRight.setTargetPosition(position);
-//                LeftViperSlide.setTargetPosition(-position);
+            if (rightPrevposition != rightPosition && leftPrevposition != leftPosition && gamepad2.left_stick_y == 0) {
+                motorSlideRight.setTargetPosition(rightPosition);
+                motorSlideLeft.setTargetPosition(leftPosition);
                 motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                LeftViperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                prevposition = position;
+                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                rightPrevposition = rightPosition;
+                leftPrevposition = leftPosition;
                 motorSlideRight.setVelocity(4000);
-//                LeftViperSlide.setVelocity(4000);
+                motorSlideLeft.setVelocity(4000);
             }
-            telemetry.addData("position", position);
-            telemetry.addData("positionReal", motorSlideRight.getCurrentPosition());
-            telemetry.addData("prevPos", prevposition);
-            telemetry.update();
 
-            //Outtake 2 Servos
+            //Intake - motorIntake = "motor7"
+            if (gamepad2.left_trigger > 0) {
+                motorIntake.setPower(gamepad2.left_trigger);
+            } else {
+                motorIntake.setPower(0);
+            }
+
             //Top of D Pad - servoROT = "servo1" & servoLOT = "servo2"
             if (gamepad2.dpad_up) {
                 if (servoROT.getPosition() > 0.7 && servoLOT.getPosition() > 0.7) {
@@ -195,7 +175,6 @@ public class RO_Meet1 extends LinearOpMode {
                 }
             }
 
-            
             //Left of D Pad - servoLOT = "servo2"
             if (gamepad2.dpad_left) {
                 if (servoLOT.getPosition() > 0.7) {
@@ -206,7 +185,6 @@ public class RO_Meet1 extends LinearOpMode {
                     TimeUnit.MILLISECONDS.sleep(350);
                 }
             }
-
 
             //Right of D Pad - servoROT = "servo1"
             if (gamepad2.dpad_right) {
@@ -219,32 +197,11 @@ public class RO_Meet1 extends LinearOpMode {
                 }
             }
 
-
-            //Flight Launcher - motorLauncher = "motor6"
-//            if (gamepad1.a) {
-//                motorLauncher.setPower(1);
-//            } else {
-//                motorLauncher.setPower(0);
-//            }
-
-
-            //Pull Up - motorPullUp = "motor6"
-//            if (gamepad1.x) {
-//                motorPullUp.setPower(1);
-//            } else if (gamepad1.y) {
-//                motorPullUp.setPower(-1);
-//            } else {
-//                motorPullUp.setPower(0);
-//            }
-
-
-            //Intake - motorIntake = "motor7"
-            motorIntake.setDirection(DcMotor.Direction.REVERSE);
-            if (gamepad1.left_trigger > 0) {
-                motorIntake.setPower(gamepad1.left_trigger);
-            } else {
-                motorIntake.setPower(0);
+            //Flight Launcher - servoLauncher = "servo5"
+            if (gamepad1.a) {
+                servoLauncher.setPosition(1);
             }
+
         }
     }
 }
