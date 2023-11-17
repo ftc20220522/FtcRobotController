@@ -18,7 +18,6 @@ public class RO_Meet1 extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-
         //Center Odometery Wheel in Motor Port 0 (motor1 encoder)
         //Right Odometery Wheel in Motor Port 1 (motor2 encoder)
         //Left Odometery Wheel in Motor Port 2 (motor3 encoder)
@@ -112,22 +111,23 @@ public class RO_Meet1 extends LinearOpMode {
 //            telemetry.update();
 
             //Viper Slide Preset
-            if(gamepad2.x){
+            if (gamepad2.x) {
                 rightPosition = 1200;
                 leftPosition = 1200;
             }
-            if(gamepad2.y) {
+            if (gamepad2.y) {
                 rightPosition =  2023;
                 leftPosition = 2023;
             }
-            if(gamepad2.b) {
+            if (gamepad2.b) {
                 rightPosition = 2850;
                 leftPosition = 2850;
             }
-            if(gamepad2.a) {
+            if (gamepad2.a) {
                 rightPosition = 50;
                 leftPosition = 50;
             }
+
             if (gamepad2.left_stick_y != 0) {
                 motorSlideRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 motorSlideLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -143,7 +143,6 @@ public class RO_Meet1 extends LinearOpMode {
                 motorSlideLeft.setVelocity(0);
                 a = false;
             }
-//
             if (rightPrevposition != rightPosition && leftPrevposition != leftPosition && gamepad2.left_stick_y == 0) {
                 motorSlideRight.setTargetPosition(rightPosition);
                 motorSlideLeft.setTargetPosition(leftPosition);
@@ -154,6 +153,13 @@ public class RO_Meet1 extends LinearOpMode {
                 motorSlideRight.setVelocity(4000);
                 motorSlideLeft.setVelocity(4000);
             }
+            telemetry.addData("position", rightPosition);
+            telemetry.addData("positionReal", motorSlideRight.getCurrentPosition());
+            telemetry.addData("prevPos", rightPrevposition);
+            telemetry.addData("position", leftPosition);
+            telemetry.addData("positionReal", motorSlideLeft.getCurrentPosition());
+            telemetry.addData("prevPos", leftPrevposition);
+            telemetry.update();
 
             //Intake - motorIntake = "motor7"
             if (gamepad2.left_trigger > 0) {

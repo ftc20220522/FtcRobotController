@@ -3,26 +3,19 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(group = "FINALCODE")
 public class FlightLauncher extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        DcMotor launcherMotor = hardwareMap.dcMotor.get("motor1");
-        launcherMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
+        Servo servoLauncher = hardwareMap.servo.get("servo5");
         waitForStart();
-
         if (isStopRequested()) return;
 
         while (opModeIsActive()) {
             if (gamepad1.a) {
-                launcherMotor.setPower(1);
-            }
-            else if (gamepad1.b) {
-                launcherMotor.setPower(-1);
-            } else {
-                launcherMotor.setPower(0);
+                servoLauncher.setPosition(1);
             }
         }
     }
