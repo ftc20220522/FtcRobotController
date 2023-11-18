@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import java.util.concurrent.TimeUnit;
 
 @TeleOp(group = "ZTest")
-public class servoLimitTest extends LinearOpMode{
+public class servoTest extends LinearOpMode{
     public void runOpMode() throws InterruptedException {
         Servo servo = hardwareMap.servo.get("servo1");
         waitForStart();

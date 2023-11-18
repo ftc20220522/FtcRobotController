@@ -41,13 +41,11 @@ public class RO_Meet1 extends LinearOpMode {
         motorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        Servo servoLOT = hardwareMap.servo.get("servo2");
         Servo servoROT = hardwareMap.servo.get("servo1");
         servoROT.setDirection(Servo.Direction.REVERSE);
-        Servo servoUpperOT =  hardwareMap.servo.get("servo3");
-        Servo servoLowerOT =  hardwareMap.servo.get("servo4");
-        Servo servoLauncher = hardwareMap.servo.get("servo5");
-
+        Servo servoLOT = hardwareMap.servo.get("servo2");
+        Servo servoTurnerOT = hardwareMap.servo.get("servo3");
+        Servo servoLauncher = hardwareMap.servo.get("servo4");
 
         /*
          Reverse the right side motors
@@ -153,17 +151,10 @@ public class RO_Meet1 extends LinearOpMode {
                 motorSlideRight.setVelocity(4000);
 //                motorSlideLeft.setVelocity(4000);
             }
-            telemetry.addData("position", rightPosition);
-            telemetry.addData("positionReal", motorSlideRight.getCurrentPosition());
-            telemetry.addData("prevPos", rightPrevposition);
-            telemetry.addData("position", leftPosition);
-            telemetry.addData("positionReal", motorSlideLeft.getCurrentPosition());
-            telemetry.addData("prevPos", leftPrevposition);
-            telemetry.update();
 
             //Intake - motorIntake = "motor7"
             if (gamepad2.left_trigger > 0) {
-                motorIntake.setPower(gamepad2.left_trigger);
+                motorIntake.setPower(1);
             } else {
                 motorIntake.setPower(0);
             }
@@ -203,11 +194,25 @@ public class RO_Meet1 extends LinearOpMode {
                 }
             }
 
-            //Flight Launcher - servoLauncher = "servo5"
+            telemetry.addData("servo pos", servoLOT.getPosition());
+            telemetry.addData("servo pos", servoROT.getPosition());
+            telemetry.update();
+
+            //OT Turner Servo
+            if (gamepad2.left_bumper || gamepad2.right_bumper && motorSlideLeft.getCurrentPosition() > 100) {
+                if (servoTurnerOT.getPosition() < 0.2) {
+                    servoTurnerOT.setPosition(0.75);
+                    TimeUnit.MILLISECONDS.sleep(350);
+                } else {
+                    servoTurnerOT.setPosition(0.1);
+                    TimeUnit.MILLISECONDS.sleep(350);
+                }
+            }
+
+            //Flight Launcher
             if (gamepad1.a) {
                 servoLauncher.setPosition(1);
             }
-
         }
     }
 }
