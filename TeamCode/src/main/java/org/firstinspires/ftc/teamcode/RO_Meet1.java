@@ -28,9 +28,9 @@ public class RO_Meet1 extends LinearOpMode {
         DcMotor motorFrontRight = hardwareMap.dcMotor.get("motor2");
         DcMotor motorIntake = hardwareMap.dcMotor.get("motor5");
 
-        DcMotorEx motorSlideLeft = hardwareMap.get(DcMotorEx.class, "motor6");
+        DcMotorEx motorSlideLeft = hardwareMap.get(DcMotorEx.class, "motor7");
         motorSlideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        DcMotorEx motorSlideRight= hardwareMap.get(DcMotorEx.class, "motor7");
+        DcMotorEx motorSlideRight= hardwareMap.get(DcMotorEx.class, "motor6");
         motorSlideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
