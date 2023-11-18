@@ -130,13 +130,13 @@ public class RO_Meet1 extends LinearOpMode {
 
             if (gamepad2.left_stick_y != 0) {
                 motorSlideRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                motorSlideLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                motorSlideLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 motorSlideRight.setVelocity(signum(gamepad2.left_stick_y)*2000);
-                motorSlideLeft.setVelocity(signum(gamepad2.left_stick_y)*2000);
+//                motorSlideLeft.setVelocity(signum(gamepad2.left_stick_y)*2000);
                 rightPosition = motorSlideRight.getCurrentPosition();
-                leftPosition = motorSlideLeft.getCurrentPosition();
+//                leftPosition = motorSlideLeft.getCurrentPosition();
                 rightPrevposition = motorSlideRight.getCurrentPosition();
-                leftPrevposition = motorSlideLeft.getCurrentPosition();
+//                leftPrevposition = motorSlideLeft.getCurrentPosition();
                 a = true;
             } else if (a) {
                 motorSlideRight.setVelocity(0);
@@ -145,13 +145,13 @@ public class RO_Meet1 extends LinearOpMode {
             }
             if (rightPrevposition != rightPosition && leftPrevposition != leftPosition && gamepad2.left_stick_y == 0) {
                 motorSlideRight.setTargetPosition(rightPosition);
-                motorSlideLeft.setTargetPosition(leftPosition);
+//                motorSlideLeft.setTargetPosition(leftPosition);
                 motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 rightPrevposition = rightPosition;
-                leftPrevposition = leftPosition;
+//                leftPrevposition = leftPosition;
                 motorSlideRight.setVelocity(4000);
-                motorSlideLeft.setVelocity(4000);
+//                motorSlideLeft.setVelocity(4000);
             }
             telemetry.addData("position", rightPosition);
             telemetry.addData("positionReal", motorSlideRight.getCurrentPosition());
