@@ -151,6 +151,13 @@ public class RO_Meet1 extends LinearOpMode {
                 motorSlideRight.setVelocity(4000);
 //                motorSlideLeft.setVelocity(4000);
             }
+            telemetry.addData("position", rightPosition);
+            telemetry.addData("positionReal", motorSlideRight.getCurrentPosition());
+            telemetry.addData("prevPos", rightPrevposition);
+            telemetry.addData("position", leftPosition);
+            telemetry.addData("positionReal", motorSlideLeft.getCurrentPosition());
+            telemetry.addData("prevPos", leftPrevposition);
+            telemetry.update();
 
             //Intake - motorIntake = "motor7"
             if (gamepad2.left_trigger > 0) {
@@ -194,9 +201,9 @@ public class RO_Meet1 extends LinearOpMode {
                 }
             }
 
-            telemetry.addData("servo pos", servoLOT.getPosition());
-            telemetry.addData("servo pos", servoROT.getPosition());
-            telemetry.update();
+//            telemetry.addData("servo pos", servoLOT.getPosition());
+//            telemetry.addData("servo pos", servoROT.getPosition());
+//            telemetry.update();
 
             //OT Turner Servo
             if (gamepad2.left_bumper || gamepad2.right_bumper && motorSlideLeft.getCurrentPosition() > 100) {
