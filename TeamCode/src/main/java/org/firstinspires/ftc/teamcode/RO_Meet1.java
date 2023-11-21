@@ -28,9 +28,10 @@ public class RO_Meet1 extends LinearOpMode {
         DcMotor motorFrontRight = hardwareMap.dcMotor.get("motor2");
         DcMotor motorIntake = hardwareMap.dcMotor.get("motor5");
 
-        DcMotorEx motorSlideLeft = hardwareMap.get(DcMotorEx.class, "motor7");
+        DcMotorEx motorSlideLeft = hardwareMap.get(DcMotorEx.class, "motor6");
         motorSlideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        DcMotorEx motorSlideRight= hardwareMap.get(DcMotorEx.class, "motor6");
+        motorSlideLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        DcMotorEx motorSlideRight= hardwareMap.get(DcMotorEx.class, "motor7");
         motorSlideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -46,6 +47,9 @@ public class RO_Meet1 extends LinearOpMode {
         Servo servoTurnerOT = hardwareMap.servo.get("servo3");
         Servo servoLauncher = hardwareMap.servo.get("servo4");
 
+//        motorSlideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//        motorSlideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
         /*
          Reverse the right side motors
          Reverse left motors if you are using NeveRests
@@ -56,13 +60,14 @@ public class RO_Meet1 extends LinearOpMode {
         waitForStart();
         if (isStopRequested()) return;
 
+        motorSlideLeft.setTargetPosition(0);
+        motorSlideRight.setTargetPosition(0);
+
         double y;
         double x;
         double rx;
-        int rightPosition = 0;
-        int leftPosition = 0;
-        int rightPrevposition = 0;
-        int leftPrevposition = 0;
+        int position = 0;
+        int prevposition = 0;
         boolean a = false;
 
         while (opModeIsActive()) {
@@ -109,53 +114,47 @@ public class RO_Meet1 extends LinearOpMode {
 
             //Viper Slide Preset
             if (gamepad2.x) {
-                rightPosition = 1200;
-                leftPosition = 1200;
+                position = 300;
             }
             if (gamepad2.y) {
-                rightPosition =  2023;
-                leftPosition = 2023;
+                position = 500;
             }
             if (gamepad2.b) {
-                rightPosition = 2850;
-                leftPosition = 2850;
+                position = 800;
             }
             if (gamepad2.a) {
-                rightPosition = 50;
-                leftPosition = 50;
+                position = 50;
             }
             if (gamepad2.left_stick_y != 0) {
                 motorSlideRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 motorSlideLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                motorSlideRight.setVelocity(signum(gamepad2.left_stick_y)*2000);
+//                motorSlideRight.setVelocity(-signum(gamepad2.left_stick_y)*2000);
                 motorSlideLeft.setVelocity(-signum(gamepad2.left_stick_y)*2000);
-                rightPosition = motorSlideRight.getCurrentPosition();
-                leftPosition = motorSlideLeft.getCurrentPosition();
-                rightPrevposition = motorSlideRight.getCurrentPosition();
-                leftPrevposition = motorSlideLeft.getCurrentPosition();
+                position = motorSlideLeft.getCurrentPosition();
+                prevposition = position;
                 a = true;
             } else if (a) {
                 motorSlideRight.setVelocity(0);
                 motorSlideLeft.setVelocity(0);
+                position = motorSlideLeft.getCurrentPosition();
+                prevposition = position;
                 a = false;
             }
-            if (rightPrevposition != rightPosition && leftPrevposition != leftPosition && gamepad2.left_stick_y == 0) {
-                motorSlideRight.setTargetPosition(rightPosition);
-                motorSlideLeft.setTargetPosition(-leftPosition);
-                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            if (prevposition != position && gamepad2.left_stick_y == 0) {
+//                motorSlideRight.setTargetPosition(position);
+                motorSlideLeft.setTargetPosition(position);
+//                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                rightPrevposition = rightPosition;
-                leftPrevposition = leftPosition;
-                motorSlideRight.setVelocity(4000);
-                motorSlideLeft.setVelocity(4000);
+//                motorSlideRight.setVelocity(400);
+                motorSlideLeft.setVelocity(400);
+                prevposition=position;
+
             }
 
-            telemetry.addData("position", rightPosition);
-            telemetry.addData("positionReal", motorSlideRight.getCurrentPosition());
-            telemetry.addData("prevPos", rightPrevposition);
-            telemetry.addData("position", leftPosition);
-            telemetry.addData("positionReal", motorSlideLeft.getCurrentPosition());
-            telemetry.addData("prevPos", leftPrevposition);
+            telemetry.addData("position", position);
+            telemetry.addData("right", motorSlideRight.getCurrentPosition());
+            telemetry.addData("positionReal", motorSlideRight.getTargetPosition());
+            telemetry.addData("lefd", motorSlideLeft.getCurrentPosition());
             telemetry.update();
 
             //Intake - motorIntake = "motor7"
