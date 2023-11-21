@@ -22,10 +22,11 @@ public class RO_Meet1 extends LinearOpMode {
         //Right Odometery Wheel in Motor Port 1 (motor2 encoder)
         //Left Odometery Wheel in Motor Port 2 (motor3 encoder)
 
-        DcMotor motorBackLeft = hardwareMap.dcMotor.get("motor3");
-        DcMotor motorFrontLeft = hardwareMap.dcMotor.get("motor4");
         DcMotor motorBackRight = hardwareMap.dcMotor.get("motor1");
         DcMotor motorFrontRight = hardwareMap.dcMotor.get("motor2");
+        DcMotor motorBackLeft = hardwareMap.dcMotor.get("motor3");
+        DcMotor motorFrontLeft = hardwareMap.dcMotor.get("motor4");
+
         DcMotor motorIntake = hardwareMap.dcMotor.get("motor5");
 
         DcMotorEx motorSlideLeft = hardwareMap.get(DcMotorEx.class, "motor6");
@@ -141,14 +142,13 @@ public class RO_Meet1 extends LinearOpMode {
                 a = false;
             }
             if (prevposition != position && gamepad2.left_stick_y == 0) {
-//                motorSlideRight.setTargetPosition(position);
+                //motorSlideRight.setTargetPosition(position);
                 motorSlideLeft.setTargetPosition(position);
-//                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                //motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                motorSlideRight.setVelocity(400);
-                motorSlideLeft.setVelocity(400);
+                //motorSlideRight.setVelocity(2000);
+                motorSlideLeft.setVelocity(2000);
                 prevposition=position;
-
             }
 
             telemetry.addData("position", position);
