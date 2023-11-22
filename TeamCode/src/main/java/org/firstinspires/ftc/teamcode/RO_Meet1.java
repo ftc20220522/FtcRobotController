@@ -115,13 +115,13 @@ public class RO_Meet1 extends LinearOpMode {
 
             //Viper Slide Preset
             if (gamepad2.x) {
-                position = 300;
+                position = 1000;
             }
             if (gamepad2.y) {
-                position = 500;
+                position = 1750;
             }
             if (gamepad2.b) {
-                position = 800;
+                position = 2499;
             }
             if (gamepad2.a) {
                 position = 50;
@@ -129,7 +129,7 @@ public class RO_Meet1 extends LinearOpMode {
             if (gamepad2.left_stick_y != 0) {
                 motorSlideRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 motorSlideLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//                motorSlideRight.setVelocity(-signum(gamepad2.left_stick_y)*2000);
+                motorSlideRight.setVelocity(-signum(gamepad2.left_stick_y)*1900);
                 motorSlideLeft.setVelocity(-signum(gamepad2.left_stick_y)*2000);
                 position = motorSlideLeft.getCurrentPosition();
                 prevposition = position;
@@ -137,17 +137,20 @@ public class RO_Meet1 extends LinearOpMode {
             } else if (a) {
                 motorSlideRight.setVelocity(0);
                 motorSlideLeft.setVelocity(0);
+                motorSlideLeft.setTargetPosition(motorSlideRight.getCurrentPosition());
+                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideLeft.setVelocity(2050);
                 position = motorSlideLeft.getCurrentPosition();
                 prevposition = position;
                 a = false;
             }
             if (prevposition != position && gamepad2.left_stick_y == 0) {
-                //motorSlideRight.setTargetPosition(position);
+                motorSlideRight.setTargetPosition(position);
                 motorSlideLeft.setTargetPosition(position);
-                //motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                //motorSlideRight.setVelocity(2000);
-                motorSlideLeft.setVelocity(2000);
+                motorSlideRight.setVelocity(2000);
+                motorSlideLeft.setVelocity(2050);
                 prevposition=position;
             }
 
