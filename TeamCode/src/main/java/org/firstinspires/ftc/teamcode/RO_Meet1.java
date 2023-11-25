@@ -121,7 +121,7 @@ public class RO_Meet1 extends LinearOpMode {
                 position = 1750;
             }
             if (gamepad2.b) {
-                position = 2499;
+                position = 2500;
             }
             if (gamepad2.a) {
                 position = 50;
@@ -137,9 +137,9 @@ public class RO_Meet1 extends LinearOpMode {
             } else if (a) {
                 motorSlideRight.setVelocity(0);
                 motorSlideLeft.setVelocity(0);
-                motorSlideLeft.setTargetPosition(motorSlideRight.getCurrentPosition());
+                motorSlideRight.setTargetPosition(motorSlideLeft.getCurrentPosition());
                 motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideLeft.setVelocity(2050);
+                motorSlideRight.setVelocity(1000);
                 position = motorSlideLeft.getCurrentPosition();
                 prevposition = position;
                 a = false;
@@ -149,8 +149,8 @@ public class RO_Meet1 extends LinearOpMode {
                 motorSlideLeft.setTargetPosition(position);
                 motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideRight.setVelocity(2000);
-                motorSlideLeft.setVelocity(2050);
+                motorSlideRight.setVelocity(4000);
+                motorSlideLeft.setVelocity(4080);
                 prevposition=position;
             }
 
