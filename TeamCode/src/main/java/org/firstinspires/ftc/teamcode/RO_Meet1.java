@@ -26,13 +26,12 @@ public class RO_Meet1 extends LinearOpMode {
         DcMotor motorFrontRight = hardwareMap.dcMotor.get("motor2");
         DcMotor motorBackLeft = hardwareMap.dcMotor.get("motor3");
         DcMotor motorFrontLeft = hardwareMap.dcMotor.get("motor4");
-
         DcMotor motorIntake = hardwareMap.dcMotor.get("motor5");
-
-        DcMotorEx motorSlideLeft = hardwareMap.get(DcMotorEx.class, "motor6");
+        DcMotor motorPullUp = hardwareMap.dcMotor.get("motor6");
+        DcMotorEx motorSlideLeft = hardwareMap.get(DcMotorEx.class, "motor7");
         motorSlideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorSlideLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        DcMotorEx motorSlideRight= hardwareMap.get(DcMotorEx.class, "motor7");
+        DcMotorEx motorSlideRight= hardwareMap.get(DcMotorEx.class, "motor8");
         motorSlideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -153,20 +152,13 @@ public class RO_Meet1 extends LinearOpMode {
                 motorSlideLeft.setVelocity(4080);
                 prevposition=position;
             }
-
             telemetry.addData("position", position);
             telemetry.addData("right", motorSlideRight.getCurrentPosition());
             telemetry.addData("positionReal", motorSlideRight.getTargetPosition());
             telemetry.addData("lefd", motorSlideLeft.getCurrentPosition());
             telemetry.update();
 
-            //Intake - motorIntake = "motor7"
-            if (gamepad2.left_trigger > 0) {
-                motorIntake.setPower(1);
-            } else {
-                motorIntake.setPower(0);
-            }
-
+/*
             //Top of D Pad - servoROT = "servo1" & servoLOT = "servo2"
             if (gamepad2.dpad_up) {
                 if (servoROT.getPosition() > 0.7 && servoLOT.getPosition() > 0.7) {
@@ -202,12 +194,8 @@ public class RO_Meet1 extends LinearOpMode {
                 }
             }
 
-//            telemetry.addData("servo pos", servoLOT.getPosition());
-//            telemetry.addData("servo pos", servoROT.getPosition());
-//            telemetry.update();
-
             //OT Turner Servo
-            if (gamepad2.left_bumper || gamepad2.right_bumper && motorSlideLeft.getCurrentPosition() > 100) {
+            if (gamepad2.dpad_down) {
                 if (servoTurnerOT.getPosition() < 0.2) {
                     servoTurnerOT.setPosition(0.75);
                     TimeUnit.MILLISECONDS.sleep(350);
@@ -216,10 +204,23 @@ public class RO_Meet1 extends LinearOpMode {
                     TimeUnit.MILLISECONDS.sleep(350);
                 }
             }
+*/
+            //Intake
+            if (gamepad1.left_bumper) {
+                motorIntake.setPower(1);
+            } else if (gamepad1.right_bumper){
+                motorIntake.setPower(-1);
+            } else {
+                motorIntake.setPower(0);
+            }
 
-            //Flight Launcher
-            if (gamepad1.a) {
+            //Flight Launcher & Pull Up
+            if (gamepad2.left_bumper) {
                 servoLauncher.setPosition(1);
+                motorPullUp.setPower(1);
+            } else if (gamepad2.right_bumper) {
+                servoLauncher.setPosition(0);
+                motorPullUp.setPower(-1);
             }
         }
     }
