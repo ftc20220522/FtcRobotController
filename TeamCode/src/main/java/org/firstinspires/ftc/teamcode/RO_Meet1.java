@@ -27,11 +27,10 @@ public class RO_Meet1 extends LinearOpMode {
         DcMotor motorBackLeft = hardwareMap.dcMotor.get("motor3");
         DcMotor motorFrontLeft = hardwareMap.dcMotor.get("motor4");
         DcMotor motorIntake = hardwareMap.dcMotor.get("motor5");
-        DcMotor motorPullUp = hardwareMap.dcMotor.get("motor6");
-        DcMotorEx motorSlideLeft = hardwareMap.get(DcMotorEx.class, "motor7");
+        DcMotorEx motorSlideLeft = hardwareMap.get(DcMotorEx.class, "motor6");
         motorSlideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorSlideLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        DcMotorEx motorSlideRight= hardwareMap.get(DcMotorEx.class, "motor8");
+        DcMotorEx motorSlideRight= hardwareMap.get(DcMotorEx.class, "motor7");
         motorSlideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -69,6 +68,7 @@ public class RO_Meet1 extends LinearOpMode {
         int position = 0;
         int prevposition = 0;
         boolean a = false;
+        boolean pull = false;
 
         while (opModeIsActive()) {
 
@@ -215,12 +215,19 @@ public class RO_Meet1 extends LinearOpMode {
             }
 
             //Flight Launcher & Pull Up
-            if (gamepad2.left_bumper) {
+            if (gamepad2.start) {
                 servoLauncher.setPosition(1);
-                motorPullUp.setPower(1);
-            } else if (gamepad2.right_bumper) {
-                servoLauncher.setPosition(0);
-                motorPullUp.setPower(-1);
+            }
+
+            if(gamepad1.start && !pull) {
+                position=2500;
+                pull=true;
+            } else if (gamepad1.start && pull) {
+                position=50;
+                motorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                motorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                motorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             }
         }
     }
