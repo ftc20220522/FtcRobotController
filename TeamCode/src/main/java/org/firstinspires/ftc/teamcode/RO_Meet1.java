@@ -69,6 +69,7 @@ public class RO_Meet1 extends LinearOpMode {
         int prevposition = 0;
         boolean a = false;
         boolean pull = false;
+        int speed = 4000;
 
         while (opModeIsActive()) {
 
@@ -148,8 +149,8 @@ public class RO_Meet1 extends LinearOpMode {
                 motorSlideLeft.setTargetPosition(position);
                 motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideRight.setVelocity(4000);
-                motorSlideLeft.setVelocity(4080);
+                motorSlideRight.setVelocity(speed);
+                motorSlideLeft.setVelocity(speed);
                 prevposition=position;
             }
             telemetry.addData("position", position);
@@ -220,14 +221,18 @@ public class RO_Meet1 extends LinearOpMode {
             }
 
             if(gamepad1.start && !pull) {
-                position=2500;
+                position=2999;
+
+                TimeUnit.MILLISECONDS.sleep(350);
                 pull=true;
-            } else if (gamepad1.start && pull) {
+            } else if (gamepad1.start && pull){
+                speed = 800;
                 position=50;
                 motorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                 motorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                 motorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                 motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                TimeUnit.MILLISECONDS.sleep(500);
             }
         }
     }
