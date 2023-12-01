@@ -115,15 +115,19 @@ public class RO_Meet1 extends LinearOpMode {
 
             //Viper Slide Preset
             if (gamepad2.x) {
+                speed=4000;
                 position = 1000;
             }
             if (gamepad2.y) {
+                speed=4000;
                 position = 1750;
             }
             if (gamepad2.b) {
+                speed=4000;
                 position = 2500;
             }
             if (gamepad2.a) {
+                speed=4000;
                 position = 50;
             }
             if (gamepad2.left_stick_y != 0) {
