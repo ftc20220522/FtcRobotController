@@ -132,7 +132,7 @@ public class RO_Meet1 extends LinearOpMode {
                 speed=4000;
                 position = 50;
             }
-            
+
             if (gamepad2.left_stick_y != 0) {
                 motorSlideRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 motorSlideLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
