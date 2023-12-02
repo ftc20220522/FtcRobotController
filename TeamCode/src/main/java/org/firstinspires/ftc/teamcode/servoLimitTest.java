@@ -13,13 +13,19 @@ public class servoLimitTest extends LinearOpMode{
         waitForStart();
         if (isStopRequested()) return;
         while (opModeIsActive()) {
-            while (gamepad1.a) {
+            if (gamepad1.a) {
                 servo.setPosition(servo.getPosition()+0.05);
                 TimeUnit.MILLISECONDS.sleep(350);
             }
-            while (gamepad1.b) {
+            if (gamepad1.b) {
                 servo.setPosition(servo.getPosition()-0.05);
                 TimeUnit.MILLISECONDS.sleep(350);
+            }
+            if (gamepad1.x) {
+                servo.setDirection(Servo.Direction.REVERSE);
+            }
+            if (gamepad1.y) {
+                servo.setDirection(Servo.Direction.FORWARD);
             }
             telemetry.addData("servo pos.", servo.getPosition());
             telemetry.update();
