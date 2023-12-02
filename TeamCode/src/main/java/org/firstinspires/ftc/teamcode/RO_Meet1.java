@@ -208,18 +208,18 @@ public class RO_Meet1 extends LinearOpMode {
                     servoTOT.setPosition(0.0);
                     TimeUnit.MILLISECONDS.sleep(350);
                 } else {
-                    servoTOT.setPosition(0.93);
+                    servoTOT.setPosition(0.92);
                     TimeUnit.MILLISECONDS.sleep(350);
                 }
             }
 
             //Base Outtake Servo
-            if (gamepad2.left_bumper) {
-                if (servoTOT.getPosition() < 0.1) {
-                    servoTOT.setPosition(0.75);
+            if (gamepad2.right_bumper) {
+                if (servoBOT.getPosition() > 0.95) {
+                    servoBOT.setPosition(0.0);
                     TimeUnit.MILLISECONDS.sleep(350);
                 } else {
-                    servoTOT.setPosition(0.1);
+                    servoBOT.setPosition(1.0);
                     TimeUnit.MILLISECONDS.sleep(350);
                 }
             }
