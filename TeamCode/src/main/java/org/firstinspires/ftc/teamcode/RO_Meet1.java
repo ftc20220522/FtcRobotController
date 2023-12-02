@@ -202,13 +202,13 @@ public class RO_Meet1 extends LinearOpMode {
                 }
             }
 
-            //Turner Outtake Servo
+            //Top Outtake Servo
             if (gamepad2.left_bumper) {
-                if (servoTOT.getPosition() < 0.1) {
-                    servoTOT.setPosition(0.75);
+                if (servoTOT.getPosition() > 0.9) {
+                    servoTOT.setPosition(0.0);
                     TimeUnit.MILLISECONDS.sleep(350);
                 } else {
-                    servoTOT.setPosition(0.1);
+                    servoTOT.setPosition(0.93);
                     TimeUnit.MILLISECONDS.sleep(350);
                 }
             }

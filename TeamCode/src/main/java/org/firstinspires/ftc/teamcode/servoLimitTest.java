@@ -22,10 +22,12 @@ public class servoLimitTest extends LinearOpMode{
                 TimeUnit.MILLISECONDS.sleep(350);
             }
             if (gamepad1.x) {
-                servo.setDirection(Servo.Direction.REVERSE);
+                servo.setPosition(servo.getPosition()-0.01);
+                TimeUnit.MILLISECONDS.sleep(350);
             }
             if (gamepad1.y) {
-                servo.setDirection(Servo.Direction.FORWARD);
+                servo.setPosition(servo.getPosition()+0.01);
+                TimeUnit.MILLISECONDS.sleep(350);
             }
             telemetry.addData("servo pos.", servo.getPosition());
             telemetry.update();
