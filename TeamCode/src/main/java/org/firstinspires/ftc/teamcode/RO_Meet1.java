@@ -32,7 +32,7 @@ public class RO_Meet1 extends LinearOpMode {
         motorSlideLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         DcMotorEx motorSlideRight= hardwareMap.get(DcMotorEx.class, "motor7");
         motorSlideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+        DcMotor temp = hardwareMap.dcMotor.get("motor8");
         motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -164,6 +164,9 @@ public class RO_Meet1 extends LinearOpMode {
             telemetry.addData("right", motorSlideRight.getCurrentPosition());
             telemetry.addData("positionReal", motorSlideRight.getTargetPosition());
             telemetry.addData("lefd", motorSlideLeft.getCurrentPosition());
+            telemetry.addData("leftOdometry", temp.getCurrentPosition());
+            telemetry.addData("rightOdometry", temp.getCurrentPosition());
+            telemetry.addData("midOdometry", temp.getCurrentPosition());
             telemetry.update();
 
 
