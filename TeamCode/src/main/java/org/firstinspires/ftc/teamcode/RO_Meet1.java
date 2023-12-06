@@ -4,6 +4,7 @@ import static java.lang.Math.signum;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -46,6 +47,8 @@ public class RO_Meet1 extends LinearOpMode {
         Servo servoLOT = hardwareMap.servo.get("servo3");
         Servo servoTOT = hardwareMap.servo.get("servo4");
         Servo servoBOT = hardwareMap.servo.get("servo5");
+        CRServo servoConv1 = (CRServo) hardwareMap.crservo.get("servo6");
+        //CRServo servoConv2 = (CRservo) hardwareMap.crservo.get("servo7");
 
 
 //        motorSlideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -167,8 +170,6 @@ public class RO_Meet1 extends LinearOpMode {
             telemetry.addData("leftOdometry", temp.getCurrentPosition());
             telemetry.addData("rightOdometry", temp.getCurrentPosition());
             telemetry.addData("midOdometry", temp.getCurrentPosition());
-            telemetry.update();
-
 
             //Top of D Pad - servoROT = "servo1" & servoLOT = "servo2"
             if (gamepad2.dpad_up) {
@@ -205,35 +206,34 @@ public class RO_Meet1 extends LinearOpMode {
                 }
             }
 
-            //Top Outtake Servo
+            //Outtake Servos
             if (gamepad2.left_bumper) {
-                if (servoTOT.getPosition() > 0.9) {
-                    servoTOT.setPosition(0.0);
+                if (servoBOT.getPosition() < 0.05 && servoTOT.getPosition() < 0.3) {
+                    servoTOT.setPosition(1.0);
+                    servoBOT.setPosition(0.92);
                     TimeUnit.MILLISECONDS.sleep(350);
                 } else {
-                    servoTOT.setPosition(0.92);
+                    servoTOT.setPosition(0.25);
+                    servoBOT.setPosition(0.0);
                     TimeUnit.MILLISECONDS.sleep(350);
                 }
             }
 
-            //Base Outtake Servo
-            if (gamepad2.right_bumper) {
-                if (servoBOT.getPosition() > 0.95) {
-                    servoBOT.setPosition(0.0);
-                    TimeUnit.MILLISECONDS.sleep(350);
-                } else {
-                    servoBOT.setPosition(1.0);
-                    TimeUnit.MILLISECONDS.sleep(350);
-                }
-            }
+            telemetry.addData("servo bottom pos.", servoBOT.getPosition());
+            telemetry.addData("servo top pos.", servoTOT.getPosition());
+            telemetry.update();
 
             //Intake
             if (gamepad1.left_bumper) {
                 motorIntake.setPower(1);
+                servoConv1.setPower(1);
+                //servoConv2.setPower(1);
             } else if (gamepad1.right_bumper){
                 motorIntake.setPower(-1);
             } else {
                 motorIntake.setPower(0);
+                servoConv1.setPower(0);
+                //servoConv2.setPower(0);
             }
 
             //Flight Launcher
