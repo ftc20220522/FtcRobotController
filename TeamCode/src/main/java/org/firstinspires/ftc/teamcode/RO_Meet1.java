@@ -228,7 +228,7 @@ public class RO_Meet1 extends LinearOpMode {
                 motorIntake.setPower(1);
                 servoConv1.setPower(1);
                 //servoConv2.setPower(1);
-            } else if (gamepad1.right_bumper){
+            } else if (gamepad1.right_bumper) {
                 motorIntake.setPower(-1);
             } else {
                 motorIntake.setPower(0);

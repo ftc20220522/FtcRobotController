@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 public class servoLimitTest extends LinearOpMode{
     public void runOpMode() throws InterruptedException {
         Servo servo = hardwareMap.servo.get("servo1");
+        servo.setDirection(Servo.Direction.REVERSE);
         waitForStart();
         if (isStopRequested()) return;
         while (opModeIsActive()) {
