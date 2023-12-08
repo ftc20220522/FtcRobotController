@@ -210,6 +210,17 @@ public class RO_Meet1 extends LinearOpMode {
             if (gamepad2.left_bumper) {
                 if (servoTOT.getPosition()<0.7) {
                     //Down
+                    if (position != 0) {
+                        position = 0;
+                        motorSlideRight.setTargetPosition(0);
+                        motorSlideLeft.setTargetPosition(0);
+                        motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        motorSlideRight.setVelocity(1000);
+                        motorSlideLeft.setVelocity(1000);
+                        prevposition = position;
+                        TimeUnit.MILLISECONDS.sleep(1100);
+                    }
                     servoBOT.setPosition(1.0);
                     TimeUnit.MILLISECONDS.sleep(900);
                     servoTOT.setPosition(0.89);
@@ -217,15 +228,17 @@ public class RO_Meet1 extends LinearOpMode {
                 } else {
                     //UP
                     servoBOT.setPosition(0.92);
-                    position=300;
-                    motorSlideRight.setTargetPosition(550);
-                    motorSlideLeft.setTargetPosition(550);
-                    motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    motorSlideRight.setVelocity(600);
-                    motorSlideLeft.setVelocity(600);
-                    TimeUnit.MILLISECONDS.sleep(1100);
-                    prevposition=position;
+                    if (position < 500) {
+                        position = 550;
+                        motorSlideRight.setTargetPosition(550);
+                        motorSlideLeft.setTargetPosition(550);
+                        motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        motorSlideRight.setVelocity(1000);
+                        motorSlideLeft.setVelocity(1000);
+                        prevposition = position;
+                        TimeUnit.MILLISECONDS.sleep(1100);
+                    }
                     servoTOT.setPosition(0.685);
                     servoBOT.setPosition(0.45);
                     TimeUnit.MILLISECONDS.sleep(1100);
