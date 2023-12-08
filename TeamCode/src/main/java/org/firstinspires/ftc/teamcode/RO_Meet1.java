@@ -209,7 +209,7 @@ public class RO_Meet1 extends LinearOpMode {
                 }
             }
 
-            //Outtake Servos
+            //Outtake Servos - WORKING: DO NOT TOUCH
             if (gamepad2.left_bumper) {
                 if (servoTOT.getPosition()<0.7) {
                     //Down
