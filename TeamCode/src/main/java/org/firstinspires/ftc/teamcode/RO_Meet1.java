@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.configuration.annotations.ServoType;
 
 import java.util.concurrent.TimeUnit;
 
@@ -45,7 +46,7 @@ public class RO_Meet1 extends LinearOpMode {
         Servo servoROT = hardwareMap.servo.get("servo2");
         servoROT.setDirection(Servo.Direction.REVERSE);
         Servo servoLOT = hardwareMap.servo.get("servo3");
-        Servo servoTOT = hardwareMap.servo.get("servo4");
+        Servo servoTOT = (ServoType) hardwareMap.servo.get("servo4");
         Servo servoBOT = hardwareMap.servo.get("servo5");
         CRServo servoConv1 = (CRServo) hardwareMap.crservo.get("servo6");
         //CRServo servoConv2 = (CRservo) hardwareMap.crservo.get("servo7");
@@ -173,35 +174,35 @@ public class RO_Meet1 extends LinearOpMode {
 
             //Top of D Pad - servoROT = "servo1" & servoLOT = "servo2"
             if (gamepad2.dpad_up) {
-                if (servoROT.getPosition() > 0.7 && servoLOT.getPosition() > 0.7) {
-                    servoROT.setPosition(0.1);
-                    servoLOT.setPosition(0.1);
+                if (servoLOT.getPosition() < 0.2 && servoROT.getPosition() < 0.1) {
+                    servoLOT.setPosition(0.76);
+                    servoROT.setPosition(0.8);
                     TimeUnit.MILLISECONDS.sleep(350);
                 } else {
-                    servoROT.setPosition(0.75);
-                    servoLOT.setPosition(0.75);
+                    servoLOT.setPosition(0.18);
+                    servoROT.setPosition(0.08);
                     TimeUnit.MILLISECONDS.sleep(350);
                 }
             }
 
             //Left of D Pad - servoLOT = "servo2"
             if (gamepad2.dpad_left) {
-                if (servoLOT.getPosition() > 0.7) {
-                    servoLOT.setPosition(0.1);
+                if (servoLOT.getPosition() < 0.2) {
+                    servoLOT.setPosition(0.76);
                     TimeUnit.MILLISECONDS.sleep(350);
                 } else {
-                    servoLOT.setPosition(0.75);
+                    servoLOT.setPosition(0.18);
                     TimeUnit.MILLISECONDS.sleep(350);
                 }
             }
 
             //Right of D Pad - servoROT = "servo1"
             if (gamepad2.dpad_right) {
-                if (servoROT.getPosition() > 0.7) {
-                    servoROT.setPosition(0.1);
+                if (servoROT.getPosition() < 0.1) {
+                    servoROT.setPosition(0.8);
                     TimeUnit.MILLISECONDS.sleep(350);
                 } else {
-                    servoROT.setPosition(0.75);
+                    servoROT.setPosition(0.08);
                     TimeUnit.MILLISECONDS.sleep(350);
                 }
             }
@@ -219,6 +220,8 @@ public class RO_Meet1 extends LinearOpMode {
                 }
             }
 
+            telemetry.addData("servo r pos.", servoROT.getPosition());
+            telemetry.addData("servo l pos.", servoLOT.getPosition());
             telemetry.addData("servo bottom pos.", servoBOT.getPosition());
             telemetry.addData("servo top pos.", servoTOT.getPosition());
             telemetry.update();
