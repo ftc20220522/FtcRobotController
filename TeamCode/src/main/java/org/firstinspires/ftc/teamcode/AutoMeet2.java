@@ -29,6 +29,8 @@ public class AutoMeet2 extends LinearOpMode{
 
     String pos;
 
+    HuskyLens.Block[] blocks;
+
     @Override
     public void runOpMode() {
         huskyLens = hardwareMap.get(HuskyLens.class, "huskylens");
@@ -73,15 +75,19 @@ public class AutoMeet2 extends LinearOpMode{
          * found in the enumeration HuskyLens.Algorithm.
          */
         huskyLens.selectAlgorithm(HuskyLens.Algorithm.OBJECT_TRACKING);
+        while (blocks.length<1)
+            if (!rateLimit.hasExpired()) {
+            continue;
+            }
+        rateLimit.reset();
+
 
         telemetry.update();
-        HuskyLens.Block[] blocks = huskyLens.blocks();
+        blocks = huskyLens.blocks();
         telemetry.addData("Block count", blocks.length);
         for (int i = 0; i < blocks.length; i++) {
             telemetry.addData("Block", blocks[i].toString());
-            if (blocks[i].x <= 100) {
-                telemetry.addData("Pos:", "Left");
-            } else if (blocks[i].x > 100 && blocks[i].x <= 200) {
+            if (blocks[i].x > 100 && blocks[i].x <= 200) {
                 telemetry.addData("Pos:", "Middle");
             } else if (blocks[i].x >200) {
                 telemetry.addData("Pos:", "Right");
