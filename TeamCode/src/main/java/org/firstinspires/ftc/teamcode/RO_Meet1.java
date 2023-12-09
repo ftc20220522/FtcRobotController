@@ -209,7 +209,13 @@ public class RO_Meet1 extends LinearOpMode {
                     TimeUnit.MILLISECONDS.sleep(350);
                 }
             }
-
+            if (gamepad1.a) {
+                if (servoBOT.getPosition() < 0.95) {
+                    servoBOT.setPosition(1);
+                } else {
+                    servoBOT.setPosition(0.9);
+                }
+            }
             //Outtake Servos - WORKING: DO NOT TOUCH
             if (gamepad2.left_bumper) {
                 if (servoTOT.getPosition()<0.7) {
@@ -266,14 +272,14 @@ public class RO_Meet1 extends LinearOpMode {
                 motorIntake.setPower(-1);
                 servoInt.setPower(-1);
             } else {
+                motorIntake.setPower(0);
+                servoInt.setPower(0);
                 if (intrun) {
                     servoInt.setPower(1);
-                    TimeUnit.MILLISECONDS.sleep(5000);
+                    TimeUnit.MILLISECONDS.sleep(7000);
                     servoInt.setPower(0);
                     intrun=false;
                 }
-                motorIntake.setPower(0);
-                servoInt.setPower(0);
             }
 
             //Flight Launcher

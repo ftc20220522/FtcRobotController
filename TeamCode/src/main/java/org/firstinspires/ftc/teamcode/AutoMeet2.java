@@ -2,8 +2,10 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -24,17 +26,55 @@ public class AutoMeet2 extends LinearOpMode{
 
     private HuskyLens huskyLens;
 
-    boolean toggle = true;
+
     String mode = "TAG";
 
     String pos;
 
+    int location=1;
+
     HuskyLens.Block[] blocks;
 
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        Servo servoROT = hardwareMap.servo.get("servo2");
+        servoROT.setDirection(Servo.Direction.REVERSE);
+        Servo servoLOT = hardwareMap.servo.get("servo3");
+        Servo servoTOT = hardwareMap.servo.get("servo5");
+        servoTOT.setDirection(Servo.Direction.REVERSE);
+        Servo servoBOT = hardwareMap.servo.get("servo4");
+        DcMotorEx motorSlideLeft = hardwareMap.get(DcMotorEx.class, "motor6");
+        motorSlideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorSlideLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        DcMotorEx motorSlideRight= hardwareMap.get(DcMotorEx.class, "motor7");
+        motorSlideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         huskyLens = hardwareMap.get(HuskyLens.class, "huskylens");
-
+        Pose2d startPose = new Pose2d(0, 0, 0);
+        drive.setPoseEstimate(startPose);
+        TrajectorySequence toRight = drive.trajectorySequenceBuilder(startPose)
+                .forward(20)
+                .strafeRight(10)
+                .build();
+        TrajectorySequence toMid = drive.trajectorySequenceBuilder(startPose)
+//                .strafeLeft(4.5)
+                .forward(26)
+                .build();
+        TrajectorySequence toLeft = drive.trajectorySequenceBuilder(startPose)
+//                .strafeLeft(4.5)
+                .forward(26.5)
+                .turn(Math.toRadians(90))
+                .forward(3)
+                .build();
+        TrajectorySequence back = drive.trajectorySequenceBuilder(toMid.end())
+                .back(4)
+                .build();
+        TrajectorySequence back2 = drive.trajectorySequenceBuilder(toRight.end())
+                .back(4)
+                .build();
+        TrajectorySequence back3 = drive.trajectorySequenceBuilder(toLeft.end())
+                .back(4)
+                .build();
         /*
          * This sample rate limits the reads solely to allow a user time to observe
          * what is happening on the Driver Station telemetry.  Typical applications
@@ -74,24 +114,117 @@ public class AutoMeet2 extends LinearOpMode{
          * within the OpMode by calling selectAlgorithm() and passing it one of the values
          * found in the enumeration HuskyLens.Algorithm.
          */
-        huskyLens.selectAlgorithm(HuskyLens.Algorithm.OBJECT_TRACKING);
-        while (blocks.length<1)
+        waitForStart();
+        servoTOT.setPosition(0.89);
+        servoBOT.setPosition(0.9);
+        servoROT.setPosition(0.1);
+        long start = System.currentTimeMillis();
+        long end = start + 2000;
+        huskyLens.selectAlgorithm(HuskyLens.Algorithm.COLOR_RECOGNITION);
+        while (opModeIsActive() && System.currentTimeMillis() < end) {
             if (!rateLimit.hasExpired()) {
-            continue;
+                continue;
             }
-        rateLimit.reset();
+            rateLimit.reset();
 
-
-        telemetry.update();
-        blocks = huskyLens.blocks();
-        telemetry.addData("Block count", blocks.length);
-        for (int i = 0; i < blocks.length; i++) {
-            telemetry.addData("Block", blocks[i].toString());
-            if (blocks[i].x > 100 && blocks[i].x <= 200) {
-                telemetry.addData("Pos:", "Middle");
-            } else if (blocks[i].x >200) {
-                telemetry.addData("Pos:", "Right");
+            telemetry.update();
+            blocks = huskyLens.blocks();
+            telemetry.addData("Block count", blocks.length);
+            if (blocks.length>0) {
+                telemetry.addData("Block", blocks[0].toString());
+                if (blocks[0].x <= 100) {
+                    telemetry.addData("Pos:", "Left");
+                    telemetry.update();
+                    location=2;
+                } else if (blocks[0].x > 100 && blocks[0].x <= 200) {
+                    telemetry.addData("Pos:", "Middle");
+                    telemetry.update();
+                    location=3;
+                } else if (blocks[0].x > 200) {
+                    telemetry.addData("Pos:", "Right");
+                    telemetry.update();
+                }
+                break;
             }
+        }
+        if (location == 2) {
+            drive.followTrajectorySequence(toMid);
+            motorSlideRight.setTargetPosition(420);
+            motorSlideLeft.setTargetPosition(420);
+            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideRight.setVelocity(3400);
+            motorSlideLeft.setVelocity(3400);
+            sleep(1000);
+            servoTOT.setPosition(0.876);
+            servoBOT.setPosition(0.82);
+            sleep(1000);
+            servoROT.setPosition(0.8);
+            sleep(500);
+            drive.followTrajectorySequence(back);
+            servoTOT.setPosition(0.89);
+            servoBOT.setPosition(0.9);
+            servoROT.setPosition(0.1);
+            sleep(500);
+            motorSlideRight.setTargetPosition(0);
+            motorSlideLeft.setTargetPosition(0);
+            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideRight.setVelocity(3400);
+            motorSlideLeft.setVelocity(3400);
+            sleep(2500);
+        } else if (location==3){
+            drive.followTrajectorySequence(toRight);
+            motorSlideRight.setTargetPosition(420);
+            motorSlideLeft.setTargetPosition(420);
+            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideRight.setVelocity(3400);
+            motorSlideLeft.setVelocity(3400);
+            sleep(1000);
+            servoTOT.setPosition(0.876);
+            servoBOT.setPosition(0.82);
+            sleep(1000);
+            servoROT.setPosition(0.8);
+            sleep(500);
+            drive.followTrajectorySequence(back2);
+            servoTOT.setPosition(0.89);
+            servoBOT.setPosition(0.9);
+            servoROT.setPosition(0.1);
+            sleep(500);
+            motorSlideRight.setTargetPosition(0);
+            motorSlideLeft.setTargetPosition(0);
+            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideRight.setVelocity(3400);
+            motorSlideLeft.setVelocity(3400);
+            sleep(2500);
+        } else if (location == 1) {
+            drive.followTrajectorySequence(toLeft);
+            motorSlideRight.setTargetPosition(420);
+            motorSlideLeft.setTargetPosition(420);
+            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideRight.setVelocity(3400);
+            motorSlideLeft.setVelocity(3400);
+            sleep(1000);
+            servoTOT.setPosition(0.876);
+            servoBOT.setPosition(0.82);
+            sleep(1000);
+            servoROT.setPosition(0.8);
+            sleep(500);
+            drive.followTrajectorySequence(back3);
+            servoTOT.setPosition(0.89);
+            servoBOT.setPosition(0.9);
+            servoROT.setPosition(0.1);
+            sleep(500);
+            motorSlideRight.setTargetPosition(0);
+            motorSlideLeft.setTargetPosition(0);
+            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideRight.setVelocity(3400);
+            motorSlideLeft.setVelocity(3400);
+            sleep(2500);
         }
     }
 
