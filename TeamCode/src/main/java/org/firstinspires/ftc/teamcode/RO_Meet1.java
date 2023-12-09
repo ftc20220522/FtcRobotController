@@ -79,6 +79,9 @@ public class RO_Meet1 extends LinearOpMode {
         boolean pull = false;
         boolean intrun = false;
         int speed = 4000;
+        long start;
+        long end = 0;
+        boolean settime = false;
 
         while (opModeIsActive()) {
 
@@ -268,18 +271,26 @@ public class RO_Meet1 extends LinearOpMode {
                 motorIntake.setPower(1);
                 servoInt.setPower(1);
                 intrun=true;
+                settime=true;
             } else if (gamepad1.right_bumper) {
                 motorIntake.setPower(-1);
                 servoInt.setPower(-1);
-            } else {
+            } else if (intrun) {
                 motorIntake.setPower(0);
-                servoInt.setPower(0);
-                if (intrun) {
+                if (settime) {
+                    start = System.currentTimeMillis();
+                    end = start + 7000;
+                    settime = false;
+                }
+                if (System.currentTimeMillis()<end) {
                     servoInt.setPower(1);
                     TimeUnit.MILLISECONDS.sleep(7000);
                     servoInt.setPower(0);
+                } else {
                     intrun=false;
                 }
+            } else {
+                servoInt.setPower(0);
             }
 
             //Flight Launcher
