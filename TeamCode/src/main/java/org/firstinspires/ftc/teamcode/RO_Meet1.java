@@ -40,13 +40,14 @@ public class RO_Meet1 extends LinearOpMode {
         motorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        Servo servoLauncher = hardwareMap.servo.get("servo1");
+        Servo servoLauncher = hardwareMap.servo.get("servo7");
         Servo servoROT = hardwareMap.servo.get("servo2");
         servoROT.setDirection(Servo.Direction.REVERSE);
         Servo servoLOT = hardwareMap.servo.get("servo3");
         Servo servoTOT = hardwareMap.servo.get("servo5");
         servoTOT.setDirection(Servo.Direction.REVERSE);
         Servo servoBOT = hardwareMap.servo.get("servo4");
+        CRServo servoInt = hardwareMap.crservo.get("servo6");
 
 
 //        motorSlideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -58,6 +59,8 @@ public class RO_Meet1 extends LinearOpMode {
          motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
          motorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
         */
+
+        servoLauncher.setPosition(0.67);
 
         waitForStart();
         if (isStopRequested()) return;
@@ -74,6 +77,7 @@ public class RO_Meet1 extends LinearOpMode {
         int prevposition = 0;
         boolean a = false;
         boolean pull = false;
+        boolean intrun = false;
         int speed = 4000;
 
         while (opModeIsActive()) {
@@ -129,7 +133,7 @@ public class RO_Meet1 extends LinearOpMode {
             }
             if (gamepad2.b) {
                 speed=4000;
-                position = 2500;
+                position = 2250;
             }
             if (gamepad2.a) {
                 speed=4000;
@@ -197,11 +201,11 @@ public class RO_Meet1 extends LinearOpMode {
 
             //Right of D Pad - servoROT = "servo1"
             if (gamepad2.dpad_right) {
-                if (servoROT.getPosition() < 0.1) {
-                    servoROT.setPosition(0.8);
+                if (servoROT.getPosition() < 0.2) {
+                    servoROT.setPosition(0.67);
                     TimeUnit.MILLISECONDS.sleep(350);
                 } else {
-                    servoROT.setPosition(0.08);
+                    servoROT.setPosition(0.1223);
                     TimeUnit.MILLISECONDS.sleep(350);
                 }
             }
@@ -216,8 +220,8 @@ public class RO_Meet1 extends LinearOpMode {
                         motorSlideLeft.setTargetPosition(0);
                         motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                         motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        motorSlideRight.setVelocity(1000);
-                        motorSlideLeft.setVelocity(1000);
+                        motorSlideRight.setVelocity(4000);
+                        motorSlideLeft.setVelocity(4000);
                         prevposition = position;
                         TimeUnit.MILLISECONDS.sleep(1100);
                     }
@@ -256,31 +260,45 @@ public class RO_Meet1 extends LinearOpMode {
             //Intake
             if (gamepad1.left_bumper) {
                 motorIntake.setPower(1);
+                servoInt.setPower(1);
+                intrun=true;
             } else if (gamepad1.right_bumper) {
                 motorIntake.setPower(-1);
+                servoInt.setPower(-1);
             } else {
+                if (intrun) {
+                    servoInt.setPower(1);
+                    TimeUnit.MILLISECONDS.sleep(5000);
+                    servoInt.setPower(0);
+                    intrun=false;
+                }
                 motorIntake.setPower(0);
+                servoInt.setPower(0);
             }
 
             //Flight Launcher
-            if (gamepad2.start) {
-                servoLauncher.setPosition(1);
+            if (gamepad2.back) {
+                servoLauncher.setPosition(0.92);
                 TimeUnit.MILLISECONDS.sleep(350);
+            } else {
+                servoLauncher.setPosition(0.67);
             }
 
             //Pull Up
-            if (gamepad1.start && !pull) {
-                position = 3000;
+            if (gamepad1.back && !pull) {
+                servoTOT.setPosition(0.685);
+                position = 3070;
                 TimeUnit.MILLISECONDS.sleep(350);
                 pull = true;
-            } else if (gamepad1.start && pull){
+            } else if (gamepad1.back && pull){
                 speed = 800;
                 position = 50;
                 motorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                 motorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                 motorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                 motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                TimeUnit.MILLISECONDS.sleep(500);
+                TimeUnit.MILLISECONDS.sleep(1000);
+                servoTOT.setPosition(0.89);
             }
         }
     }
