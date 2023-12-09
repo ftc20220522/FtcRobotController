@@ -177,12 +177,12 @@ public class RO_Meet1 extends LinearOpMode {
 
             //Top of D Pad - servoROT = "servo1" & servoLOT = "servo2"
             if (gamepad2.dpad_up) {
-                if (servoLOT.getPosition() < 0.2 && servoROT.getPosition() < 0.1) {
-                    servoLOT.setPosition(0.76);
+                if (servoLOT.getPosition() > 0.8 && servoROT.getPosition() < 0.1) {
+                    servoLOT.setPosition(0.14);
                     servoROT.setPosition(0.8);
                     TimeUnit.MILLISECONDS.sleep(350);
                 } else {
-                    servoLOT.setPosition(0.18);
+                    servoLOT.setPosition(0.84);
                     servoROT.setPosition(0.08);
                     TimeUnit.MILLISECONDS.sleep(350);
                 }
@@ -190,11 +190,11 @@ public class RO_Meet1 extends LinearOpMode {
 
             //Left of D Pad - servoLOT = "servo2"
             if (gamepad2.dpad_left) {
-                if (servoLOT.getPosition() < 0.2) {
-                    servoLOT.setPosition(0.76);
+                if (servoLOT.getPosition() > 0.8) {
+                    servoLOT.setPosition(0.14);
                     TimeUnit.MILLISECONDS.sleep(350);
                 } else {
-                    servoLOT.setPosition(0.18);
+                    servoLOT.setPosition(0.84);
                     TimeUnit.MILLISECONDS.sleep(350);
                 }
             }
@@ -205,7 +205,7 @@ public class RO_Meet1 extends LinearOpMode {
                     servoROT.setPosition(0.67);
                     TimeUnit.MILLISECONDS.sleep(350);
                 } else {
-                    servoROT.setPosition(0.1223);
+                    servoROT.setPosition(0.14);
                     TimeUnit.MILLISECONDS.sleep(350);
                 }
             }
@@ -283,7 +283,7 @@ public class RO_Meet1 extends LinearOpMode {
             }
 
             //Flight Launcher
-            if (gamepad2.back) {
+            if (gamepad1.start) {
                 servoLauncher.setPosition(0.92);
                 TimeUnit.MILLISECONDS.sleep(350);
             } else {

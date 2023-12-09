@@ -2,26 +2,21 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 import com.qualcomm.hardware.dfrobot.HuskyLens;
-import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 
 import java.util.concurrent.TimeUnit;
-@Autonomous(name="Auto2")
-public class AutoMeet2 extends LinearOpMode{
+@Autonomous(name="AutoMeet2InsideRed")
+public class AutoMeet2InsideRed extends LinearOpMode{
     private final int READ_PERIOD = 1;
 
     private HuskyLens huskyLens;
@@ -67,13 +62,18 @@ public class AutoMeet2 extends LinearOpMode{
                 .forward(3)
                 .build();
         TrajectorySequence back = drive.trajectorySequenceBuilder(toMid.end())
-                .back(4)
+                .back(18)
+                .strafeRight(25)
                 .build();
         TrajectorySequence back2 = drive.trajectorySequenceBuilder(toRight.end())
                 .back(4)
+                .strafeRight(16)
+                .forward(25)
                 .build();
         TrajectorySequence back3 = drive.trajectorySequenceBuilder(toLeft.end())
                 .back(4)
+                .strafeLeft(16)
+                .back(20)
                 .build();
         /*
          * This sample rate limits the reads solely to allow a user time to observe
