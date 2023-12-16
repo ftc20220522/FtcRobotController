@@ -168,7 +168,7 @@ public class AutoMeet2OutsideBlue extends LinearOpMode{
             motorSlideRight.setVelocity(3400);
             motorSlideLeft.setVelocity(3400);
             sleep(2500);
-        } else if (location==3){
+        } else if (location==1){
             drive.followTrajectorySequence(toRight);
             motorSlideRight.setTargetPosition(420);
             motorSlideLeft.setTargetPosition(420);
@@ -194,7 +194,7 @@ public class AutoMeet2OutsideBlue extends LinearOpMode{
             motorSlideRight.setVelocity(3400);
             motorSlideLeft.setVelocity(3400);
             sleep(2500);
-        } else if (location == 1) {
+        } else if (location == 3) {
             drive.followTrajectorySequence(toLeft);
             motorSlideRight.setTargetPosition(420);
             motorSlideLeft.setTargetPosition(420);

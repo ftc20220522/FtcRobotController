@@ -77,7 +77,7 @@ public class RO_Meet1 extends LinearOpMode {
         int prevposition = 0;
         boolean a = false;
         boolean pull = false;
-        boolean intrun = false;
+        boolean toggle = false;
         int speed = 4000;
         long start;
         long end = 0;
@@ -270,35 +270,20 @@ public class RO_Meet1 extends LinearOpMode {
             if (gamepad1.left_bumper) {
                 motorIntake.setPower(1);
                 servoInt.setPower(1);
-                intrun=true;
-                settime=true;
             } else if (gamepad1.right_bumper) {
                 motorIntake.setPower(-1);
                 servoInt.setPower(-1);
-            } else if (intrun) {
-                motorIntake.setPower(0);
-                if (settime) {
-                    start = System.currentTimeMillis();
-                    end = start + 7000;
-                    settime = false;
-                }
-                if (System.currentTimeMillis()<end) {
-                    servoInt.setPower(1);
-                    TimeUnit.MILLISECONDS.sleep(7000);
-                    servoInt.setPower(0);
-                } else {
-                    intrun=false;
-                }
             } else {
+                motorIntake.setPower(0);
                 servoInt.setPower(0);
             }
 
             //Flight Launcher
-            if (gamepad1.start) {
-                servoLauncher.setPosition(0.92);
+            if (gamepad2.start) {
+                servoLauncher.setPosition(0.0);
                 TimeUnit.MILLISECONDS.sleep(350);
             } else {
-                servoLauncher.setPosition(0.67);
+                servoLauncher.setPosition(0.3);
             }
 
             //Pull Up

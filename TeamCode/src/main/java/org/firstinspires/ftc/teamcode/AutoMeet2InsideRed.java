@@ -15,7 +15,7 @@ import com.qualcomm.hardware.dfrobot.HuskyLens;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 
 import java.util.concurrent.TimeUnit;
-@Autonomous(name="AutoMeet2InsideRed")
+@Autonomous(name="DONTUSE")
 public class AutoMeet2InsideRed extends LinearOpMode{
     private final int READ_PERIOD = 1;
 
@@ -63,7 +63,7 @@ public class AutoMeet2InsideRed extends LinearOpMode{
                 .build();
         TrajectorySequence back = drive.trajectorySequenceBuilder(toMid.end())
                 .back(18)
-                .strafeRight(25)
+                .strafeLeft(25)
                 .build();
         TrajectorySequence back2 = drive.trajectorySequenceBuilder(toRight.end())
                 .back(4)
