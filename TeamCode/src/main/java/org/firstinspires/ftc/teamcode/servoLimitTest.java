@@ -8,12 +8,18 @@ import java.util.concurrent.TimeUnit;
 
 @TeleOp(group = "ZTest")
 public class servoLimitTest extends LinearOpMode{
-    //89@67
+    //.2->.5
+    //.57&.75
+    //0.83->0.55 TOT
+    //0-0.21 BOT
+    //0.1-0.2
     public void runOpMode() throws InterruptedException {
-        Servo servo = hardwareMap.servo.get("servo7");
+        Servo servo = hardwareMap.servo.get("servo1");
+//        Servo servo1 = hardwareMap.servo.get("servo3");
         waitForStart();
         if (isStopRequested()) return;
         while (opModeIsActive()) {
+//            servo1.setPosition(0);
             if (gamepad1.a) {
                 servo.setPosition(servo.getPosition()+0.05);
                 TimeUnit.MILLISECONDS.sleep(350);

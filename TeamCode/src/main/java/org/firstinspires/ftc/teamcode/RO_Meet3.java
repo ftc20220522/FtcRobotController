@@ -32,7 +32,7 @@ public class RO_Meet3 extends OpMode {
     DcMotor temp;
 
     Servo servoLauncher;
-    CRServo servoHOT;
+    Servo servoHOT;
     Servo servoFOT;
     Servo servoTOT;
     Servo servoBOT;
@@ -63,10 +63,16 @@ public class RO_Meet3 extends OpMode {
         In,
         Out,
     }
+    public enum LaunchState {
+        Close,
+        Open,
+    }
     ElapsedTime liftTimer = new ElapsedTime();
     ElapsedTime hookTimer = new ElapsedTime();
+    ElapsedTime launchTimer = new ElapsedTime();
     ArmState armState = ArmState.Bottom;
     HookState hState = HookState.Out;
+    LaunchState lState = LaunchState.Close;
 
 
     public void init() {
@@ -79,14 +85,13 @@ public class RO_Meet3 extends OpMode {
         motorSlideRight = hardwareMap.get(DcMotorEx.class, "motor6");
         temp = hardwareMap.dcMotor.get("motor7");
         servoLauncher = hardwareMap.servo.get("servo1");
-        servoHOT = hardwareMap.crservo.get("servo5"); //Hook ot
+        servoHOT = hardwareMap.servo.get("servo5"); //Hook ot
         servoFOT = hardwareMap.servo.get("servo4"); // flap ot
         servoTOT = hardwareMap.servo.get("servo2"); // top ot
         servoBOT = hardwareMap.servo.get("servo3"); // bottom ot
-//        servoInt = hardwareMap.crservo.get("servo5");
         motorSlideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorSlideLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         motorSlideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorSlideRight.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -96,9 +101,11 @@ public class RO_Meet3 extends OpMode {
 
 //        servoROT.setDirection(Servo.Direction.REVERSE);
 
-        servoTOT.setDirection(Servo.Direction.REVERSE);
+//        servoTOT.setDirection(Servo.Direction.REVERSE);
 
         liftTimer.reset();
+        hookTimer.reset();
+        launchTimer.reset();
 
 
 //        motorSlideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -113,11 +120,14 @@ public class RO_Meet3 extends OpMode {
     }
 
     public void start() {
-        servoLauncher.setPosition(0.67);
+        servoLauncher.setPosition(0.2);
         motorSlideLeft.setTargetPosition(0);
         motorSlideRight.setTargetPosition(0);
+        servoTOT.setPosition(0.83);
+        servoBOT.setPosition(0.21);
+        servoFOT.setPosition(0.1);
 
-        servoTOT.setPosition(0.15);
+
 //        servoBOT.setPosition(1);
 
     }
@@ -127,47 +137,75 @@ public class RO_Meet3 extends OpMode {
         switch (hState) {
             case Out:
                 if (hookTimer.milliseconds() > 300) {
-                    if (gamepad2.dpad_right && armState == ArmState.Bottom) {
-                        //HOT close
-                        hookTimer.reset();
-                        hState = HookState.Out;
-                    }
-                    break;
-                }
-            case In:
-                if (hookTimer.milliseconds() > 300) {
-                    if (gamepad2.dpad_right && armState == ArmState.Bottom) {
-                        //HOT open
+                    if (gamepad1.a && armState == ArmState.Bottom) {
+                        servoHOT.setPosition(0.75);
                         hookTimer.reset();
                         hState = HookState.In;
                     }
                     break;
                 }
-            default:
-                // should never be reached, as armState should never be null
-                hState = HookState.Out;
+            case In:
+                if (hookTimer.milliseconds() > 300) {
+                    if (gamepad1.a && armState == ArmState.Bottom) {
+                        servoHOT.setPosition(0.57);
+                        hookTimer.reset();
+                        hState = HookState.Out;
+                    }
+                    break;
+                }
+//            default:
+//                // should never be reached, as armState should never be null
+//                hState = HookState.Out;
         }
-        telemetry.addData("HookState:", hState);
+        telemetry.addData("hState:", hState);
+
+        switch (lState) {
+            case Close:
+                if (launchTimer.milliseconds() > 300) {
+                    if (gamepad1.back) {
+                        servoLauncher.setPosition(0.5);
+                        launchTimer.reset();
+                        lState = LaunchState.Open;
+                    }
+                    break;
+                }
+            case Open:
+                if (launchTimer.milliseconds() > 300) {
+                    if (gamepad1.back) {
+                        servoLauncher.setPosition(0.2);
+                        launchTimer.reset();
+                        lState = LaunchState.Close;
+                    }
+                    break;
+                }
+//            default:
+//                // should never be reached, as armState should never be null
+//                lState = LaunchState.Close;
+        }
+        telemetry.addData("LaunchState:", lState);
 
 
         switch (armState) {
             case Bottom:
                 if (gamepad2.left_bumper) {
-                    motorSlideRight.setTargetPosition(500);
-                    motorSlideLeft.setTargetPosition(500);
-                    motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    motorSlideRight.setVelocity(1000);
-                    motorSlideLeft.setVelocity(1000);
-                    position = 500;
-                    prevposition=position;
+                    if (motorSlideRight.getCurrentPosition() < 450) {
+                        motorSlideRight.setTargetPosition(1000);
+                        motorSlideLeft.setTargetPosition(1000);
+                        motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        motorSlideRight.setVelocity(1000);
+                        motorSlideLeft.setVelocity(1000);
+                        position = 500;
+                        prevposition = position;
+                    }
                     liftTimer.reset();
                     armState = ArmState.RotateUp;
                 }
                 break;
             case RotateUp:
-                if (liftTimer.milliseconds() >= 1200) {
-                    //set TOT & BOT pos
+                if (motorSlideRight.getCurrentPosition()>480) {
+                    servoTOT.setPosition(0.54);
+                    servoBOT.setPosition(0);
                     liftTimer.reset();
                     armState = ArmState.Drop;
                 }
@@ -175,24 +213,46 @@ public class RO_Meet3 extends OpMode {
             case Drop:
                 if (liftTimer.seconds() >= 1) {
                     if (gamepad2.dpad_up) {
-                        //open FOT
+                        servoFOT.setPosition(0.2);
+                        liftTimer.reset();
                         armState = ArmState.Drop2;
+                    } else if (gamepad2.dpad_down) {
+                        servoFOT.setPosition(0.2);
+                        servoHOT.setPosition(0.57);
                     } else if (gamepad2.left_bumper) {
-                        //close flap
+                        servoFOT.setPosition(0.1);
+                        servoTOT.setPosition(0.83);
+                        servoBOT.setPosition(0.21);
+                        liftTimer.reset();
                         armState = ArmState.RotateDown;
                     }
                 }
                 break;
             case Drop2:
-                if (gamepad2.dpad_up) {
-                    //open HOT
-                } else if (gamepad2.left_bumper) {
-                    //close flap
-                    armState = ArmState.RotateDown;
+                if (liftTimer.milliseconds() > 350) {
+                    if (gamepad2.dpad_up) {
+                        servoHOT.setPosition(0.57);
+                    } else if (gamepad2.left_bumper) {
+                        servoFOT.setPosition(0.1);
+                        servoTOT.setPosition(0.83);
+                        servoBOT.setPosition(0.21);
+                        liftTimer.reset();
+                        armState = ArmState.RotateDown;
+                    }
                 }
                 break;
             case RotateDown:
-                //Rotating down stuff
+                if (liftTimer.milliseconds()>1000) {
+                    motorSlideRight.setTargetPosition(35);
+                    motorSlideLeft.setTargetPosition(35);
+                    motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    motorSlideRight.setVelocity(1000);
+                    motorSlideLeft.setVelocity(1000);
+                    position = 500;
+                    prevposition = position;
+                    armState = ArmState.Bottom;
+                }
                 break;
             default:
                 // should never be reached, as armState should never be null
