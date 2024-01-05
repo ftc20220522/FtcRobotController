@@ -328,8 +328,8 @@ public class FO_Meet3 extends OpMode {
                 break;
             case RotateDown:
                 if (liftTimer.milliseconds()>1000) {
-                    motorSlideRight.setTargetPosition(35);
-                    motorSlideLeft.setTargetPosition(35);
+                    motorSlideRight.setTargetPosition(23);
+                    motorSlideLeft.setTargetPosition(23);
                     motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     motorSlideRight.setVelocity(1000);
@@ -412,7 +412,7 @@ public class FO_Meet3 extends OpMode {
             }
             if (gamepad2.a) {
                 speed=4000;
-                position = 0;
+                position = 23;
             }
 
             if (gamepad2.left_stick_y != 0) {
