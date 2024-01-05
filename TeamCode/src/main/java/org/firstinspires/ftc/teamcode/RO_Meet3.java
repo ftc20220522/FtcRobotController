@@ -18,9 +18,9 @@ import java.util.concurrent.TimeUnit;
 @TeleOp(group = "FINALCODE")
 public class RO_Meet3 extends OpMode {
 
-    //Center Odometery Wheel in Motor Port 0 (motor1 encoder)
-    //Right Odometery Wheel in Motor Port 1 (motor2 encoder)
-    //Left Odometery Wheel in Motor Port 2 (motor3 encoder)
+    //Center Odometery Wheel in Motor Port 3 (motor4 encoder)
+    //Right Odometery Wheel in Motor Port 2 (motor3 encoder)
+    //Left Odometery Wheel in Motor Port 1 (motor2 encoder)
 
     DcMotor motorBackRight;
     DcMotor motorFrontRight;
