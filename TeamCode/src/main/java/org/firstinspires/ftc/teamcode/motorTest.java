@@ -15,7 +15,7 @@ public class motorTest extends LinearOpMode{
         if (isStopRequested()) return;
         while (opModeIsActive()) {
             if (gamepad1.a) {
-                motor.setPower(1);
+                motor.setPower(0.1);
                 TimeUnit.MILLISECONDS.sleep(350);
             } else if (gamepad1.b) {
                 motor.setPower(0);

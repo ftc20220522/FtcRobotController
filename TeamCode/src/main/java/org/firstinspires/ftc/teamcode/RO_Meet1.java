@@ -22,17 +22,17 @@ public class RO_Meet1 extends LinearOpMode {
         //Right Odometery Wheel in Motor Port 1 (motor2 encoder)
         //Left Odometery Wheel in Motor Port 2 (motor3 encoder)
 
-        DcMotor motorBackRight = hardwareMap.dcMotor.get("motor5");
-        DcMotor motorFrontRight = hardwareMap.dcMotor.get("motor6");
+        DcMotor motorBackRight = hardwareMap.dcMotor.get("motor1");
+        DcMotor motorFrontRight = hardwareMap.dcMotor.get("motor2");
         DcMotor motorBackLeft = hardwareMap.dcMotor.get("motor3");
-        DcMotor motorFrontLeft = hardwareMap.dcMotor.get("motor2");
-        DcMotor motorIntake = hardwareMap.dcMotor.get("motor1");
-        DcMotorEx motorSlideLeft = hardwareMap.get(DcMotorEx.class, "motor4");
+        DcMotor motorFrontLeft = hardwareMap.dcMotor.get("motor4");
+        DcMotor motorIntake = hardwareMap.dcMotor.get("motor5");
+        DcMotorEx motorSlideLeft = hardwareMap.get(DcMotorEx.class, "motor6");
         motorSlideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorSlideLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        DcMotorEx motorSlideRight= hardwareMap.get(DcMotorEx.class, "motor8");
+        DcMotorEx motorSlideRight= hardwareMap.get(DcMotorEx.class, "motor7");
         motorSlideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        DcMotor temp = hardwareMap.dcMotor.get("motor7");
+        DcMotor temp = hardwareMap.dcMotor.get("motor8");
         motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -288,7 +288,8 @@ public class RO_Meet1 extends LinearOpMode {
 
             //Pull Up
             if (gamepad1.back && !pull) {
-                position = 2500;
+                servoTOT.setPosition(0.685);
+                position = 3070;
                 TimeUnit.MILLISECONDS.sleep(350);
                 pull = true;
             } else if (gamepad1.back && pull){
@@ -299,6 +300,7 @@ public class RO_Meet1 extends LinearOpMode {
                 motorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                 motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                 TimeUnit.MILLISECONDS.sleep(1000);
+                servoTOT.setPosition(0.89);
             }
         }
     }
