@@ -150,12 +150,14 @@ public class AutoMeet3 extends LinearOpMode{
         servoTOT.setPosition(0.83);
         servoBOT.setPosition(0.23);
         servoFOT.setPosition(0.1);
-        servoHOT.setPosition(0.24);
+        servoHOT.setPosition(0.52);
         long start = System.currentTimeMillis();
         long end = start + 2000;
         huskyLens.selectAlgorithm(HuskyLens.Algorithm.COLOR_RECOGNITION);
         while (opModeIsActive() && System.currentTimeMillis() < end) {
-
+            if (!rateLimit.hasExpired()) {
+                continue;
+            }
             rateLimit.reset();
 
             telemetry.update();
