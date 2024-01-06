@@ -9,12 +9,12 @@ import java.util.concurrent.TimeUnit;
 @TeleOp(group = "ZTest")
 public class servoLimitTest extends LinearOpMode{
     //.2->.5
-    //.57&.75
-    //0.83->0.55 TOT
-    //0-0.21 BOT
+    //.57&.75 HOT - Hook
+    //0.83->0.55 TOT - Top
+    //0-0.21 BOT - Bottom
     //0.1-0.2
     public void runOpMode() throws InterruptedException {
-        Servo servo = hardwareMap.servo.get("servo2");
+        Servo servo = hardwareMap.servo.get("servo3");
 //        Servo servo1 = hardwareMap.servo.get("servo3");
         waitForStart();
         if (isStopRequested()) return;
