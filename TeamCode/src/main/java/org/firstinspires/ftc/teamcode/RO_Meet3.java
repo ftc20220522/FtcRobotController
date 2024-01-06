@@ -105,8 +105,6 @@ public class RO_Meet3 extends OpMode {
         motorBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorSlideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorSlideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -138,7 +136,7 @@ public class RO_Meet3 extends OpMode {
         motorSlideRight.setTargetPosition(0);
         servoTOT.setPosition(0.83);
         servoBOT.setPosition(0.23);
-        servoFOT.setPosition(0.57);
+        servoFOT.setPosition(0.1);
         servoHOT.setPosition(0.57);
 
 
@@ -232,7 +230,7 @@ public class RO_Meet3 extends OpMode {
             case Close:
                 if (launchTimer.milliseconds() > 300) {
                     if (gamepad1.back) {
-                        servoLauncher.setPosition(0.65);
+                        servoLauncher.setPosition(0.5);
                         launchTimer.reset();
                         lState = LaunchState.Open;
                     }
@@ -290,15 +288,15 @@ public class RO_Meet3 extends OpMode {
             case Drop:
                 if (liftTimer.seconds() >= 1) {
                     if (gamepad2.dpad_down) {
-                        servoFOT.setPosition(0.72);
+                        servoFOT.setPosition(0.2);
                         liftTimer.reset();
                         armState = ArmState.Drop2;
                     } else if (gamepad2.dpad_up) {
-                        servoFOT.setPosition(0.72);
+                        servoFOT.setPosition(0.2);
                         servoHOT.setPosition(0.57);
                         hState = HookState.Out;
                     } else if (gamepad2.left_bumper) {
-                        servoFOT.setPosition(0.72);
+                        servoFOT.setPosition(0.1);
                         servoTOT.setPosition(0.83);
                         servoBOT.setPosition(0.21);
                         liftTimer.reset();
@@ -312,7 +310,7 @@ public class RO_Meet3 extends OpMode {
                         servoHOT.setPosition(0.57);
                         hState = HookState.Out;
                     } else if (gamepad2.left_bumper) {
-                        servoFOT.setPosition(0.72);
+                        servoFOT.setPosition(0.1);
                         servoTOT.setPosition(0.83);
                         servoBOT.setPosition(0.21);
                         liftTimer.reset();
@@ -438,7 +436,7 @@ public class RO_Meet3 extends OpMode {
                 motorIntake.setPower(1);
                 servoHOT.setPosition(0.57);
                 hState = HookState.Out;
-                servoBOT.setPosition(0.1);
+                servoBOT.setPosition(0.21);
             } else if (gamepad1.right_bumper) {
                 motorIntake.setPower(-1);
             } else {
