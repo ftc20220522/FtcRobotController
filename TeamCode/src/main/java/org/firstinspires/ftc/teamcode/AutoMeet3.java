@@ -181,10 +181,10 @@ public class AutoMeet3 extends LinearOpMode{
         }
         if (location == 2) {
             drive.followTrajectorySequence(startM);
-            motorIntake.setPower(-0.38);
+            motorIntake.setPower(-0.45);
             drive.followTrajectorySequence(backM);
-            motorIntake.setPower(0);
-            drive.followTrajectorySequence(endM);
+//            motorIntake.setPower(0);
+//            drive.followTrajectorySequence(endM);
 //
 //
 //            motorSlideRight.setTargetPosition(420);
@@ -215,8 +215,8 @@ public class AutoMeet3 extends LinearOpMode{
             drive.followTrajectorySequence(startR);
             motorIntake.setPower(-0.45);
             drive.followTrajectorySequence(backR);
-            motorIntake.setPower(0);
-            drive.followTrajectorySequence(endR);
+//            motorIntake.setPower(0);
+//            drive.followTrajectorySequence(endR);
 //            motorSlideRight.setTargetPosition(420);
 //            motorSlideLeft.setTargetPosition(420);
 //            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -243,10 +243,10 @@ public class AutoMeet3 extends LinearOpMode{
 //            sleep(2500);
         } else if (location == 3) {
             drive.followTrajectorySequence(startL);
-            motorIntake.setPower(-0.38);
+            motorIntake.setPower(-0.45);
             drive.followTrajectorySequence(backL);
-            motorIntake.setPower(0);
-            drive.followTrajectorySequence(endL);
+//            motorIntake.setPower(0);
+//            drive.followTrajectorySequence(endL);
 //            motorSlideRight.setTargetPosition(420);
 //            motorSlideLeft.setTargetPosition(420);
 //            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
