@@ -148,7 +148,7 @@ public class FO_Meet3 extends OpMode {
         servoTOT.setPosition(0.83);
         servoBOT.setPosition(0.23);
         servoFOT.setPosition(0.57);
-        servoHOT.setPosition(0.57);
+        servoHOT.setPosition(0.24);
         imu.resetYaw();
 
 
@@ -217,7 +217,7 @@ public class FO_Meet3 extends OpMode {
             case Out:
                 if (hookTimer.milliseconds() > 300) {
                     if (gamepad2.right_bumper && armState == ArmState.Bottom) {
-                        servoHOT.setPosition(0.75);
+                        servoHOT.setPosition(0.07);
                         hookTimer.reset();
                         hState = HookState.In;
                     }
@@ -226,7 +226,7 @@ public class FO_Meet3 extends OpMode {
             case In:
                 if (hookTimer.milliseconds() > 300) {
                     if (gamepad2.right_bumper && armState == ArmState.Bottom) {
-                        servoHOT.setPosition(0.57);
+                        servoHOT.setPosition(0.24);
                         hookTimer.reset();
                         hState = HookState.Out;
                     }
@@ -268,7 +268,7 @@ public class FO_Meet3 extends OpMode {
             case Bottom:
                 if (gamepad2.left_bumper) {
                     if (motorSlideRight.getCurrentPosition() < 450) {
-                        servoHOT.setPosition(0.75);
+                        servoHOT.setPosition(0.07);
                         hState = HookState.In;
                         motorSlideRight.setTargetPosition(1000);
                         motorSlideLeft.setTargetPosition(1000);
@@ -305,7 +305,7 @@ public class FO_Meet3 extends OpMode {
                         armState = ArmState.Drop2;
                     } else if (gamepad2.dpad_up) {
                         servoFOT.setPosition(0.72);
-                        servoHOT.setPosition(0.57);
+                        servoHOT.setPosition(0.24);
                         hState = HookState.Out;
                     } else if (gamepad2.left_bumper) {
                         servoFOT.setPosition(0.57);
@@ -319,7 +319,7 @@ public class FO_Meet3 extends OpMode {
             case Drop2:
                 if (liftTimer.milliseconds() > 350) {
                     if (gamepad2.dpad_down) {
-                        servoHOT.setPosition(0.57);
+                        servoHOT.setPosition(0.24);
                         hState = HookState.Out;
                     } else if (gamepad2.left_bumper) {
                         servoFOT.setPosition(0.57);
@@ -473,7 +473,7 @@ public class FO_Meet3 extends OpMode {
 
             if (gamepad1.left_bumper) {
                 motorIntake.setPower(1);
-                servoHOT.setPosition(0.57);
+                servoHOT.setPosition(0.24);
                 hState = HookState.Out;
                 servoBOT.setPosition(0.2);
             } else if (gamepad1.right_bumper) {
