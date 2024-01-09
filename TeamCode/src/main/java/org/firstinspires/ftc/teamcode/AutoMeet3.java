@@ -15,8 +15,8 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 import java.util.concurrent.TimeUnit;
 
-@Autonomous(name="AutoMeet3OutsideBlue")
-public class AutoMeet3 extends LinearOpMode{
+@Autonomous(name="AutoMeet3")
+public class AutoMeet3 extends LinearOpMode {
     private final int READ_PERIOD = 2;
 
     private HuskyLens huskyLens;
@@ -26,9 +26,7 @@ public class AutoMeet3 extends LinearOpMode{
 
     String pos;
 
-    int location=2;
-
-    HuskyLens.Block[] blocks;
+    int location = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -38,8 +36,11 @@ public class AutoMeet3 extends LinearOpMode{
         DcMotor motorBackLeft = hardwareMap.dcMotor.get("motor2");
         DcMotor motorFrontLeft = hardwareMap.dcMotor.get("motor3");
         DcMotor motorIntake = hardwareMap.dcMotor.get("motor4");
-        DcMotor motorSlideLeft = hardwareMap.get(DcMotorEx.class, "motor1");
-        DcMotor motorSlideRight = hardwareMap.get(DcMotorEx.class, "motor6");
+        DcMotorEx motorSlideLeft = hardwareMap.get(DcMotorEx.class, "motor1");
+        motorSlideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        DcMotorEx motorSlideRight = hardwareMap.get(DcMotorEx.class, "motor6");
+        motorSlideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorSlideRight.setDirection(DcMotorSimple.Direction.REVERSE);
         DcMotor temp = hardwareMap.dcMotor.get("motor7");
         Servo servoLauncher = hardwareMap.servo.get("servo1");
         Servo servoHOT = hardwareMap.servo.get("servo5"); //Hook ot
@@ -59,14 +60,21 @@ public class AutoMeet3 extends LinearOpMode{
                 //Clockwise is positive (left)
                 //Counterclockwise is negative (right)
                 .build();
-        TrajectorySequence endM = drive.trajectorySequenceBuilder(backM.end())
+        TrajectorySequence moveM = drive.trajectorySequenceBuilder(backM.end())
                 .forward(3)
                 .strafeLeft(20)
-                .back(31)
-                .strafeRight(115)
-                .forward(15)
+                .back(33)
+                .turn(Math.toRadians(-90))
+                .forward(108)
                 .build();
-
+        TrajectorySequence leftM = drive.trajectorySequenceBuilder(moveM.end())
+                .strafeLeft(28)
+                .forward(3)
+                .build();
+        TrajectorySequence backwardM = drive.trajectorySequenceBuilder(leftM.end())
+                .back(4)
+                .strafeRight(15)
+                .build();
 
 
         //Right Movement
@@ -83,7 +91,6 @@ public class AutoMeet3 extends LinearOpMode{
                 .strafeRight(95)
                 .forward(13.5)
                 .build();
-
 
 
         //Left Movement
@@ -143,6 +150,9 @@ public class AutoMeet3 extends LinearOpMode{
          * within the OpMode by calling selectAlgorithm() and passing it one of the values
          * found in the enumeration HuskyLens.Algorithm.
          */
+        huskyLens.selectAlgorithm(HuskyLens.Algorithm.COLOR_RECOGNITION);
+
+
         waitForStart();
         servoLauncher.setPosition(0.2);
         motorSlideLeft.setTargetPosition(0);
@@ -150,43 +160,92 @@ public class AutoMeet3 extends LinearOpMode{
         servoTOT.setPosition(0.83);
         servoBOT.setPosition(0.23);
         servoFOT.setPosition(0.1);
-        servoHOT.setPosition(0.52);
+        servoHOT.setPosition(0.67);
         long start = System.currentTimeMillis();
         long end = start + 2000;
         huskyLens.selectAlgorithm(HuskyLens.Algorithm.COLOR_RECOGNITION);
-        while (opModeIsActive() && System.currentTimeMillis() < end) {
+        while (opModeIsActive()) {
             if (!rateLimit.hasExpired()) {
                 continue;
             }
             rateLimit.reset();
 
             telemetry.update();
-            blocks = huskyLens.blocks();
+            HuskyLens.Block[] blocks = huskyLens.blocks();
             telemetry.addData("Block count", blocks.length);
-            if (blocks.length>0) {
-                telemetry.addData("Block", blocks[0].toString());
-                if (blocks[0].x <= 100) {
+            for (int i = 0; i < blocks.length; i++) {
+                telemetry.addData("Block", blocks[i].toString());
+                if (blocks[i].x <= 100) {
                     telemetry.addData("Pos:", "Left");
                     telemetry.update();
-                    location=3;
-                } else if (blocks[0].x > 100 && blocks[0].x <= 200) {
+                    location = 3;
+                } else if (blocks[i].x > 100 && blocks[i].x <= 200) {
                     telemetry.addData("Pos:", "Middle");
                     telemetry.update();
-                    location=2;
-                } else if (blocks[0].x > 200) {
+                    location = 2;
+                } else if (blocks[i].x > 200) {
                     telemetry.addData("Pos:", "Right");
                     telemetry.update();
-                    location=1;
+                    location = 1;
                 }
+            }
+            if (blocks.length == 0) {
+                location = 2;
+            }
+            if (location != 0) {
                 break;
             }
         }
-        if (location == 2) {
-            drive.followTrajectorySequence(startM);
-            motorIntake.setPower(-0.45);
-            drive.followTrajectorySequence(backM);
-//            motorIntake.setPower(0);
-//            drive.followTrajectorySequence(endM);
+
+
+            if (location == 2) {
+                drive.followTrajectorySequence(startM);
+                //motorIntake.setPower(-0.45);
+                drive.followTrajectorySequence(backM);
+                //motorIntake.setPower(0);
+                drive.followTrajectorySequence(moveM);
+                motorSlideRight.setTargetPosition(1000);
+                motorSlideLeft.setTargetPosition(1000);
+                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideRight.setVelocity(1000);
+                motorSlideLeft.setVelocity(1000);
+                servoTOT.setPosition(0.54);
+                servoBOT.setPosition(0);
+                motorSlideRight.setTargetPosition(400);
+                motorSlideLeft.setTargetPosition(400);
+                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideRight.setVelocity(1000);
+                motorSlideLeft.setVelocity(1000);
+                sleep(2000);
+                drive.followTrajectorySequence(leftM);
+                sleep(500);
+                servoFOT.setPosition(0.72);
+                drive.followTrajectorySequence(backwardM);
+                sleep(500);
+                motorSlideRight.setTargetPosition(1000);
+                motorSlideLeft.setTargetPosition(1000);
+                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideRight.setVelocity(1000);
+                motorSlideLeft.setVelocity(1000);
+                servoTOT.setPosition(0.83);
+                servoBOT.setPosition(0.23);
+                servoFOT.setPosition(0.1);
+                servoHOT.setPosition(0.52);
+                sleep(2000);
+                motorSlideRight.setTargetPosition(55);
+                motorSlideLeft.setTargetPosition(55);
+                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideRight.setVelocity(1000);
+                motorSlideLeft.setVelocity(1000);
+                sleep(1000);
+
+
+
+
 //
 //
 //            motorSlideRight.setTargetPosition(420);
@@ -213,10 +272,10 @@ public class AutoMeet3 extends LinearOpMode{
 //            motorSlideRight.setVelocity(3400);
 //            motorSlideLeft.setVelocity(3400);
 //            sleep(2500);
-        } else if (location==1){
-            drive.followTrajectorySequence(startR);
-            motorIntake.setPower(-0.45);
-            drive.followTrajectorySequence(backR);
+            } else if (location == 1) {
+                drive.followTrajectorySequence(startR);
+                motorIntake.setPower(-0.45);
+                drive.followTrajectorySequence(backR);
 //            motorIntake.setPower(0);
 //            drive.followTrajectorySequence(endR);
 //            motorSlideRight.setTargetPosition(420);
@@ -243,10 +302,10 @@ public class AutoMeet3 extends LinearOpMode{
 //            motorSlideRight.setVelocity(3400);
 //            motorSlideLeft.setVelocity(3400);
 //            sleep(2500);
-        } else if (location == 3) {
-            drive.followTrajectorySequence(startL);
-            motorIntake.setPower(-0.45);
-            drive.followTrajectorySequence(backL);
+            } else if (location == 3) {
+                drive.followTrajectorySequence(startL);
+                motorIntake.setPower(-0.45);
+                drive.followTrajectorySequence(backL);
 //            motorIntake.setPower(0);
 //            drive.followTrajectorySequence(endL);
 //            motorSlideRight.setTargetPosition(420);
@@ -273,7 +332,8 @@ public class AutoMeet3 extends LinearOpMode{
 //            motorSlideRight.setVelocity(3400);
 //            motorSlideLeft.setVelocity(3400);
 //            sleep(2500);
+            }
         }
+
     }
 
-}
