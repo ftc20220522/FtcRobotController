@@ -57,22 +57,22 @@ public class AutoMeet3 extends LinearOpMode {
                 .build();
         TrajectorySequence backM = drive.trajectorySequenceBuilder(startM.end())
                 .forward(10)
-                //Clockwise is positive (left)
-                //Counterclockwise is negative (right)
+                //Clockwise is positive (right)
+                //Counterclockwise is negative (left)
                 .build();
         TrajectorySequence moveM = drive.trajectorySequenceBuilder(backM.end())
                 .forward(3)
-                .strafeLeft(20)
+                .strafeLeft(18)
                 .back(33)
                 .turn(Math.toRadians(-90))
-                .forward(108)
+                .forward(106)
                 .build();
         TrajectorySequence leftM = drive.trajectorySequenceBuilder(moveM.end())
                 .strafeLeft(28)
                 .forward(3)
                 .build();
         TrajectorySequence backwardM = drive.trajectorySequenceBuilder(leftM.end())
-                .back(4)
+                .back(8)
                 .strafeRight(15)
                 .build();
 
@@ -85,11 +85,19 @@ public class AutoMeet3 extends LinearOpMode {
         TrajectorySequence backR = drive.trajectorySequenceBuilder(startR.end())
                 .forward(10)
                 .build();
-        TrajectorySequence endR = drive.trajectorySequenceBuilder(backR.end())
+        TrajectorySequence moveR = drive.trajectorySequenceBuilder(backR.end())
+                .strafeRight(16)
+                .back(38)
+                .turn(Math.toRadians(-90))
+                .forward(83)
+                .build();
+        TrajectorySequence leftR = drive.trajectorySequenceBuilder(moveR.end())
+                .strafeLeft(25)
+                .forward(3)
+                .build();
+        TrajectorySequence backwardR = drive.trajectorySequenceBuilder(leftR.end())
+                .back(8)
                 .strafeRight(15)
-                .back(35)
-                .strafeRight(95)
-                .forward(13.5)
                 .build();
 
 
@@ -103,12 +111,20 @@ public class AutoMeet3 extends LinearOpMode {
         TrajectorySequence backL = drive.trajectorySequenceBuilder(startL.end())
                 .forward(9)
                 .build();
-        TrajectorySequence endL = drive.trajectorySequenceBuilder(backL.end())
-                .forward(4)
-                .strafeLeft(20)
-                .back(50)
-                .strafeRight(100)
+        TrajectorySequence moveL = drive.trajectorySequenceBuilder(backL.end())
+                .strafeLeft(28)
+                .turn(Math.toRadians(-180))
+                .forward(87)
                 .build();
+        TrajectorySequence leftL = drive.trajectorySequenceBuilder(moveL.end())
+                .strafeLeft(40)
+                .forward(3)
+                .build();
+        TrajectorySequence backwardL = drive.trajectorySequenceBuilder(leftL.end())
+                .back(8)
+                .strafeRight(15)
+                .build();
+
 
 
         /*
@@ -200,30 +216,34 @@ public class AutoMeet3 extends LinearOpMode {
 
             if (location == 2) {
                 drive.followTrajectorySequence(startM);
-                //motorIntake.setPower(-0.45);
+//                motorIntake.setPower(-0.45);
                 drive.followTrajectorySequence(backM);
-                //motorIntake.setPower(0);
+//                motorIntake.setPower(0);
                 drive.followTrajectorySequence(moveM);
+
+                //END PART DO NOT CHANGE
                 motorSlideRight.setTargetPosition(1000);
                 motorSlideLeft.setTargetPosition(1000);
                 motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorSlideRight.setVelocity(1000);
                 motorSlideLeft.setVelocity(1000);
+                sleep(250);
                 servoTOT.setPosition(0.54);
                 servoBOT.setPosition(0);
-                motorSlideRight.setTargetPosition(400);
-                motorSlideLeft.setTargetPosition(400);
+                sleep(1200);
+                motorSlideRight.setTargetPosition(100);
+                motorSlideLeft.setTargetPosition(100);
                 motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorSlideRight.setVelocity(1000);
                 motorSlideLeft.setVelocity(1000);
-                sleep(2000);
+                sleep(3400);
                 drive.followTrajectorySequence(leftM);
-                sleep(500);
+                sleep(300);
                 servoFOT.setPosition(0.72);
+                sleep(200);
                 drive.followTrajectorySequence(backwardM);
-                sleep(500);
                 motorSlideRight.setTargetPosition(1000);
                 motorSlideLeft.setTargetPosition(1000);
                 motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -232,106 +252,112 @@ public class AutoMeet3 extends LinearOpMode {
                 motorSlideLeft.setVelocity(1000);
                 servoTOT.setPosition(0.83);
                 servoBOT.setPosition(0.23);
-                servoFOT.setPosition(0.1);
+                servoFOT.setPosition(0.57);
                 servoHOT.setPosition(0.52);
                 sleep(2000);
-                motorSlideRight.setTargetPosition(55);
-                motorSlideLeft.setTargetPosition(55);
+                motorSlideRight.setTargetPosition(0);
+                motorSlideLeft.setTargetPosition(0);
                 motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorSlideRight.setVelocity(1000);
                 motorSlideLeft.setVelocity(1000);
                 sleep(1000);
-
-
-
-
-//
-//
-//            motorSlideRight.setTargetPosition(420);
-//            motorSlideLeft.setTargetPosition(420);
-//            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            motorSlideRight.setVelocity(3400);
-//            motorSlideLeft.setVelocity(3400);
-//            sleep(1000);
-//            servoTOT.setPosition(0.876);
-//            servoBOT.setPosition(0.82);
-//            sleep(1000);
-//            servoROT.setPosition(0.8);
-//            sleep(500);
-//            drive.followTrajectorySequence(back);
-//            servoTOT.setPosition(0.89);
-//            servoBOT.setPosition(0.9);
-//            servoROT.setPosition(0.1);
-//            sleep(500);
-//            motorSlideRight.setTargetPosition(0);
-//            motorSlideLeft.setTargetPosition(0);
-//            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            motorSlideRight.setVelocity(3400);
-//            motorSlideLeft.setVelocity(3400);
-//            sleep(2500);
             } else if (location == 1) {
                 drive.followTrajectorySequence(startR);
-                motorIntake.setPower(-0.45);
+//                motorIntake.setPower(-0.45);
                 drive.followTrajectorySequence(backR);
-//            motorIntake.setPower(0);
-//            drive.followTrajectorySequence(endR);
-//            motorSlideRight.setTargetPosition(420);
-//            motorSlideLeft.setTargetPosition(420);
-//            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            motorSlideRight.setVelocity(3400);
-//            motorSlideLeft.setVelocity(3400);
-//            sleep(1000);
-//            servoTOT.setPosition(0.876);
-//            servoBOT.setPosition(0.82);
-//            sleep(1000);
-//            servoROT.setPosition(0.8);
-//            sleep(500);
-//            drive.followTrajectorySequence(back2);
-//            servoTOT.setPosition(0.89);
-//            servoBOT.setPosition(0.9);
-//            servoROT.setPosition(0.1);
-//            sleep(500);
-//            motorSlideRight.setTargetPosition(0);
-//            motorSlideLeft.setTargetPosition(0);
-//            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            motorSlideRight.setVelocity(3400);
-//            motorSlideLeft.setVelocity(3400);
-//            sleep(2500);
+//                motorIntake.setPower(0);
+                drive.followTrajectorySequence(moveR);
+
+                //END PART DO NOT CHANGE
+                motorSlideRight.setTargetPosition(1000);
+                motorSlideLeft.setTargetPosition(1000);
+                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideRight.setVelocity(1000);
+                motorSlideLeft.setVelocity(1000);
+                sleep(250);
+                servoTOT.setPosition(0.54);
+                servoBOT.setPosition(0);
+                sleep(1200);
+                motorSlideRight.setTargetPosition(100);
+                motorSlideLeft.setTargetPosition(100);
+                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideRight.setVelocity(1000);
+                motorSlideLeft.setVelocity(1000);
+                sleep(3400);
+                drive.followTrajectorySequence(leftR);
+                sleep(300);
+                servoFOT.setPosition(0.72);
+                sleep(200);
+                drive.followTrajectorySequence(backwardR);
+                motorSlideRight.setTargetPosition(1000);
+                motorSlideLeft.setTargetPosition(1000);
+                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideRight.setVelocity(1000);
+                motorSlideLeft.setVelocity(1000);
+                servoTOT.setPosition(0.83);
+                servoBOT.setPosition(0.23);
+                servoFOT.setPosition(0.57);
+                servoHOT.setPosition(0.52);
+                sleep(2000);
+                motorSlideRight.setTargetPosition(0);
+                motorSlideLeft.setTargetPosition(0);
+                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideRight.setVelocity(1000);
+                motorSlideLeft.setVelocity(1000);
+                sleep(1000);
             } else if (location == 3) {
                 drive.followTrajectorySequence(startL);
-                motorIntake.setPower(-0.45);
+//                motorIntake.setPower(-0.45);
                 drive.followTrajectorySequence(backL);
-//            motorIntake.setPower(0);
-//            drive.followTrajectorySequence(endL);
-//            motorSlideRight.setTargetPosition(420);
-//            motorSlideLeft.setTargetPosition(420);
-//            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            motorSlideRight.setVelocity(3400);
-//            motorSlideLeft.setVelocity(3400);
-//            sleep(1000);
-//            servoTOT.setPosition(0.876);
-//            servoBOT.setPosition(0.82);
-//            sleep(1000);
-//            servoROT.setPosition(0.8);
-//            sleep(500);
-//            drive.followTrajectorySequence(back3);
-//            servoTOT.setPosition(0.89);
-//            servoBOT.setPosition(0.9);
-//            servoROT.setPosition(0.1);
-//            sleep(500);
-//            motorSlideRight.setTargetPosition(0);
-//            motorSlideLeft.setTargetPosition(0);
-//            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            motorSlideRight.setVelocity(3400);
-//            motorSlideLeft.setVelocity(3400);
-//            sleep(2500);
+//                motorIntake.setPower(0);
+                drive.followTrajectorySequence(moveL);
+
+                //END PART DO NOT CHANGE
+                motorSlideRight.setTargetPosition(1000);
+                motorSlideLeft.setTargetPosition(1000);
+                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideRight.setVelocity(1000);
+                motorSlideLeft.setVelocity(1000);
+                sleep(250);
+                servoTOT.setPosition(0.54);
+                servoBOT.setPosition(0);
+                sleep(1200);
+                motorSlideRight.setTargetPosition(100);
+                motorSlideLeft.setTargetPosition(100);
+                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideRight.setVelocity(1000);
+                motorSlideLeft.setVelocity(1000);
+                sleep(3400);
+                drive.followTrajectorySequence(leftL);
+                sleep(300);
+                servoFOT.setPosition(0.72);
+                sleep(200);
+                drive.followTrajectorySequence(backwardL);
+                motorSlideRight.setTargetPosition(1000);
+                motorSlideLeft.setTargetPosition(1000);
+                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideRight.setVelocity(1000);
+                motorSlideLeft.setVelocity(1000);
+                servoTOT.setPosition(0.83);
+                servoBOT.setPosition(0.23);
+                servoFOT.setPosition(0.57);
+                servoHOT.setPosition(0.52);
+                sleep(2000);
+                motorSlideRight.setTargetPosition(0);
+                motorSlideLeft.setTargetPosition(0);
+                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorSlideRight.setVelocity(1000);
+                motorSlideLeft.setVelocity(1000);
+                sleep(1000);
             }
         }
 
