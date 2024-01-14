@@ -15,7 +15,7 @@ import com.qualcomm.hardware.dfrobot.HuskyLens;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 
 import java.util.concurrent.TimeUnit;
-@Autonomous(name="AutoMeet2OutsideBlue")
+@Autonomous(name="DONOTUSE")
 public class AutoMeet2OutsideBlue extends LinearOpMode{
     private final int READ_PERIOD = 1;
 
