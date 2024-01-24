@@ -13,7 +13,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-@TeleOp(group = "FINALCODE")
 public class FO_Meet3 extends OpMode {
 
     //Center Odometery Wheel in Motor Port 0 (motor1 encoder)

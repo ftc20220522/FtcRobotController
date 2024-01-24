@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import java.util.concurrent.TimeUnit;
 
-@TeleOp(group = "ZTest")
+
 public class motorTest extends LinearOpMode{
     public void runOpMode() throws InterruptedException {
         DcMotor motor = hardwareMap.dcMotor.get("motor1");
@@ -15,10 +15,13 @@ public class motorTest extends LinearOpMode{
         if (isStopRequested()) return;
         while (opModeIsActive()) {
             if (gamepad1.a) {
-                motor.setPower(0.1);
+                motor.setPower(1);
                 TimeUnit.MILLISECONDS.sleep(350);
             } else if (gamepad1.b) {
                 motor.setPower(0);
+                TimeUnit.MILLISECONDS.sleep(350);
+            } else if (gamepad1.y) {
+                motor.setPower(-1);
                 TimeUnit.MILLISECONDS.sleep(350);
             }
         }
