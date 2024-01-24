@@ -12,11 +12,14 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.concurrent.TimeUnit;
 
-@Autonomous(name="AutoMeet3Blue")
-public class AutoMeet3Blue extends LinearOpMode {
+@Autonomous(name="AutoTournamentOB")
+public class AutoTournamentOB extends LinearOpMode {
     private final int READ_PERIOD = 2;
 
     private HuskyLens huskyLens;
@@ -56,50 +59,55 @@ public class AutoMeet3Blue extends LinearOpMode {
                 .back(29)
                 .build();
         TrajectorySequence backM = drive.trajectorySequenceBuilder(startM.end())
-                .forward(7)
+                .forward(5)
                 //Clockwise is positive (right)
                 //Counterclockwise is negative (left)
                 .build();
         TrajectorySequence moveM = drive.trajectorySequenceBuilder(backM.end())
+                .forward(3)
+                .strafeLeft(18)
+                .back(33)
                 .turn(Math.toRadians(-90))
-                .forward(32)
-                .strafeRight(5)
+                .forward(106)
                 .build();
         TrajectorySequence leftM = drive.trajectorySequenceBuilder(moveM.end())
-                .forward(8)
+                .strafeLeft(28)
+                .forward(3)
                 .build();
         TrajectorySequence backwardM = drive.trajectorySequenceBuilder(leftM.end())
                 .back(8)
-                .strafeLeft(28)
+                .strafeRight(15)
                 .build();
 
 
         //Right Movement
         TrajectorySequence startR = drive.trajectorySequenceBuilder(startPose)
-                .back(29.5)
-                .turn(Math.toRadians(-90))
-                .back(6)
+                .back(26)
+                .strafeLeft(11)
                 .build();
         TrajectorySequence backR = drive.trajectorySequenceBuilder(startR.end())
-                .forward(6)
+                .forward(10)
                 .build();
         TrajectorySequence moveR = drive.trajectorySequenceBuilder(backR.end())
-                .forward(35.5)
-                .strafeRight(7)
+                .strafeRight(16)
+                .back(38)
+                .turn(Math.toRadians(-90))
+                .forward(83)
                 .build();
         TrajectorySequence leftR = drive.trajectorySequenceBuilder(moveR.end())
+                .strafeLeft(25)
                 .forward(3)
                 .build();
         TrajectorySequence backwardR = drive.trajectorySequenceBuilder(leftR.end())
                 .back(8)
-                .strafeLeft(36)
+                .strafeRight(15)
                 .build();
 
 
         //Left Movement
         TrajectorySequence startL = drive.trajectorySequenceBuilder(startPose)
                 .back(28.5)
-                //Negative turns counterclockwise
+                //Positive turns counterclockwise
                 .turn(Math.toRadians(90))
                 .back(10)
                 .build();
@@ -201,12 +209,32 @@ public class AutoMeet3Blue extends LinearOpMode {
                 }
             }
             if (blocks.length == 0) {
-                location = 1;
+                location = 2;
             }
             if (location != 0) {
                 break;
             }
         }
+        boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
+        AprilTagProcessor aprilTag;
+        VisionPortal visionPortal;
+
+        double DESIRED_DISTANCE = 2.0;  //  this is how close the camera should get to the target (inches)
+        double SPEED_GAIN  =  0.02  ;   //  Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.   (0.50 / 25.0)
+        double STRAFE_GAIN =  0.015 ;   //  Strafe Speed Control "Gain".  eg: Ramp up to 25% power at a 25 degree Yaw error.   (0.25 / 25.0)
+        double TURN_GAIN   =  0.01  ;   //  Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
+
+        double MAX_AUTO_SPEED = 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
+        double MAX_AUTO_STRAFE= 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
+        double MAX_AUTO_TURN  = 0.3;   //  Clip the turn speed to this max value (adjust for your robot)
+
+        motorFrontLeft   = null;  //  Used to control the left front drive wheel
+        motorFrontRight  = null;  //  Used to control the right front drive wheel
+        motorBackLeft    = null;  //  Used to control the left back drive wheel
+        motorBackRight   = null;  //  Used to control the right back drive wheel
+
+        int DESIRED_TAG_ID = 1;     // Choose the tag you want to approach or set to -1 for ANY tag.
+        AprilTagDetection desiredTag = null;     // Used to hold the data for a detected AprilTag
 
 
             if (location == 2) {
@@ -226,13 +254,14 @@ public class AutoMeet3Blue extends LinearOpMode {
                 sleep(250);
                 servoTOT.setPosition(0.54);
                 servoBOT.setPosition(0);
-                sleep(700);
-                motorSlideRight.setTargetPosition(25);
-                motorSlideLeft.setTargetPosition(25);
+                sleep(1200);
+                motorSlideRight.setTargetPosition(100);
+                motorSlideLeft.setTargetPosition(100);
                 motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorSlideRight.setVelocity(1000);
                 motorSlideLeft.setVelocity(1000);
+                sleep(3400);
                 drive.followTrajectorySequence(leftM);
                 sleep(300);
                 servoFOT.setPosition(0.72);
@@ -258,9 +287,9 @@ public class AutoMeet3Blue extends LinearOpMode {
                 sleep(1000);
             } else if (location == 1) {
                 drive.followTrajectorySequence(startR);
-                motorIntake.setPower(-0.45);
+//                motorIntake.setPower(-0.45);
                 drive.followTrajectorySequence(backR);
-                motorIntake.setPower(0);
+//                motorIntake.setPower(0);
                 drive.followTrajectorySequence(moveR);
 
                 //END PART DO NOT CHANGE
@@ -274,12 +303,13 @@ public class AutoMeet3Blue extends LinearOpMode {
                 servoTOT.setPosition(0.54);
                 servoBOT.setPosition(0);
                 sleep(1200);
-                motorSlideRight.setTargetPosition(25);
-                motorSlideLeft.setTargetPosition(25);
+                motorSlideRight.setTargetPosition(100);
+                motorSlideLeft.setTargetPosition(100);
                 motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorSlideRight.setVelocity(1000);
                 motorSlideLeft.setVelocity(1000);
+                sleep(3400);
                 drive.followTrajectorySequence(leftR);
                 sleep(300);
                 servoFOT.setPosition(0.72);

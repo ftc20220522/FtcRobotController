@@ -15,8 +15,8 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 import java.util.concurrent.TimeUnit;
 
-@Autonomous(name="AutoMeet3")
-public class AutoMeet3 extends LinearOpMode {
+@Autonomous(name="AutoTournamentIB")
+public class AutoTournamentIB extends LinearOpMode {
     private final int READ_PERIOD = 2;
 
     private HuskyLens huskyLens;
@@ -56,55 +56,50 @@ public class AutoMeet3 extends LinearOpMode {
                 .back(29)
                 .build();
         TrajectorySequence backM = drive.trajectorySequenceBuilder(startM.end())
-                .forward(5)
+                .forward(7)
                 //Clockwise is positive (right)
                 //Counterclockwise is negative (left)
                 .build();
         TrajectorySequence moveM = drive.trajectorySequenceBuilder(backM.end())
-                .forward(3)
-                .strafeLeft(18)
-                .back(33)
                 .turn(Math.toRadians(-90))
-                .forward(106)
+                .forward(32)
+                .strafeRight(5)
                 .build();
         TrajectorySequence leftM = drive.trajectorySequenceBuilder(moveM.end())
-                .strafeLeft(28)
-                .forward(3)
+                .forward(8)
                 .build();
         TrajectorySequence backwardM = drive.trajectorySequenceBuilder(leftM.end())
                 .back(8)
-                .strafeRight(15)
+                .strafeLeft(28)
                 .build();
 
 
         //Right Movement
         TrajectorySequence startR = drive.trajectorySequenceBuilder(startPose)
-                .back(26)
-                .strafeLeft(11)
+                .back(29.5)
+                .turn(Math.toRadians(-90))
+                .back(6)
                 .build();
         TrajectorySequence backR = drive.trajectorySequenceBuilder(startR.end())
-                .forward(10)
+                .forward(6)
                 .build();
         TrajectorySequence moveR = drive.trajectorySequenceBuilder(backR.end())
-                .strafeRight(16)
-                .back(38)
-                .turn(Math.toRadians(-90))
-                .forward(83)
+                .forward(35.5)
+                .strafeRight(7)
                 .build();
         TrajectorySequence leftR = drive.trajectorySequenceBuilder(moveR.end())
-                .strafeLeft(25)
                 .forward(3)
                 .build();
         TrajectorySequence backwardR = drive.trajectorySequenceBuilder(leftR.end())
                 .back(8)
-                .strafeRight(15)
+                .strafeLeft(36)
                 .build();
 
 
         //Left Movement
         TrajectorySequence startL = drive.trajectorySequenceBuilder(startPose)
                 .back(28.5)
-                //Positive turns counterclockwise
+                //Negative turns counterclockwise
                 .turn(Math.toRadians(90))
                 .back(10)
                 .build();
@@ -206,7 +201,7 @@ public class AutoMeet3 extends LinearOpMode {
                 }
             }
             if (blocks.length == 0) {
-                location = 2;
+                location = 1;
             }
             if (location != 0) {
                 break;
@@ -231,14 +226,13 @@ public class AutoMeet3 extends LinearOpMode {
                 sleep(250);
                 servoTOT.setPosition(0.54);
                 servoBOT.setPosition(0);
-                sleep(1200);
-                motorSlideRight.setTargetPosition(100);
-                motorSlideLeft.setTargetPosition(100);
+                sleep(700);
+                motorSlideRight.setTargetPosition(25);
+                motorSlideLeft.setTargetPosition(25);
                 motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorSlideRight.setVelocity(1000);
                 motorSlideLeft.setVelocity(1000);
-                sleep(3400);
                 drive.followTrajectorySequence(leftM);
                 sleep(300);
                 servoFOT.setPosition(0.72);
@@ -264,9 +258,9 @@ public class AutoMeet3 extends LinearOpMode {
                 sleep(1000);
             } else if (location == 1) {
                 drive.followTrajectorySequence(startR);
-//                motorIntake.setPower(-0.45);
+                motorIntake.setPower(-0.45);
                 drive.followTrajectorySequence(backR);
-//                motorIntake.setPower(0);
+                motorIntake.setPower(0);
                 drive.followTrajectorySequence(moveR);
 
                 //END PART DO NOT CHANGE
@@ -280,13 +274,12 @@ public class AutoMeet3 extends LinearOpMode {
                 servoTOT.setPosition(0.54);
                 servoBOT.setPosition(0);
                 sleep(1200);
-                motorSlideRight.setTargetPosition(100);
-                motorSlideLeft.setTargetPosition(100);
+                motorSlideRight.setTargetPosition(25);
+                motorSlideLeft.setTargetPosition(25);
                 motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorSlideRight.setVelocity(1000);
                 motorSlideLeft.setVelocity(1000);
-                sleep(3400);
                 drive.followTrajectorySequence(leftR);
                 sleep(300);
                 servoFOT.setPosition(0.72);
