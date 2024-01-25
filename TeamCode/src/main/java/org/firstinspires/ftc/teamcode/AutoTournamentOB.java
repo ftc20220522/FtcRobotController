@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package TournamentFiles;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.hardware.dfrobot.HuskyLens;
@@ -12,11 +12,14 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.concurrent.TimeUnit;
 
-@Autonomous(name="AutoMeet3")
-public class AutoMeet3 extends LinearOpMode {
+@Autonomous(name="AutoTournamentOB")
+public class AutoTournamentOB extends LinearOpMode {
     private final int READ_PERIOD = 2;
 
     private HuskyLens huskyLens;
@@ -212,6 +215,26 @@ public class AutoMeet3 extends LinearOpMode {
                 break;
             }
         }
+        boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
+        AprilTagProcessor aprilTag;
+        VisionPortal visionPortal;
+
+        double DESIRED_DISTANCE = 2.0;  //  this is how close the camera should get to the target (inches)
+        double SPEED_GAIN  =  0.02  ;   //  Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.   (0.50 / 25.0)
+        double STRAFE_GAIN =  0.015 ;   //  Strafe Speed Control "Gain".  eg: Ramp up to 25% power at a 25 degree Yaw error.   (0.25 / 25.0)
+        double TURN_GAIN   =  0.01  ;   //  Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
+
+        double MAX_AUTO_SPEED = 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
+        double MAX_AUTO_STRAFE= 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
+        double MAX_AUTO_TURN  = 0.3;   //  Clip the turn speed to this max value (adjust for your robot)
+
+        motorFrontLeft   = null;  //  Used to control the left front drive wheel
+        motorFrontRight  = null;  //  Used to control the right front drive wheel
+        motorBackLeft    = null;  //  Used to control the left back drive wheel
+        motorBackRight   = null;  //  Used to control the right back drive wheel
+
+        int DESIRED_TAG_ID = 1;     // Choose the tag you want to approach or set to -1 for ANY tag.
+        AprilTagDetection desiredTag = null;     // Used to hold the data for a detected AprilTag
 
 
             if (location == 2) {
