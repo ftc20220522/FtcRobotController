@@ -1,16 +1,21 @@
-package TournamentFiles;
+package org.firstinspires.ftc.teamcode;
 
 import static java.lang.Math.signum;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class RO_Tournament extends OpMode {
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
+@TeleOp(group = "FINALCODE")
+public class FO_Tournament extends OpMode {
 
     //Center Odometery Wheel in Motor Port 0 (motor1 encoder)
     //Right Odometery Wheel in Motor Port 1 (motor2 encoder)
@@ -31,6 +36,8 @@ public class RO_Tournament extends OpMode {
     Servo servoFOT;
     Servo servoTOT;
     Servo servoBOT;
+    IMU imu;
+//    CRServo servoInt;
 
     double y;
     double x;
@@ -101,6 +108,13 @@ public class RO_Tournament extends OpMode {
         motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        imu = hardwareMap.get(IMU.class, "imu");
+        // Adjust the orientation parameters to match your robot
+        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD));
+        // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
+        imu.initialize(parameters);
         liftTimer.reset();
         hookTimer.reset();
     }
@@ -113,6 +127,7 @@ public class RO_Tournament extends OpMode {
         servoBOT.setPosition(0.23);
         servoFOT.setPosition(0.57);
         servoHOT.setPosition(0.52);
+        imu.resetYaw();
     }
 
     public void loop() {
@@ -301,38 +316,50 @@ public class RO_Tournament extends OpMode {
 
 
 
-            // Denominator is the largest motor power (absolute value) or 1
-            // This ensures all the powers maintain the same ratio, but only when
-            // at least one is out of the range [-1, 1]
-            // servo2.setDirection(Servo.Direction.REVERSE);
-            if (gamepad1.right_trigger > 0) {
-                y = -gamepad1.left_stick_y; // Remember, this is reversed!
-                x = gamepad1.left_stick_x; // Counteract imperfect strafing
-                rx = gamepad1.right_stick_x;
-            } else if (gamepad1.left_trigger > 0) {
-                y = 0.25 * -gamepad1.left_stick_y; // Remember, this is reversed!
-                x = 0.25 * gamepad1.left_stick_x; // Counteract imperfect strafing
-                rx = 0.35 * gamepad1.right_stick_x;
-            } else {
-                y = -0.5 * gamepad1.left_stick_y; // Remember, this is reversed!
-                x = 0.5 * gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
-                rx = 0.65 * gamepad1.right_stick_x;
-            }
+        if (gamepad1.right_trigger > 0) {
+            y = -gamepad1.left_stick_y; // Remember, this is reversed!
+            x = gamepad1.left_stick_x; // Counteract imperfect strafing
+            rx = -gamepad1.right_stick_x;
+        } else if (gamepad1.left_trigger > 0) {
+            y = -0.25 * gamepad1.left_stick_y; // Remember, this is reversed!
+            x = 0.25 * gamepad1.left_stick_x; // Counteract imperfect strafing
+            rx = -0.35 * gamepad1.right_stick_x;
+        } else {
+            y = -0.5 * gamepad1.left_stick_y; // Remember, this is reversed!
+            x = 0.5 * gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
+            rx = -0.65 * gamepad1.right_stick_x;
+        }
 
-            /*
-             Denominator is the largest motor power (absolute value) or 1
-             This ensures all the powers maintain the same ratio, but only when
-             at least one is out of the range [-1, 1]
-            */
-            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-            double frontLeftPower = (y + x + rx) / denominator;
-            double backLeftPower = (y - x + rx) / denominator;
-            double frontRightPower = (y - x - rx) / denominator;
-            double backRightPower = (y + x - rx) / denominator;
-            motorFrontLeft.setPower(-frontLeftPower);
-            motorBackLeft.setPower(-backLeftPower);
-            motorFrontRight.setPower(frontRightPower);
-            motorBackRight.setPower(backRightPower);
+        if (gamepad1.back) {
+            imu.resetYaw();
+        }
+
+        // This button choice was made so that it is hard to hit on accident,
+        // it can be freely changed based on preference.
+        // The equivalent button is start on Xbox-style controllers.
+
+
+        double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+
+        // Rotate the movement direction counter to the bot's rotation
+        double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
+        double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
+
+        rotX = rotX * 1.1;  // Counteract imperfect strafing
+
+        // Denominator is the largest motor power (absolute value) or 1
+        // This ensures all the powers maintain the same ratio,
+        // but only if at least one is out of the range [-1, 1]
+        double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
+        double frontLeftPower = (rotY + rotX + rx) / denominator;
+        double backLeftPower = (rotY - rotX + rx) / denominator;
+        double frontRightPower = (rotY - rotX - rx) / denominator;
+        double backRightPower = (rotY + rotX - rx) / denominator;
+
+        motorFrontLeft.setPower(frontLeftPower);
+        motorBackLeft.setPower(backLeftPower);
+        motorFrontRight.setPower(frontRightPower);
+        motorBackRight.setPower(backRightPower);
 
 
 //            telemetry.addData("odometer middle pos", motorBackRight.getCurrentPosition());
@@ -340,79 +367,79 @@ public class RO_Tournament extends OpMode {
 //            telemetry.addData("odometer left pos", motorBackLeft.getCurrentPosition());
 //            telemetry.update();
 
-            //Viper Slide Preset
-            if (gamepad2.x) {
-                speed=4000;
-                position = 1000;
-                armState = ArmState.RotateUp;
-            }
-            if (gamepad2.y) {
-                speed=4000;
-                position = 1750;
-                armState = ArmState.RotateUp;
+        //Viper Slide Preset
+        if (gamepad2.x) {
+            speed=4000;
+            position = 1000;
+            armState = ArmState.RotateUp;
+        }
+        if (gamepad2.y) {
+            speed=4000;
+            position = 1750;
+            armState = ArmState.RotateUp;
 
-            }
-            if (gamepad2.b) {
-                speed=4000;
-                position = 2250;
-                armState = ArmState.RotateUp;
-            }
-            if (gamepad2.a) {
-                speed=4000;
-                position = 55;
-                armState = ArmState.RotateUp;
-            }
+        }
+        if (gamepad2.b) {
+            speed=4000;
+            position = 2250;
+            armState = ArmState.RotateUp;
+        }
+        if (gamepad2.a) {
+            speed=4000;
+            position = 55;
+            armState = ArmState.RotateUp;
+        }
 
-            if (gamepad2.left_stick_y != 0) {
-                motorSlideRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                motorSlideLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                motorSlideRight.setVelocity(-signum(gamepad2.left_stick_y)*1900);
-                motorSlideLeft.setVelocity(-signum(gamepad2.left_stick_y)*2000);
-                position = motorSlideLeft.getCurrentPosition();
-                prevposition = position;
-                a = true;
-            } else if (a) {
-                motorSlideRight.setVelocity(0);
-                motorSlideLeft.setVelocity(0);
-                motorSlideRight.setTargetPosition(motorSlideLeft.getCurrentPosition());
-                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideRight.setVelocity(1000);
-                position = motorSlideLeft.getCurrentPosition();
-                prevposition = position;
-                a = false;
-            }
-            if (prevposition != position && gamepad2.left_stick_y == 0) {
-                motorSlideRight.setTargetPosition(position);
-                motorSlideLeft.setTargetPosition(position);
-                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideRight.setVelocity(speed);
-                motorSlideLeft.setVelocity(speed);
-                prevposition=position;
-            }
-            telemetry.addData("position", position);
-            telemetry.addData("right", motorSlideRight.getCurrentPosition());
-            telemetry.addData("positionReal", motorSlideRight.getTargetPosition());
-            telemetry.addData("lefd", motorSlideLeft.getCurrentPosition());
-            telemetry.addData("leftOdometry", temp.getCurrentPosition());
-            telemetry.addData("rightOdometry", temp.getCurrentPosition());
-            telemetry.addData("midOdometry", temp.getCurrentPosition());
+        if (gamepad2.left_stick_y != 0) {
+            motorSlideRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorSlideLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorSlideRight.setVelocity(-signum(gamepad2.left_stick_y)*1900);
+            motorSlideLeft.setVelocity(-signum(gamepad2.left_stick_y)*2000);
+            position = motorSlideLeft.getCurrentPosition();
+            prevposition = position;
+            a = true;
+        } else if (a) {
+            motorSlideRight.setVelocity(0);
+            motorSlideLeft.setVelocity(0);
+            motorSlideRight.setTargetPosition(motorSlideLeft.getCurrentPosition());
+            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideRight.setVelocity(1000);
+            position = motorSlideLeft.getCurrentPosition();
+            prevposition = position;
+            a = false;
+        }
+        if (prevposition != position && gamepad2.left_stick_y == 0) {
+            motorSlideRight.setTargetPosition(position);
+            motorSlideLeft.setTargetPosition(position);
+            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideRight.setVelocity(speed);
+            motorSlideLeft.setVelocity(speed);
+            prevposition=position;
+        }
+        telemetry.addData("position", position);
+        telemetry.addData("right", motorSlideRight.getCurrentPosition());
+        telemetry.addData("positionReal", motorSlideRight.getTargetPosition());
+        telemetry.addData("lefd", motorSlideLeft.getCurrentPosition());
+        telemetry.addData("leftOdometry", temp.getCurrentPosition());
+        telemetry.addData("rightOdometry", temp.getCurrentPosition());
+        telemetry.addData("midOdometry", temp.getCurrentPosition());
 
-            if (gamepad1.left_bumper) {
-                motorIntake.setPower(1);
-                servoHOT.setPosition(0.52);
-                hState = HookState.Out;
-                servoBOT.setPosition(0.2);
-            } else if (gamepad1.right_bumper) {
-                motorIntake.setPower(-1);
-            } else {
-                motorIntake.setPower(0);
-            }
+        if (gamepad1.left_bumper) {
+            motorIntake.setPower(1);
+            servoHOT.setPosition(0.52);
+            hState = HookState.Out;
+            servoBOT.setPosition(0.2);
+        } else if (gamepad1.right_bumper) {
+            motorIntake.setPower(-1);
+        } else {
+            motorIntake.setPower(0);
+        }
 
-            if (gamepad2.back) {
-                motorLauncher.setPower(0.95);
-            } else {
-                motorLauncher.setPower(0);
-            }
+        if (gamepad2.back) {
+            motorLauncher.setPower(0.95);
+        } else {
+            motorLauncher.setPower(0);
+        }
     }
 }

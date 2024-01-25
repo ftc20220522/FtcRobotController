@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import java.util.concurrent.TimeUnit;
 
+@TeleOp(group = "ZTest")
 public class servoLimitTest extends LinearOpMode{
     //.2->.5
     //.57&.75 HOT - Hook

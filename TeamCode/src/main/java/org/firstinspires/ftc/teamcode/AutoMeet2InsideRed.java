@@ -15,8 +15,8 @@ import com.qualcomm.hardware.dfrobot.HuskyLens;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 
 import java.util.concurrent.TimeUnit;
-
-public class AutoMeet2OB extends LinearOpMode{
+@Autonomous(name="DONTUSE")
+public class AutoMeet2InsideRed extends LinearOpMode{
     private final int READ_PERIOD = 1;
 
     private HuskyLens huskyLens;
@@ -62,13 +62,18 @@ public class AutoMeet2OB extends LinearOpMode{
                 .forward(3)
                 .build();
         TrajectorySequence back = drive.trajectorySequenceBuilder(toMid.end())
-                .back(4)
+                .back(18)
+                .strafeLeft(25)
                 .build();
         TrajectorySequence back2 = drive.trajectorySequenceBuilder(toRight.end())
                 .back(4)
+                .strafeRight(16)
+                .forward(25)
                 .build();
         TrajectorySequence back3 = drive.trajectorySequenceBuilder(toLeft.end())
                 .back(4)
+                .strafeLeft(16)
+                .back(20)
                 .build();
         /*
          * This sample rate limits the reads solely to allow a user time to observe
@@ -168,7 +173,7 @@ public class AutoMeet2OB extends LinearOpMode{
             motorSlideRight.setVelocity(3400);
             motorSlideLeft.setVelocity(3400);
             sleep(2500);
-        } else if (location==1){
+        } else if (location==3){
             drive.followTrajectorySequence(toRight);
             motorSlideRight.setTargetPosition(420);
             motorSlideLeft.setTargetPosition(420);
@@ -194,7 +199,7 @@ public class AutoMeet2OB extends LinearOpMode{
             motorSlideRight.setVelocity(3400);
             motorSlideLeft.setVelocity(3400);
             sleep(2500);
-        } else if (location == 3) {
+        } else if (location == 1) {
             drive.followTrajectorySequence(toLeft);
             motorSlideRight.setTargetPosition(420);
             motorSlideLeft.setTargetPosition(420);

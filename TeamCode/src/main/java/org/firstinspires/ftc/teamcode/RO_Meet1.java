@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import java.util.concurrent.TimeUnit;
 
 
+@TeleOp(group = "FINALCODE")
 public class RO_Meet1 extends LinearOpMode {
 
 

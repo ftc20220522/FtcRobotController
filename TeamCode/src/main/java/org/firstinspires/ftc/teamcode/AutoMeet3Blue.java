@@ -15,8 +15,8 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 import java.util.concurrent.TimeUnit;
 
-@Autonomous(name="AutoTournamentIB")
-public class AutoTournamentIB extends LinearOpMode {
+@Autonomous(name="AutoMeet3Blue")
+public class AutoMeet3Blue extends LinearOpMode {
     private final int READ_PERIOD = 2;
 
     private HuskyLens huskyLens;

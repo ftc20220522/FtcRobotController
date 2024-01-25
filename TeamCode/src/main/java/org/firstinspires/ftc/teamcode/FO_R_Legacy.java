@@ -16,8 +16,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 import java.util.concurrent.TimeUnit;
 
-
+@TeleOp
 public class FO_R_Legacy extends LinearOpMode {
+    @Override
     public void runOpMode() throws InterruptedException {
         // Declare our motors
         // Make sure your ID's match your configuration

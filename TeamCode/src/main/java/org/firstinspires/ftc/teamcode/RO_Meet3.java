@@ -14,6 +14,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.concurrent.TimeUnit;
 
+
+@TeleOp(group = "FINALCODE")
 public class RO_Meet3 extends OpMode {
 
     //Center Odometery Wheel in Motor Port 3 (motor4 encoder)
