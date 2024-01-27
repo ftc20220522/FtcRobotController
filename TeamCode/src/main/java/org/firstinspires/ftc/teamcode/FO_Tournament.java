@@ -125,7 +125,7 @@ public class FO_Tournament extends OpMode {
         motorSlideRight.setTargetPosition(78);
         servoTOT.setPosition(0.83);
         servoBOT.setPosition(0.23);
-        servoFOT.setPosition(0.57);
+        servoFOT.setPosition(0.51);
         servoHOT.setPosition(0.52);
         imu.resetYaw();
     }
@@ -249,15 +249,15 @@ public class FO_Tournament extends OpMode {
             case Drop:
                 if (liftTimer.seconds() >= 1) {
                     if (gamepad2.dpad_down) {
-                        servoFOT.setPosition(0.72);
+                        servoFOT.setPosition(0.66);
                         liftTimer.reset();
                         armState = ArmState.Drop2;
                     } else if (gamepad2.dpad_up) {
-                        servoFOT.setPosition(0.72);
+                        servoFOT.setPosition(0.66);
                         servoHOT.setPosition(0.52);
                         hState = HookState.Out;
                     } else if (gamepad2.left_bumper) {
-                        servoFOT.setPosition(0.57);
+                        servoFOT.setPosition(0.51);
                         servoTOT.setPosition(0.83);
                         servoBOT.setPosition(0.21);
                         liftTimer.reset();
@@ -271,7 +271,7 @@ public class FO_Tournament extends OpMode {
                         servoHOT.setPosition(0.52);
                         hState = HookState.Out;
                     } else if (gamepad2.left_bumper) {
-                        servoFOT.setPosition(0.57);
+                        servoFOT.setPosition(0.51);
                         servoTOT.setPosition(0.83);
                         servoBOT.setPosition(0.21);
                         liftTimer.reset();

@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -165,11 +166,11 @@ public class AutoTournamentOB extends LinearOpMode {
          * within the OpMode by calling selectAlgorithm() and passing it one of the values
          * found in the enumeration HuskyLens.Algorithm.
          */
-        waitForStart();
-        long start = System.currentTimeMillis();
-        long end = start + 2000;
         huskyLens.selectAlgorithm(HuskyLens.Algorithm.COLOR_RECOGNITION);
-
+        ElapsedTime timer = new ElapsedTime();
+        telemetry.update();
+        waitForStart();
+        timer.reset();
 
         while (opModeIsActive()) {
             if (!rateLimit.hasExpired()) {
@@ -196,7 +197,7 @@ public class AutoTournamentOB extends LinearOpMode {
                     location = 3;
                 }
             }
-            if (blocks.length == 0) {
+            if (blocks.length == 0 && timer.milliseconds()>1500) {
                 location = 3;
             }
             if (location != 0) {

@@ -13,8 +13,9 @@ public class servoLimitTest extends LinearOpMode{
     //0.83->0.55 TOT - Top
     //0-0.21 BOT - Bottom
     //0.1-0.2
+    //Flap: close 0.51, open 0,66
     public void runOpMode() throws InterruptedException {
-        Servo servo = hardwareMap.servo.get("servo5");
+        Servo servo = hardwareMap.servo.get("servo4");
 //        Servo servo1 = hardwareMap.servo.get("servo3");
         waitForStart();
         if (isStopRequested()) return;
