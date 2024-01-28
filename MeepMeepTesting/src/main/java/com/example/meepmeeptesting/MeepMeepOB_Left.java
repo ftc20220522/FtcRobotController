@@ -12,12 +12,12 @@ public class MeepMeepOB_Left {
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 16.3)
+                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(-38, 61, 0))
-                                .lineToConstantHeading(new Vector2d(-34,29))
+                        drive.trajectorySequenceBuilder(new Pose2d(14, -61, 0))
+                                .lineToConstantHeading(new Vector2d(32,-31))
                                 //Common
-                                .lineToConstantHeading(new Vector2d(-44,12))
+                                .lineToConstantHeading(new Vector2d(44,12))
                                 .turn(Math.toRadians(-90))
                                 .lineToConstantHeading(new Vector2d(46,12))
                                 //Lift viper and wait

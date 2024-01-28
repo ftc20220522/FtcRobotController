@@ -17,8 +17,8 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 import java.util.concurrent.TimeUnit;
 
-@Autonomous(name="AutoTournamentOB")
-public class AutoTournamentOB extends LinearOpMode {
+@Autonomous(name="AutoTournamentOR")
+public class AutoTournamentOR extends LinearOpMode {
     private final int READ_PERIOD = 2;
     private HuskyLens huskyLens;
     String mode = "TAG";
@@ -44,7 +44,7 @@ public class AutoTournamentOB extends LinearOpMode {
         Servo servoTOT = hardwareMap.servo.get("servo2"); // top ot
         Servo servoBOT = hardwareMap.servo.get("servo3"); // bottom ot
         huskyLens = hardwareMap.get(HuskyLens.class, "huskylens");
-        Pose2d startPose = new Pose2d(-38, 61, Math.toRadians(90));
+        Pose2d startPose = new Pose2d(-38, -61, Math.toRadians(270));
         drive.setPoseEstimate(startPose);
 
         servoClamp.setPosition(0.6);
@@ -57,63 +57,72 @@ public class AutoTournamentOB extends LinearOpMode {
 
         //Left Movement
         TrajectorySequence purpleL = drive.trajectorySequenceBuilder(startPose)
-                .lineToConstantHeading(new Vector2d(-32,31))
+                .lineToConstantHeading(new Vector2d(-38.5,-31))
                 .build();
         TrajectorySequence getToPosL = drive.trajectorySequenceBuilder(purpleL.end())
-                .lineToConstantHeading(new Vector2d(-37,31))
-                .lineToConstantHeading(new Vector2d(-44,10))
+                .lineToConstantHeading(new Vector2d(-34,-31))
+                .lineToConstantHeading(new Vector2d(-34,-10))
+                .turn(Math.toRadians(90))
                 .build();
 
         //Middle Movement
         TrajectorySequence purpleM = drive.trajectorySequenceBuilder(startPose)
-                .lineToConstantHeading(new Vector2d(-41,24))
+                .lineToConstantHeading(new Vector2d(-38,-12))
+                .turn(Math.toRadians(90))
+                .lineToConstantHeading(new Vector2d(-34,-15))
                 .build();
         TrajectorySequence getToPosM = drive.trajectorySequenceBuilder(purpleM.end())
-                .lineToConstantHeading(new Vector2d(-44,24))
-                .lineToConstantHeading(new Vector2d(-44,10))
+                .lineToConstantHeading(new Vector2d(-44,-10))
                 .build();
 
         //Right Movement
         TrajectorySequence purpleR = drive.trajectorySequenceBuilder(startPose)
-                .lineToConstantHeading(new Vector2d(-56,31))
+                .lineToConstantHeading(new Vector2d(-38,-31))
+                .lineToConstantHeading(new Vector2d(-9,-31))
+                .lineToConstantHeading(new Vector2d(-17,-31))
                 .build();
         TrajectorySequence getToPosR = drive.trajectorySequenceBuilder(purpleR.end())
-                .lineToConstantHeading(new Vector2d(-58,31))
-                .lineToConstantHeading(new Vector2d(-58,18))
-                .lineToConstantHeading(new Vector2d(-44,10))
+                .lineToConstantHeading(new Vector2d(-12,-31))
+                .lineToConstantHeading(new Vector2d(-11,-10))
+                .turn(Math.toRadians(90))
                 .build();
 
         //To Board Movement
-        TrajectorySequence toBoard = drive.trajectorySequenceBuilder(getToPosM.end())
-                .turn(Math.toRadians(-90))
-                .lineToConstantHeading(new Vector2d(44,10))
+        TrajectorySequence toBoardL = drive.trajectorySequenceBuilder(getToPosL.end())
+                .lineToConstantHeading(new Vector2d(44,-10))
+                .build();
+        TrajectorySequence toBoardM = drive.trajectorySequenceBuilder(getToPosM.end())
+                .lineToConstantHeading(new Vector2d(44,-10))
+                .build();
+        TrajectorySequence toBoardR = drive.trajectorySequenceBuilder(getToPosR.end())
+                .lineToConstantHeading(new Vector2d(44,-10))
                 .build();
 
         //Left
-        TrajectorySequence posL = drive.trajectorySequenceBuilder(toBoard.end())
-                .lineToConstantHeading(new Vector2d(46,39))
-                .lineToConstantHeading(new Vector2d(54,39))
+        TrajectorySequence posL = drive.trajectorySequenceBuilder(toBoardL.end())
+                .lineToConstantHeading(new Vector2d(46,-24))
+                .lineToConstantHeading(new Vector2d(53,-24))
                 .build();
         TrajectorySequence endL = drive.trajectorySequenceBuilder(posL.end())
-                .lineToConstantHeading(new Vector2d(46,39))
+                .lineToConstantHeading(new Vector2d(46,-24))
                 .build();
 
         //Mid
-        TrajectorySequence posM = drive.trajectorySequenceBuilder(toBoard.end())
-                .lineToConstantHeading(new Vector2d(46,30))
-                .lineToConstantHeading(new Vector2d(54,30))
+        TrajectorySequence posM = drive.trajectorySequenceBuilder(toBoardM.end())
+                .lineToConstantHeading(new Vector2d(46,-31))
+                .lineToConstantHeading(new Vector2d(53,-31))
                 .build();
         TrajectorySequence endM = drive.trajectorySequenceBuilder(posM.end())
-                .lineToConstantHeading(new Vector2d(46,30))
+                .lineToConstantHeading(new Vector2d(46,-31))
                 .build();
 
         //Right
-        TrajectorySequence posR = drive.trajectorySequenceBuilder(toBoard.end())
-                .lineToConstantHeading(new Vector2d(46,26))
-                .lineToConstantHeading(new Vector2d(54,26))
+        TrajectorySequence posR = drive.trajectorySequenceBuilder(toBoardR.end())
+                .lineToConstantHeading(new Vector2d(46,-40))
+                .lineToConstantHeading(new Vector2d(53,-40))
                 .build();
-        TrajectorySequence endR = drive.trajectorySequenceBuilder(posR.end())
-                .lineToConstantHeading(new Vector2d(46,26))
+        TrajectorySequence endR = drive.trajectorySequenceBuilder(posL.end())
+                .lineToConstantHeading(new Vector2d(46,-40))
                 .build();
 
 
@@ -176,32 +185,32 @@ public class AutoTournamentOB extends LinearOpMode {
                 if (blocks[i].x <= 100) {
                     telemetry.addData("Pos:", "Left");
                     telemetry.update();
-                    location = 1;
+                    location = 4;
                 } else if (blocks[i].x > 100 && blocks[i].x <= 200) {
                     telemetry.addData("Pos:", "Middle");
                     telemetry.update();
-                    location = 2;
+                    location = 5;
                 } else if (blocks[i].x > 200) {
                     telemetry.addData("Pos:", "Right");
                     telemetry.update();
-                    location = 2;
+                    location = 6;
                 }
             }
             if (blocks.length == 0 && timer.milliseconds()>1500) {
-                location = 3;
+                location = 6;
             }
             if (location != 0) {
                 break;
             }
         }
-        if (location == 1) {
+        if (location == 4) {
             drive.followTrajectorySequence(purpleL);
             servoClamp.setPosition(0.1);
             sleep(300);
             drive.followTrajectorySequence(getToPosL);
 
             //To Backboard
-            drive.followTrajectorySequence(toBoard);
+            drive.followTrajectorySequence(toBoardL);
 
             //Viper Slides Up & Set
             motorSlideRight.setTargetPosition(1000);
@@ -248,14 +257,14 @@ public class AutoTournamentOB extends LinearOpMode {
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
             sleep(1000);
-        } else if (location == 2) {
+        } else if (location == 5) {
             drive.followTrajectorySequence(purpleM);
             servoClamp.setPosition(0.1);
             sleep(300);
             drive.followTrajectorySequence(getToPosM);
 
             //To Backboard
-            drive.followTrajectorySequence(toBoard);
+            drive.followTrajectorySequence(toBoardM);
 
             //Viper Slides Up & Set
             motorSlideRight.setTargetPosition(1000);
@@ -302,14 +311,14 @@ public class AutoTournamentOB extends LinearOpMode {
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
             sleep(1000);
-        } else if (location == 3) {
+        } else if (location == 6) {
             drive.followTrajectorySequence(purpleR);
             servoClamp.setPosition(0.1);
             sleep(300);
             drive.followTrajectorySequence(getToPosR);
 
             //To Backboard
-            drive.followTrajectorySequence(toBoard);
+            drive.followTrajectorySequence(toBoardR);
 
             //Viper Slides Up & Set
             motorSlideRight.setTargetPosition(1000);
@@ -328,7 +337,7 @@ public class AutoTournamentOB extends LinearOpMode {
             motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
-            sleep(5000);
+            sleep(4000);
 
             //Position to Board
             drive.followTrajectorySequence(posR);

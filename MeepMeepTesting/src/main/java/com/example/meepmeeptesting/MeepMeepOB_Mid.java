@@ -14,27 +14,17 @@ public class MeepMeepOB_Mid {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
-<<<<<<< Updated upstream:MeepMeepTesting/src/main/java/com/example/meepmeeptesting/MeepMeepTesting.java
-                        drive.trajectorySequenceBuilder(new Pose2d(0, 0, 0))
-                                .forward(30)
-                                .turn(Math.toRadians(90))
-                                .forward(30)
-                                .turn(Math.toRadians(90))
-                                .forward(30)
-                                .turn(Math.toRadians(90))
-                                .forward(30)
-                                .turn(Math.toRadians(90))
-=======
-                        drive.trajectorySequenceBuilder(new Pose2d(-38, 61, 0))
-                                .lineToConstantHeading(new Vector2d(-41,24))
-                                //Common
-                                .lineToConstantHeading(new Vector2d(-44,12))
+                        drive.trajectorySequenceBuilder(new Pose2d(-38, -61, Math.toRadians(270)))
+                                .lineToConstantHeading(new Vector2d(-38,-12))
                                 .turn(Math.toRadians(-90))
-                                .lineToConstantHeading(new Vector2d(46,12))
+                                .lineToConstantHeading(new Vector2d(-38,-15))
+                                //Common
+                                .lineToConstantHeading(new Vector2d(-44,-12))
+
+                                .lineToConstantHeading(new Vector2d(46,-12))
                                 //Lift viper and wait
-                                .lineToConstantHeading(new Vector2d(46,28))
-                                .lineToConstantHeading(new Vector2d(49,28))
->>>>>>> Stashed changes:MeepMeepTesting/src/main/java/com/example/meepmeeptesting/MeepMeepOB_Mid.java
+                                .lineToConstantHeading(new Vector2d(46,-28))
+                                .lineToConstantHeading(new Vector2d(49,-28))
                                 .build()
                 );
 
