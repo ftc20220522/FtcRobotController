@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -8,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -15,19 +17,13 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 import java.util.concurrent.TimeUnit;
 
-@Autonomous(name="AutoTournamentIB")
+@Autonomous(name="AutoInsideBlue")
 public class AutoTournamentIB extends LinearOpMode {
     private final int READ_PERIOD = 2;
-
     private HuskyLens huskyLens;
-
-
     String mode = "TAG";
-
     String pos;
-
     int location = 0;
-
     @Override
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
@@ -42,84 +38,83 @@ public class AutoTournamentIB extends LinearOpMode {
         motorSlideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorSlideRight.setDirection(DcMotorSimple.Direction.REVERSE);
         DcMotor temp = hardwareMap.dcMotor.get("motor7");
-        Servo servoLauncher = hardwareMap.servo.get("servo1");
+        Servo servoClamp = hardwareMap.servo.get("servo1");
         Servo servoHOT = hardwareMap.servo.get("servo5"); //Hook ot
         Servo servoFOT = hardwareMap.servo.get("servo4"); // flap ot
         Servo servoTOT = hardwareMap.servo.get("servo2"); // top ot
         Servo servoBOT = hardwareMap.servo.get("servo3"); // bottom ot
         huskyLens = hardwareMap.get(HuskyLens.class, "huskylens");
-        Pose2d startPose = new Pose2d(0, 0, 180);
+        Pose2d startPose = new Pose2d(14, 61, Math.toRadians(90));
         drive.setPoseEstimate(startPose);
 
-        //Middle Movement
-        TrajectorySequence startM = drive.trajectorySequenceBuilder(startPose)
-                .back(29)
-                .build();
-        TrajectorySequence backM = drive.trajectorySequenceBuilder(startM.end())
-                .forward(7)
-                //Clockwise is positive (right)
-                //Counterclockwise is negative (left)
-                .build();
-        TrajectorySequence moveM = drive.trajectorySequenceBuilder(backM.end())
-                .turn(Math.toRadians(-90))
-                .forward(32)
-                .strafeRight(5)
-                .build();
-        TrajectorySequence leftM = drive.trajectorySequenceBuilder(moveM.end())
-                .forward(8)
-                .build();
-        TrajectorySequence backwardM = drive.trajectorySequenceBuilder(leftM.end())
-                .back(8)
-                .strafeLeft(28)
-                .build();
-
-
-        //Right Movement
-        TrajectorySequence startR = drive.trajectorySequenceBuilder(startPose)
-                .back(29.5)
-                .turn(Math.toRadians(-90))
-                .back(6)
-                .build();
-        TrajectorySequence backR = drive.trajectorySequenceBuilder(startR.end())
-                .forward(6)
-                .build();
-        TrajectorySequence moveR = drive.trajectorySequenceBuilder(backR.end())
-                .forward(35.5)
-                .strafeRight(7)
-                .build();
-        TrajectorySequence leftR = drive.trajectorySequenceBuilder(moveR.end())
-                .forward(3)
-                .build();
-        TrajectorySequence backwardR = drive.trajectorySequenceBuilder(leftR.end())
-                .back(8)
-                .strafeLeft(36)
-                .build();
-
+        servoClamp.setPosition(0.6);
+        motorSlideLeft.setTargetPosition(0);
+        motorSlideRight.setTargetPosition(0);
+        servoTOT.setPosition(0.83);
+        servoBOT.setPosition(0.23);
+        servoFOT.setPosition(0.51);
+        servoHOT.setPosition(0.67);
 
         //Left Movement
-        TrajectorySequence startL = drive.trajectorySequenceBuilder(startPose)
-                .back(28.5)
-                //Negative turns counterclockwise
-                .turn(Math.toRadians(90))
-                .back(10)
+        TrajectorySequence purpleL = drive.trajectorySequenceBuilder(startPose)
+                .lineToConstantHeading(new Vector2d(23.5,35))
+                .turn(Math.toRadians(-90))
                 .build();
-        TrajectorySequence backL = drive.trajectorySequenceBuilder(startL.end())
-                .forward(9)
+        TrajectorySequence getToPosL = drive.trajectorySequenceBuilder(purpleL.end())
+                .lineToConstantHeading(new Vector2d(22,44))
                 .build();
-        TrajectorySequence moveL = drive.trajectorySequenceBuilder(backL.end())
-                .strafeLeft(28)
-                .turn(Math.toRadians(-180))
-                .forward(87)
+        TrajectorySequence toBoardL = drive.trajectorySequenceBuilder(getToPosL.end())
+                .lineToConstantHeading(new Vector2d(54,41))
                 .build();
-        TrajectorySequence leftL = drive.trajectorySequenceBuilder(moveL.end())
-                .strafeLeft(40)
-                .forward(3)
+        TrajectorySequence posL = drive.trajectorySequenceBuilder(toBoardL.end())
+                .lineToConstantHeading(new Vector2d(46,41))
+                .lineToConstantHeading(new Vector2d(46,58))
                 .build();
-        TrajectorySequence backwardL = drive.trajectorySequenceBuilder(leftL.end())
-                .back(8)
-                .strafeRight(15)
+        TrajectorySequence endL = drive.trajectorySequenceBuilder(posL.end())
+                .lineToConstantHeading(new Vector2d(60,58))
                 .build();
 
+
+
+        //Middle Movement
+        TrajectorySequence purpleM = drive.trajectorySequenceBuilder(startPose)
+                .lineToConstantHeading(new Vector2d(14,28))
+                .turn(Math.toRadians(-90))
+                .build();
+        TrajectorySequence getToPosM = drive.trajectorySequenceBuilder(purpleM.end())
+                .lineToConstantHeading(new Vector2d(14,37))
+                .build();
+        TrajectorySequence toBoardM = drive.trajectorySequenceBuilder(getToPosM.end())
+                .lineToConstantHeading(new Vector2d(54,34.5))
+                .build();
+        TrajectorySequence posM = drive.trajectorySequenceBuilder(toBoardM.end())
+                .lineToConstantHeading(new Vector2d(46,58))
+                .build();
+        TrajectorySequence endM = drive.trajectorySequenceBuilder(posM.end())
+                .lineToConstantHeading(new Vector2d(60,58))
+                .build();
+
+
+        
+        //Right Movement
+        TrajectorySequence purpleR = drive.trajectorySequenceBuilder(startPose)
+                .lineToConstantHeading(new Vector2d(14,31))
+                .turn(Math.toRadians(180))
+                .lineToConstantHeading(new Vector2d(8,31))
+                .build();
+        TrajectorySequence getToPosR = drive.trajectorySequenceBuilder(purpleR.end())
+                .lineToConstantHeading(new Vector2d(20,31))
+                .turn(Math.toRadians(90))
+                .build();
+        TrajectorySequence toBoardR = drive.trajectorySequenceBuilder(getToPosR.end())
+                .lineToConstantHeading(new Vector2d(54.5,28))
+                .build();
+        TrajectorySequence posR = drive.trajectorySequenceBuilder(toBoardR.end())
+                .lineToConstantHeading(new Vector2d(46,58))
+                .build();
+        TrajectorySequence endR = drive.trajectorySequenceBuilder(posL.end())
+                .lineToConstantHeading(new Vector2d(60,58))
+                .build();
 
 
         /*
@@ -162,19 +157,11 @@ public class AutoTournamentIB extends LinearOpMode {
          * found in the enumeration HuskyLens.Algorithm.
          */
         huskyLens.selectAlgorithm(HuskyLens.Algorithm.COLOR_RECOGNITION);
-
-
+        ElapsedTime timer = new ElapsedTime();
+        telemetry.update();
         waitForStart();
-        servoLauncher.setPosition(0.2);
-        motorSlideLeft.setTargetPosition(0);
-        motorSlideRight.setTargetPosition(0);
-        servoTOT.setPosition(0.83);
-        servoBOT.setPosition(0.23);
-        servoFOT.setPosition(0.1);
-        servoHOT.setPosition(0.67);
-        long start = System.currentTimeMillis();
-        long end = start + 2000;
-        huskyLens.selectAlgorithm(HuskyLens.Algorithm.COLOR_RECOGNITION);
+        timer.reset();
+
         while (opModeIsActive()) {
             if (!rateLimit.hasExpired()) {
                 continue;
@@ -189,170 +176,181 @@ public class AutoTournamentIB extends LinearOpMode {
                 if (blocks[i].x <= 100) {
                     telemetry.addData("Pos:", "Left");
                     telemetry.update();
-                    location = 3;
+                    location = 4;
                 } else if (blocks[i].x > 100 && blocks[i].x <= 200) {
                     telemetry.addData("Pos:", "Middle");
                     telemetry.update();
-                    location = 2;
+                    location = 5;
                 } else if (blocks[i].x > 200) {
                     telemetry.addData("Pos:", "Right");
                     telemetry.update();
-                    location = 1;
+                    location = 6;
                 }
             }
-            if (blocks.length == 0) {
-                location = 1;
+            if (blocks.length == 0 && timer.milliseconds()>1500) {
+                location = 6;
             }
             if (location != 0) {
                 break;
             }
         }
+        if (location == 4) {
+            drive.followTrajectorySequence(purpleL);
+            servoClamp.setPosition(0.1);
+            sleep(200);
+            drive.followTrajectorySequence(getToPosL);
 
+            //Viper Slides Up & Set
+            motorSlideRight.setTargetPosition(1000);
+            motorSlideLeft.setTargetPosition(1000);
+            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideRight.setVelocity(1000);
+            motorSlideLeft.setVelocity(1000);
+            sleep(250);
+            servoTOT.setPosition(0.54);
+            servoBOT.setPosition(0);
+            sleep(750);
+            motorSlideRight.setTargetPosition(0);
+            motorSlideLeft.setTargetPosition(0);
+            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideRight.setVelocity(1000);
+            motorSlideLeft.setVelocity(1000);
+            sleep(500);
 
-            if (location == 2) {
-                drive.followTrajectorySequence(startM);
-                motorIntake.setPower(-0.45);
-                drive.followTrajectorySequence(backM);
-                motorIntake.setPower(0);
-                drive.followTrajectorySequence(moveM);
+            //Position to Board
+            drive.followTrajectorySequence(toBoardL);
+            sleep(300);
+            servoFOT.setPosition(0.66);
+            sleep(200);
+            drive.followTrajectorySequence(posL);
 
-                //END PART DO NOT CHANGE
-                motorSlideRight.setTargetPosition(1000);
-                motorSlideLeft.setTargetPosition(1000);
-                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideRight.setVelocity(1000);
-                motorSlideLeft.setVelocity(1000);
-                sleep(250);
-                servoTOT.setPosition(0.54);
-                servoBOT.setPosition(0);
-                sleep(700);
-                motorSlideRight.setTargetPosition(25);
-                motorSlideLeft.setTargetPosition(25);
-                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideRight.setVelocity(1000);
-                motorSlideLeft.setVelocity(1000);
-                drive.followTrajectorySequence(leftM);
-                sleep(300);
-                servoFOT.setPosition(0.72);
-                sleep(200);
-                drive.followTrajectorySequence(backwardM);
-                motorSlideRight.setTargetPosition(1000);
-                motorSlideLeft.setTargetPosition(1000);
-                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideRight.setVelocity(1000);
-                motorSlideLeft.setVelocity(1000);
-                servoTOT.setPosition(0.83);
-                servoBOT.setPosition(0.23);
-                servoFOT.setPosition(0.57);
-                servoHOT.setPosition(0.52);
-                sleep(2000);
-                motorSlideRight.setTargetPosition(0);
-                motorSlideLeft.setTargetPosition(0);
-                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideRight.setVelocity(1000);
-                motorSlideLeft.setVelocity(1000);
-                sleep(1000);
-            } else if (location == 1) {
-                drive.followTrajectorySequence(startR);
-                motorIntake.setPower(-0.45);
-                drive.followTrajectorySequence(backR);
-                motorIntake.setPower(0);
-                drive.followTrajectorySequence(moveR);
+            //End
+            motorSlideRight.setTargetPosition(1000);
+            motorSlideLeft.setTargetPosition(1000);
+            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideRight.setVelocity(1000);
+            motorSlideLeft.setVelocity(1000);
+            servoTOT.setPosition(0.83);
+            servoBOT.setPosition(0.23);
+            servoFOT.setPosition(0.57);
+            servoHOT.setPosition(0.52);
+            sleep(1500);
+            motorSlideRight.setTargetPosition(0);
+            motorSlideLeft.setTargetPosition(0);
+            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideRight.setVelocity(1000);
+            motorSlideLeft.setVelocity(1000);
+            sleep(500);
+            drive.followTrajectorySequence(endL);
+        } else if (location == 5) {
+            drive.followTrajectorySequence(purpleM);
+            servoClamp.setPosition(0.1);
+            sleep(200);
+            drive.followTrajectorySequence(getToPosM);
 
-                //END PART DO NOT CHANGE
-                motorSlideRight.setTargetPosition(1000);
-                motorSlideLeft.setTargetPosition(1000);
-                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideRight.setVelocity(1000);
-                motorSlideLeft.setVelocity(1000);
-                sleep(250);
-                servoTOT.setPosition(0.54);
-                servoBOT.setPosition(0);
-                sleep(1200);
-                motorSlideRight.setTargetPosition(25);
-                motorSlideLeft.setTargetPosition(25);
-                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideRight.setVelocity(1000);
-                motorSlideLeft.setVelocity(1000);
-                drive.followTrajectorySequence(leftR);
-                sleep(300);
-                servoFOT.setPosition(0.72);
-                sleep(200);
-                drive.followTrajectorySequence(backwardR);
-                motorSlideRight.setTargetPosition(1000);
-                motorSlideLeft.setTargetPosition(1000);
-                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideRight.setVelocity(1000);
-                motorSlideLeft.setVelocity(1000);
-                servoTOT.setPosition(0.83);
-                servoBOT.setPosition(0.23);
-                servoFOT.setPosition(0.57);
-                servoHOT.setPosition(0.52);
-                sleep(2000);
-                motorSlideRight.setTargetPosition(0);
-                motorSlideLeft.setTargetPosition(0);
-                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideRight.setVelocity(1000);
-                motorSlideLeft.setVelocity(1000);
-                sleep(1000);
-            } else if (location == 3) {
-                drive.followTrajectorySequence(startL);
-//                motorIntake.setPower(-0.45);
-                drive.followTrajectorySequence(backL);
-//                motorIntake.setPower(0);
-                drive.followTrajectorySequence(moveL);
+            //Viper Slides Up & Set
+            motorSlideRight.setTargetPosition(1000);
+            motorSlideLeft.setTargetPosition(1000);
+            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideRight.setVelocity(1000);
+            motorSlideLeft.setVelocity(1000);
+            sleep(250);
+            servoTOT.setPosition(0.54);
+            servoBOT.setPosition(0);
+            sleep(750);
+            motorSlideRight.setTargetPosition(0);
+            motorSlideLeft.setTargetPosition(0);
+            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideRight.setVelocity(1000);
+            motorSlideLeft.setVelocity(1000);
+            sleep(500);
 
-                //END PART DO NOT CHANGE
-                motorSlideRight.setTargetPosition(1000);
-                motorSlideLeft.setTargetPosition(1000);
-                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideRight.setVelocity(1000);
-                motorSlideLeft.setVelocity(1000);
-                sleep(250);
-                servoTOT.setPosition(0.54);
-                servoBOT.setPosition(0);
-                sleep(1200);
-                motorSlideRight.setTargetPosition(100);
-                motorSlideLeft.setTargetPosition(100);
-                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideRight.setVelocity(1000);
-                motorSlideLeft.setVelocity(1000);
-                sleep(3400);
-                drive.followTrajectorySequence(leftL);
-                sleep(300);
-                servoFOT.setPosition(0.72);
-                sleep(200);
-                drive.followTrajectorySequence(backwardL);
-                motorSlideRight.setTargetPosition(1000);
-                motorSlideLeft.setTargetPosition(1000);
-                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideRight.setVelocity(1000);
-                motorSlideLeft.setVelocity(1000);
-                servoTOT.setPosition(0.83);
-                servoBOT.setPosition(0.23);
-                servoFOT.setPosition(0.57);
-                servoHOT.setPosition(0.52);
-                sleep(2000);
-                motorSlideRight.setTargetPosition(0);
-                motorSlideLeft.setTargetPosition(0);
-                motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorSlideRight.setVelocity(1000);
-                motorSlideLeft.setVelocity(1000);
-                sleep(1000);
-            }
+            //Position to Board
+            drive.followTrajectorySequence(toBoardM);
+            sleep(300);
+            servoFOT.setPosition(0.66);
+            sleep(200);
+            drive.followTrajectorySequence(posM);
+
+            //End
+            motorSlideRight.setTargetPosition(1000);
+            motorSlideLeft.setTargetPosition(1000);
+            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideRight.setVelocity(1000);
+            motorSlideLeft.setVelocity(1000);
+            servoTOT.setPosition(0.83);
+            servoBOT.setPosition(0.23);
+            servoFOT.setPosition(0.57);
+            servoHOT.setPosition(0.52);
+            sleep(1500);
+            motorSlideRight.setTargetPosition(0);
+            motorSlideLeft.setTargetPosition(0);
+            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideRight.setVelocity(1000);
+            motorSlideLeft.setVelocity(1000);
+            sleep(500);
+            drive.followTrajectorySequence(endM);
+        } else if (location == 6) {
+            drive.followTrajectorySequence(purpleR);
+            servoClamp.setPosition(0.1);
+            sleep(200);
+            drive.followTrajectorySequence(getToPosR);
+
+            //Viper Slides Up & Set
+            motorSlideRight.setTargetPosition(1000);
+            motorSlideLeft.setTargetPosition(1000);
+            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideRight.setVelocity(1000);
+            motorSlideLeft.setVelocity(1000);
+            sleep(250);
+            servoTOT.setPosition(0.54);
+            servoBOT.setPosition(0);
+            sleep(750);
+            motorSlideRight.setTargetPosition(0);
+            motorSlideLeft.setTargetPosition(0);
+            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideRight.setVelocity(1000);
+            motorSlideLeft.setVelocity(1000);
+            sleep(500);
+
+            //Position to Board
+            drive.followTrajectorySequence(toBoardR);
+            sleep(300);
+            servoFOT.setPosition(0.66);
+            sleep(200);
+            drive.followTrajectorySequence(posR);
+
+            //End
+            motorSlideRight.setTargetPosition(1000);
+            motorSlideLeft.setTargetPosition(1000);
+            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideRight.setVelocity(1000);
+            motorSlideLeft.setVelocity(1000);
+            servoTOT.setPosition(0.83);
+            servoBOT.setPosition(0.23);
+            servoFOT.setPosition(0.57);
+            servoHOT.setPosition(0.52);
+            sleep(1500);
+            motorSlideRight.setTargetPosition(0);
+            motorSlideLeft.setTargetPosition(0);
+            motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorSlideRight.setVelocity(1000);
+            motorSlideLeft.setVelocity(1000);
+            sleep(500);
+            drive.followTrajectorySequence(endR);
         }
-
     }
+}
 

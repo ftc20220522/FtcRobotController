@@ -14,17 +14,15 @@ public class MeepMeepOB_Mid {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(-38, -61, Math.toRadians(270)))
-                                .lineToConstantHeading(new Vector2d(-38,-12))
-                                .turn(Math.toRadians(-90))
-                                .lineToConstantHeading(new Vector2d(-38,-15))
-                                //Common
-                                .lineToConstantHeading(new Vector2d(-44,-12))
-
-                                .lineToConstantHeading(new Vector2d(46,-12))
-                                //Lift viper and wait
-                                .lineToConstantHeading(new Vector2d(46,-28))
-                                .lineToConstantHeading(new Vector2d(49,-28))
+                        drive.trajectorySequenceBuilder(new Pose2d(16, -61, Math.toRadians(270)))
+                                .lineToConstantHeading(new Vector2d(22,-24))
+                                .lineToConstantHeading(new Vector2d(40,-24))
+                                .turn(Math.toRadians(90))
+                                .lineToConstantHeading(new Vector2d(34,-15))
+                                .lineToConstantHeading(new Vector2d(44,-10))
+                                .lineToConstantHeading(new Vector2d(-44,-10))
+                                .lineToConstantHeading(new Vector2d(-46,-31))
+                                .lineToConstantHeading(new Vector2d(-53,-31))
                                 .build()
                 );
 
