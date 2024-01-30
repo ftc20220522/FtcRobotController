@@ -51,7 +51,7 @@ public class AutoTournamentOR extends LinearOpMode {
         motorSlideLeft.setTargetPosition(0);
         motorSlideRight.setTargetPosition(0);
         servoTOT.setPosition(0.83);
-        servoBOT.setPosition(0.23);
+        servoBOT.setPosition(0.7);
         servoFOT.setPosition(0.51);
         servoHOT.setPosition(0.67);
 
@@ -217,7 +217,7 @@ public class AutoTournamentOR extends LinearOpMode {
             motorSlideLeft.setVelocity(1000);
             sleep(250);
             servoTOT.setPosition(0.54);
-            servoBOT.setPosition(0);
+            servoBOT.setPosition(0.47);
             sleep(1200);
             motorSlideRight.setTargetPosition(50);
             motorSlideLeft.setTargetPosition(50);
@@ -242,7 +242,7 @@ public class AutoTournamentOR extends LinearOpMode {
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
             servoTOT.setPosition(0.83);
-            servoBOT.setPosition(0.23);
+            servoBOT.setPosition(0.7);
             servoFOT.setPosition(0.57);
             servoHOT.setPosition(0.52);
             sleep(2000);
@@ -271,7 +271,7 @@ public class AutoTournamentOR extends LinearOpMode {
             motorSlideLeft.setVelocity(1000);
             sleep(250);
             servoTOT.setPosition(0.54);
-            servoBOT.setPosition(0);
+            servoBOT.setPosition(0.47);
             sleep(1200);
             motorSlideRight.setTargetPosition(50);
             motorSlideLeft.setTargetPosition(50);
@@ -296,7 +296,7 @@ public class AutoTournamentOR extends LinearOpMode {
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
             servoTOT.setPosition(0.83);
-            servoBOT.setPosition(0.23);
+            servoBOT.setPosition(0.7);
             servoFOT.setPosition(0.57);
             servoHOT.setPosition(0.52);
             sleep(2000);
@@ -325,7 +325,7 @@ public class AutoTournamentOR extends LinearOpMode {
             motorSlideLeft.setVelocity(1000);
             sleep(250);
             servoTOT.setPosition(0.54);
-            servoBOT.setPosition(0);
+            servoBOT.setPosition(0.47);
             sleep(1200);
             motorSlideRight.setTargetPosition(50);
             motorSlideLeft.setTargetPosition(50);
@@ -350,7 +350,7 @@ public class AutoTournamentOR extends LinearOpMode {
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
             servoTOT.setPosition(0.83);
-            servoBOT.setPosition(0.23);
+            servoBOT.setPosition(0.7);
             servoFOT.setPosition(0.57);
             servoHOT.setPosition(0.52);
             sleep(2000);
