@@ -340,7 +340,7 @@ public class FO_Tournament extends OpMode {
         // The equivalent button is start on Xbox-style controllers.
 
 
-        double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS)-Math.toRadians(90);
 
         // Rotate the movement direction counter to the bot's rotation
         double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
@@ -418,6 +418,7 @@ public class FO_Tournament extends OpMode {
             motorSlideLeft.setVelocity(speed);
             prevposition=position;
         }
+        telemetry.addData("heading", Math.toDegrees(botHeading));
         telemetry.addData("position", position);
         telemetry.addData("right", motorSlideRight.getCurrentPosition());
         telemetry.addData("positionReal", motorSlideRight.getTargetPosition());

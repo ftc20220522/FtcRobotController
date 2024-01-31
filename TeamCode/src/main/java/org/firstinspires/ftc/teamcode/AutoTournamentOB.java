@@ -51,16 +51,17 @@ public class AutoTournamentOB extends LinearOpMode {
         motorSlideLeft.setTargetPosition(0);
         motorSlideRight.setTargetPosition(0);
         servoTOT.setPosition(0.83);
-        servoBOT.setPosition(0.7);
+        servoBOT.setPosition(0.69);
         servoFOT.setPosition(0.51);
         servoHOT.setPosition(0.67);
 
         //Left Movement
         TrajectorySequence purpleL = drive.trajectorySequenceBuilder(startPose)
+                .lineToConstantHeading(new Vector2d(-38,31))
                 .lineToConstantHeading(new Vector2d(-32,31))
                 .build();
         TrajectorySequence getToPosL = drive.trajectorySequenceBuilder(purpleL.end())
-                .lineToConstantHeading(new Vector2d(-37,31))
+                .lineToConstantHeading(new Vector2d(-35,31))
                 .lineToConstantHeading(new Vector2d(-44,10))
                 .build();
         TrajectorySequence toBoardL = drive.trajectorySequenceBuilder(getToPosL.end())
@@ -101,12 +102,14 @@ public class AutoTournamentOB extends LinearOpMode {
 
         //Right Movement
         TrajectorySequence purpleR = drive.trajectorySequenceBuilder(startPose)
-                .lineToConstantHeading(new Vector2d(-56,31))
+                .lineToConstantHeading(new Vector2d(-47,27))
+                .lineToConstantHeading(new Vector2d(-56.75,31))
                 .build();
         TrajectorySequence getToPosR = drive.trajectorySequenceBuilder(purpleR.end())
-                .lineToConstantHeading(new Vector2d(-58,31))
-                .lineToConstantHeading(new Vector2d(-58,18))
-                .lineToConstantHeading(new Vector2d(-44,10))
+                .lineToConstantHeading(new Vector2d(-58.5,31))
+                .lineToConstantHeading(new Vector2d(-58.5,45))
+                .lineToConstantHeading(new Vector2d(-35,45))
+                .lineToConstantHeading(new Vector2d(-35,10))
                 .build();
         TrajectorySequence toBoardR = drive.trajectorySequenceBuilder(getToPosR.end())
                 .turn(Math.toRadians(-90))
@@ -188,7 +191,7 @@ public class AutoTournamentOB extends LinearOpMode {
                 } else if (blocks[i].x > 200) {
                     telemetry.addData("Pos:", "Right");
                     telemetry.update();
-                    location = 2;
+                    location = 3;
                 }
             }
             if (blocks.length == 0 && timer.milliseconds()>1500) {
@@ -218,8 +221,8 @@ public class AutoTournamentOB extends LinearOpMode {
             servoTOT.setPosition(0.54);
             servoBOT.setPosition(0.47);
             sleep(1200);
-            motorSlideRight.setTargetPosition(50);
-            motorSlideLeft.setTargetPosition(50);
+            motorSlideRight.setTargetPosition(0);
+            motorSlideLeft.setTargetPosition(0);
             motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorSlideRight.setVelocity(1000);
@@ -241,8 +244,8 @@ public class AutoTournamentOB extends LinearOpMode {
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
             servoTOT.setPosition(0.83);
-            servoBOT.setPosition(0.7);
-            servoFOT.setPosition(0.57);
+            servoBOT.setPosition(0.69);
+            servoFOT.setPosition(0.51);
             servoHOT.setPosition(0.52);
             sleep(2000);
             motorSlideRight.setTargetPosition(0);
@@ -251,7 +254,7 @@ public class AutoTournamentOB extends LinearOpMode {
             motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
-            sleep(1000);
+            sleep(2000);
         } else if (location == 2) {
             drive.followTrajectorySequence(purpleM);
             servoClamp.setPosition(0.1);
@@ -272,8 +275,8 @@ public class AutoTournamentOB extends LinearOpMode {
             servoTOT.setPosition(0.54);
             servoBOT.setPosition(0.47);
             sleep(1200);
-            motorSlideRight.setTargetPosition(50);
-            motorSlideLeft.setTargetPosition(50);
+            motorSlideRight.setTargetPosition(0);
+            motorSlideLeft.setTargetPosition(0);
             motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorSlideRight.setVelocity(1000);
@@ -295,8 +298,8 @@ public class AutoTournamentOB extends LinearOpMode {
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
             servoTOT.setPosition(0.83);
-            servoBOT.setPosition(0.7);
-            servoFOT.setPosition(0.57);
+            servoBOT.setPosition(0.69);
+            servoFOT.setPosition(0.51);
             servoHOT.setPosition(0.52);
             sleep(2000);
             motorSlideRight.setTargetPosition(0);
@@ -305,7 +308,7 @@ public class AutoTournamentOB extends LinearOpMode {
             motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
-            sleep(1000);
+            sleep(2000);
         } else if (location == 3) {
             drive.followTrajectorySequence(purpleR);
             servoClamp.setPosition(0.1);
@@ -326,8 +329,8 @@ public class AutoTournamentOB extends LinearOpMode {
             servoTOT.setPosition(0.54);
             servoBOT.setPosition(0.47);
             sleep(1200);
-            motorSlideRight.setTargetPosition(50);
-            motorSlideLeft.setTargetPosition(50);
+            motorSlideRight.setTargetPosition(0);
+            motorSlideLeft.setTargetPosition(0);
             motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorSlideRight.setVelocity(1000);
@@ -349,8 +352,8 @@ public class AutoTournamentOB extends LinearOpMode {
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
             servoTOT.setPosition(0.83);
-            servoBOT.setPosition(0.7);
-            servoFOT.setPosition(0.57);
+            servoBOT.setPosition(0.69);
+            servoFOT.setPosition(0.51);
             servoHOT.setPosition(0.52);
             sleep(2000);
             motorSlideRight.setTargetPosition(0);
@@ -359,7 +362,7 @@ public class AutoTournamentOB extends LinearOpMode {
             motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
-            sleep(1000);
+            sleep(2000);
             }
         }
 }
