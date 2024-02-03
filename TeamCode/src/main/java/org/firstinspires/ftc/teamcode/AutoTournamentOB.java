@@ -116,11 +116,11 @@ public class AutoTournamentOB extends LinearOpMode {
                 .lineToConstantHeading(new Vector2d(44,10))
                 .build();
         TrajectorySequence posR = drive.trajectorySequenceBuilder(toBoardR.end())
-                .lineToConstantHeading(new Vector2d(46,25))
-                .lineToConstantHeading(new Vector2d(54,25))
+                .lineToConstantHeading(new Vector2d(46,26))
+                .lineToConstantHeading(new Vector2d(54,26))
                 .build();
         TrajectorySequence endR = drive.trajectorySequenceBuilder(posR.end())
-                .lineToConstantHeading(new Vector2d(46,25))
+                .lineToConstantHeading(new Vector2d(46,26))
                 .build();
 
 
@@ -335,7 +335,7 @@ public class AutoTournamentOB extends LinearOpMode {
             motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
-            sleep(5000);
+            sleep(1000);
 
             //Position to Board
             drive.followTrajectorySequence(posR);

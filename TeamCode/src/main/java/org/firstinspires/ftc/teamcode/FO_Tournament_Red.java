@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 @TeleOp(group = "FINALCODE")
-public class FO_Tournament extends OpMode {
+public class FO_Tournament_Red extends OpMode {
 
     //Center Odometery Wheel in Motor Port 0 (motor1 encoder)
     //Right Odometery Wheel in Motor Port 1 (motor2 encoder)
@@ -36,6 +36,7 @@ public class FO_Tournament extends OpMode {
     Servo servoFOT;
     Servo servoTOT;
     Servo servoBOT;
+    Servo servoFL;
     IMU imu;
 //    CRServo servoInt;
 
@@ -69,12 +70,18 @@ public class FO_Tournament extends OpMode {
         Extend,
         Rigged,
     }
+    public enum LaunchState {
+        PlaneIn,
+        PlaneSent,
+    }
     ElapsedTime liftTimer = new ElapsedTime();
     ElapsedTime hookTimer = new ElapsedTime();
     ElapsedTime rigTimer = new ElapsedTime();
+    ElapsedTime launchTimer = new ElapsedTime();
     ArmState armState = ArmState.Bottom;
     HookState hState = HookState.Out;
     RigState rState = RigState.Bottom;
+    LaunchState lState = LaunchState.PlaneIn;
 
     public void init() {
         //New BOT Up - 0.47, Down - 0.7
@@ -92,6 +99,7 @@ public class FO_Tournament extends OpMode {
         servoFOT = hardwareMap.servo.get("servo4"); // flap ot
         servoTOT = hardwareMap.servo.get("servo2"); // top ot
         servoBOT = hardwareMap.servo.get("servo3"); // bottom ot
+        servoFL = hardwareMap.servo.get("servo6");
         motorSlideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorSlideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorSlideRight.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -132,6 +140,27 @@ public class FO_Tournament extends OpMode {
     }
 
     public void loop() {
+        switch (lState) {
+            case PlaneIn:
+                if (launchTimer.milliseconds() > 1500) {
+                    motorLauncher.setPower(0);
+                    servoFL.setPosition(0.69);
+                    if (gamepad2.back) {
+                        servoFL.setPosition(0.39);
+                        launchTimer.reset();
+                        lState = LaunchState.PlaneSent;
+                    }
+                }
+                break;
+            case PlaneSent:
+                if (launchTimer.milliseconds()>350) {
+                    motorLauncher.setPower(1);
+                    launchTimer.reset();
+                    lState = LaunchState.PlaneIn;
+                }
+                break;
+        }
+        telemetry.addData("lState:",lState);
         switch (rState) {
             case Bottom:
                 if (gamepad1.start) {
@@ -340,7 +369,7 @@ public class FO_Tournament extends OpMode {
         // The equivalent button is start on Xbox-style controllers.
 
 
-        double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS)-Math.toRadians(90);
+        double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS)+Math.toRadians(90);
 
         // Rotate the movement direction counter to the bot's rotation
         double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
