@@ -69,11 +69,11 @@ public class AutoTournamentOB extends LinearOpMode {
                 .lineToConstantHeading(new Vector2d(44,10))
                 .build();
         TrajectorySequence posL = drive.trajectorySequenceBuilder(toBoardL.end())
-                .lineToConstantHeading(new Vector2d(46,39))
-                .lineToConstantHeading(new Vector2d(54,39))
+                .lineToConstantHeading(new Vector2d(46,40))
+                .lineToConstantHeading(new Vector2d(54,40))
                 .build();
         TrajectorySequence endL = drive.trajectorySequenceBuilder(posL.end())
-                .lineToConstantHeading(new Vector2d(46,39))
+                .lineToConstantHeading(new Vector2d(46,40))
                 .build();
 
 
@@ -91,11 +91,11 @@ public class AutoTournamentOB extends LinearOpMode {
                 .lineToConstantHeading(new Vector2d(44,10))
                 .build();
         TrajectorySequence posM = drive.trajectorySequenceBuilder(toBoardM.end())
-                .lineToConstantHeading(new Vector2d(46,30))
-                .lineToConstantHeading(new Vector2d(54,30))
+                .lineToConstantHeading(new Vector2d(46,33))
+                .lineToConstantHeading(new Vector2d(54,33))
                 .build();
         TrajectorySequence endM = drive.trajectorySequenceBuilder(posM.end())
-                .lineToConstantHeading(new Vector2d(46,30))
+                .lineToConstantHeading(new Vector2d(46,33))
                 .build();
 
 
@@ -116,11 +116,11 @@ public class AutoTournamentOB extends LinearOpMode {
                 .lineToConstantHeading(new Vector2d(44,10))
                 .build();
         TrajectorySequence posR = drive.trajectorySequenceBuilder(toBoardR.end())
-                .lineToConstantHeading(new Vector2d(46,26))
-                .lineToConstantHeading(new Vector2d(54,26))
+                .lineToConstantHeading(new Vector2d(46,25))
+                .lineToConstantHeading(new Vector2d(54,25))
                 .build();
         TrajectorySequence endR = drive.trajectorySequenceBuilder(posR.end())
-                .lineToConstantHeading(new Vector2d(46,26))
+                .lineToConstantHeading(new Vector2d(46,25))
                 .build();
 
 

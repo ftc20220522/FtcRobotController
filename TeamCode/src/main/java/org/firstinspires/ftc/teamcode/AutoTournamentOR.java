@@ -102,23 +102,23 @@ public class AutoTournamentOR extends LinearOpMode {
         //Right Movement
         TrajectorySequence purpleR = drive.trajectorySequenceBuilder(startPose)
                 .lineToConstantHeading(new Vector2d(-38,-31))
-                .lineToConstantHeading(new Vector2d(-9,-31))
-                .lineToConstantHeading(new Vector2d(-17,-31))
+                .turn(Math.toRadians(180))
+                .lineToConstantHeading(new Vector2d(-32,-31))
                 .build();
         TrajectorySequence getToPosR = drive.trajectorySequenceBuilder(purpleR.end())
-                .lineToConstantHeading(new Vector2d(-12,-31))
-                .lineToConstantHeading(new Vector2d(-11,-10))
-                .turn(Math.toRadians(90))
+                .lineToConstantHeading(new Vector2d(-40,-31))
+                .turn(Math.toRadians(-90))
+                .lineToConstantHeading(new Vector2d(-40,-10))
                 .build();
         TrajectorySequence toBoardR = drive.trajectorySequenceBuilder(getToPosR.end())
-                .lineToConstantHeading(new Vector2d(44,-10))
+                .lineToConstantHeading(new Vector2d(46,-10))
                 .build();
         TrajectorySequence posR = drive.trajectorySequenceBuilder(toBoardR.end())
-                .lineToConstantHeading(new Vector2d(46,-40))
-                .lineToConstantHeading(new Vector2d(54,-40))
+                .lineToConstantHeading(new Vector2d(46,-38))
+                .lineToConstantHeading(new Vector2d(54,-38))
                 .build();
         TrajectorySequence endR = drive.trajectorySequenceBuilder(posL.end())
-                .lineToConstantHeading(new Vector2d(46,-40))
+                .lineToConstantHeading(new Vector2d(40,-38))
                 .build();
 
 
