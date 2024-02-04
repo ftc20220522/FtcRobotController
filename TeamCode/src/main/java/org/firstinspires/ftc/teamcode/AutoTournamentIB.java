@@ -64,21 +64,21 @@ public class AutoTournamentIB extends LinearOpMode {
                 .lineToConstantHeading(new Vector2d(22,44))
                 .build();
         TrajectorySequence toBoardL = drive.trajectorySequenceBuilder(getToPosL.end())
-                .lineToConstantHeading(new Vector2d(54,41))
+                .lineToConstantHeading(new Vector2d(55.5,41))
                 .build();
         TrajectorySequence posL = drive.trajectorySequenceBuilder(toBoardL.end())
-                .lineToConstantHeading(new Vector2d(46,41))
-                .lineToConstantHeading(new Vector2d(46,58))
+                .lineToConstantHeading(new Vector2d(47.5,41))
+                .lineToConstantHeading(new Vector2d(47.5,55.5))
                 .build();
         TrajectorySequence endL = drive.trajectorySequenceBuilder(posL.end())
-                .lineToConstantHeading(new Vector2d(60,58))
+                .lineToConstantHeading(new Vector2d(64,55.5))
                 .build();
 
 
 
         //Middle Movement
         TrajectorySequence purpleM = drive.trajectorySequenceBuilder(startPose)
-                .lineToConstantHeading(new Vector2d(14,28))
+                .lineToConstantHeading(new Vector2d(14,30))
                 .turn(Math.toRadians(-90))
                 .build();
         TrajectorySequence getToPosM = drive.trajectorySequenceBuilder(purpleM.end())
@@ -88,10 +88,10 @@ public class AutoTournamentIB extends LinearOpMode {
                 .lineToConstantHeading(new Vector2d(54,34.5))
                 .build();
         TrajectorySequence posM = drive.trajectorySequenceBuilder(toBoardM.end())
-                .lineToConstantHeading(new Vector2d(46,58))
+                .lineToConstantHeading(new Vector2d(47.5,55.25))
                 .build();
         TrajectorySequence endM = drive.trajectorySequenceBuilder(posM.end())
-                .lineToConstantHeading(new Vector2d(60,58))
+                .lineToConstantHeading(new Vector2d(64,55.25))
                 .build();
 
 
@@ -110,10 +110,10 @@ public class AutoTournamentIB extends LinearOpMode {
                 .lineToConstantHeading(new Vector2d(54.5,28))
                 .build();
         TrajectorySequence posR = drive.trajectorySequenceBuilder(toBoardR.end())
-                .lineToConstantHeading(new Vector2d(46,58))
+                .lineToConstantHeading(new Vector2d(47.5,55.5))
                 .build();
         TrajectorySequence endR = drive.trajectorySequenceBuilder(posL.end())
-                .lineToConstantHeading(new Vector2d(60,58))
+                .lineToConstantHeading(new Vector2d(64 ,55.5))
                 .build();
 
 
@@ -244,8 +244,8 @@ public class AutoTournamentIB extends LinearOpMode {
             motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
-            sleep(500);
-            drive.followTrajectorySequence(endL);
+            sleep(7000);
+//            drive.followTrajectorySequence(endL);
         } else if (location == 5) {
             drive.followTrajectorySequence(purpleM);
             servoClamp.setPosition(0.1);
@@ -296,8 +296,8 @@ public class AutoTournamentIB extends LinearOpMode {
             motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
-            sleep(500);
-            drive.followTrajectorySequence(endM);
+            sleep(7000);
+//            drive.followTrajectorySequence(endM);
         } else if (location == 6) {
             drive.followTrajectorySequence(purpleR);
             servoClamp.setPosition(0.1);
@@ -348,8 +348,8 @@ public class AutoTournamentIB extends LinearOpMode {
             motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
-            sleep(500);
-            drive.followTrajectorySequence(endR);
+            sleep(7000);
+            //drive.followTrajectorySequence(endR);
         }
     }
 }

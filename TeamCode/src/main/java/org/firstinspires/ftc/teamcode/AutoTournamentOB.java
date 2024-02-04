@@ -70,7 +70,7 @@ public class AutoTournamentOB extends LinearOpMode {
                 .build();
         TrajectorySequence posL = drive.trajectorySequenceBuilder(toBoardL.end())
                 .lineToConstantHeading(new Vector2d(46,40))
-                .lineToConstantHeading(new Vector2d(54,40))
+                .lineToConstantHeading(new Vector2d(55.5,40))
                 .build();
         TrajectorySequence endL = drive.trajectorySequenceBuilder(posL.end())
                 .lineToConstantHeading(new Vector2d(46,40))
@@ -92,7 +92,7 @@ public class AutoTournamentOB extends LinearOpMode {
                 .build();
         TrajectorySequence posM = drive.trajectorySequenceBuilder(toBoardM.end())
                 .lineToConstantHeading(new Vector2d(46,33))
-                .lineToConstantHeading(new Vector2d(54,33))
+                .lineToConstantHeading(new Vector2d(55.5,33))
                 .build();
         TrajectorySequence endM = drive.trajectorySequenceBuilder(posM.end())
                 .lineToConstantHeading(new Vector2d(46,33))
@@ -116,11 +116,11 @@ public class AutoTournamentOB extends LinearOpMode {
                 .lineToConstantHeading(new Vector2d(44,10))
                 .build();
         TrajectorySequence posR = drive.trajectorySequenceBuilder(toBoardR.end())
-                .lineToConstantHeading(new Vector2d(46,26))
-                .lineToConstantHeading(new Vector2d(54,26))
+                .lineToConstantHeading(new Vector2d(46,28))
+                .lineToConstantHeading(new Vector2d(55.5,28))
                 .build();
         TrajectorySequence endR = drive.trajectorySequenceBuilder(posR.end())
-                .lineToConstantHeading(new Vector2d(46,26))
+                .lineToConstantHeading(new Vector2d(46,28))
                 .build();
 
 
