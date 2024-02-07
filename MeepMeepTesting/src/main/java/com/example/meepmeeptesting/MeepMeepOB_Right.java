@@ -14,17 +14,26 @@ public class MeepMeepOB_Right {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(-38, 61, 0))
-                                .lineToConstantHeading(new Vector2d(-56,29))
-                                .lineToConstantHeading(new Vector2d(-58,29))
-                                .lineToConstantHeading(new Vector2d(-58,18))
-                                //Common
-                                .lineToConstantHeading(new Vector2d(-44,12))
-                                .turn(Math.toRadians(-90))
-                                .lineToConstantHeading(new Vector2d(46,12))
-                                //Lift viper and wait
+                        drive.trajectorySequenceBuilder(new Pose2d(-38, 61, 90))
+                                .lineToLinearHeading(new Pose2d(-47,20,0))
+                                .lineToConstantHeading(new Vector2d(-58,11.5))
+                                .lineToConstantHeading(new Vector2d(20,11.5))
+                                .lineToConstantHeading(new Vector2d(55.5,28))
+                                .lineToConstantHeading(new Vector2d(20,11.5))
+                                .lineToConstantHeading(new Vector2d(-58,11.5))
+                                .lineToConstantHeading(new Vector2d(20,11.5))
+                                .lineToConstantHeading(new Vector2d(55.5,28))
                                 .lineToConstantHeading(new Vector2d(46,28))
-                                .lineToConstantHeading(new Vector2d(49,28))
+//                                .lineToConstantHeading(new Vector2d(-56,29))
+//                                .lineToConstantHeading(new Vector2d(-58,29))
+//                                .lineToConstantHeading(new Vector2d(-58,18))
+//                                //Common
+//                                .lineToConstantHeading(new Vector2d(-44,12))
+//                                .turn(Math.toRadians(-90))
+//                                .lineToConstantHeading(new Vector2d(46,12))
+//                                //Lift viper and wait
+//                                .lineToConstantHeading(new Vector2d(46,28))
+//                                .lineToConstantHeading(new Vector2d(49,28))
                                 .build()
                 );
 
