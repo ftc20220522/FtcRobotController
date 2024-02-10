@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 import java.util.concurrent.TimeUnit;
 
-@Autonomous(name="AutoInsideRed")
+@Autonomous(name="AutoTournamentInsideRed")
 @Disabled
 public class AutoTournamentIR extends LinearOpMode {
     private final int READ_PERIOD = 2;
