@@ -2,31 +2,29 @@ package org.firstinspires.ftc.teamcode;
 
 import static java.lang.Math.signum;
 
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 @TeleOp(group = "FINALCODE")
-@Disabled
-public class FO_Tournament_Blue extends OpMode {
+public class FO_Red extends OpMode {
 
     //Center Odometery Wheel in Motor Port 0 (motor1 encoder)
     //Right Odometery Wheel in Motor Port 1 (motor2 encoder)
     //Left Odometery Wheel in Motor Port 2 (motor3 encoder)
 
-    DcMotor motorBackRight;
-    DcMotor motorFrontRight;
-    DcMotor motorBackLeft;
-    DcMotor motorFrontLeft;
+//    DcMotor motorBackRight;
+//    DcMotor motorFrontRight;
+//    DcMotor motorBackLeft;
+//    DcMotor motorFrontLeft;
     DcMotor motorIntake;
     DcMotor motorLauncher;
     DcMotorEx motorSlideLeft;
@@ -39,7 +37,9 @@ public class FO_Tournament_Blue extends OpMode {
     Servo servoTOT;
     Servo servoBOT;
     Servo servoFL;
-    IMU imu;
+//    IMU imu;
+    SampleMecanumDrive drive;
+    Pose2d startPose;
 //    CRServo servoInt;
 
     double y;
@@ -87,10 +87,10 @@ public class FO_Tournament_Blue extends OpMode {
 
     public void init() {
         //New BOT Up - 0.47, Down - 0.7
-        motorBackRight = hardwareMap.dcMotor.get("motor8");
-        motorFrontRight = hardwareMap.dcMotor.get("motor7");
-        motorBackLeft = hardwareMap.dcMotor.get("motor2");
-        motorFrontLeft = hardwareMap.dcMotor.get("motor3");
+//        motorBackRight = hardwareMap.dcMotor.get("motor8");
+//        motorFrontRight = hardwareMap.dcMotor.get("motor7");
+//        motorBackLeft = hardwareMap.dcMotor.get("motor2");
+//        motorFrontLeft = hardwareMap.dcMotor.get("motor3");
         motorIntake = hardwareMap.dcMotor.get("motor5");
         motorLauncher = hardwareMap.dcMotor.get("motor4");
         temp = hardwareMap.dcMotor.get("motor7");
@@ -105,27 +105,42 @@ public class FO_Tournament_Blue extends OpMode {
         motorSlideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorSlideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorSlideRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        motorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        motorBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        motorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        motorBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorSlideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorSlideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        imu = hardwareMap.get(IMU.class, "imu");
-        // Adjust the orientation parameters to match your robot
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
-                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD));
-        // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
-        imu.initialize(parameters);
+//        motorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        motorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        motorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+//        motorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
+//        imu = hardwareMap.get(IMU.class, "imu");
+//        // Adjust the orientation parameters to match your robot
+//        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+//                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+//                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD));
+//        // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
+//        imu.initialize(parameters);
+
+        // Initialize SampleMecanumDrive
+        drive = new SampleMecanumDrive(hardwareMap);
+
+        // We want to turn off velocity control for teleop
+        // Velocity control per wheel is not necessary outside of motion profiled auto
+        drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        // Retrieve our pose from the PoseStorage.currentPose static field
+        // See AutoTransferPose.java for further details
+
+        startPose = new Pose2d(0, 0, Math.toRadians(270));
+        drive.setPoseEstimate(startPose);
+
         liftTimer.reset();
         hookTimer.reset();
     }
@@ -138,7 +153,7 @@ public class FO_Tournament_Blue extends OpMode {
         servoBOT.setPosition(0.7);
         servoFOT.setPosition(0.51);
         servoHOT.setPosition(0.52);
-        imu.resetYaw();
+//        imu.resetYaw();
     }
 
     public void loop() {
@@ -180,15 +195,17 @@ public class FO_Tournament_Blue extends OpMode {
                 break;
             case Extend:
                 if (rigTimer.milliseconds()>1500) {
-                    motorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                    motorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                    motorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                    motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//                    motorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//                    motorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//                    motorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//                    motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
                     if (gamepad1.start) {
-                        motorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                        motorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                        motorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                        motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//                        motorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//                        motorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//                        motorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//                        motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                        drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                         motorSlideRight.setTargetPosition(50);
                         motorSlideLeft.setTargetPosition(50);
                         motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -349,56 +366,97 @@ public class FO_Tournament_Blue extends OpMode {
 
 
         if (gamepad1.right_trigger > 0) {
-            y = -gamepad1.left_stick_y; // Remember, this is reversed!
+            y = gamepad1.left_stick_y; // Remember, this is reversed!
             x = gamepad1.left_stick_x; // Counteract imperfect strafing
-            rx = -gamepad1.right_stick_x;
+            rx = gamepad1.right_stick_x;
         } else if (gamepad1.left_trigger > 0) {
-            y = -0.25 * gamepad1.left_stick_y; // Remember, this is reversed!
+            y = 0.25 * gamepad1.left_stick_y; // Remember, this is reversed!
             x = 0.25 * gamepad1.left_stick_x; // Counteract imperfect strafing
-            rx = -0.35 * gamepad1.right_stick_x;
+            rx = 0.35 * gamepad1.right_stick_x;
         } else {
-            y = -0.5 * gamepad1.left_stick_y; // Remember, this is reversed!
+            y = 0.5 * gamepad1.left_stick_y; // Remember, this is reversed!
             x = 0.5 * gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
-            rx = -0.65 * gamepad1.right_stick_x;
+            rx = 0.65 * gamepad1.right_stick_x;
         }
 
-        if (gamepad1.back) {
-            imu = hardwareMap.get(IMU.class, "imu");
-            // Adjust the orientation parameters to match your robot
-            IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                    RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
-                    RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD));
-            // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
-            imu.initialize(parameters);
-            imu.resetYaw();
+//        if (gamepad1.back) {
+//            startPose = new Pose2d(0, 0, Math.toRadians(90));
+//            drive.setPoseEstimate(startPose);
+////            imu = hardwareMap.get(IMU.class, "imu");
+////            // Adjust the orientation parameters to match your robot
+////            IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+////                    RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+////                    RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD));
+////            // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
+////            imu.initialize(parameters);
+////            imu.resetYaw();
+//        }
+        if (gamepad1.dpad_right) {
+            startPose = new Pose2d(0, 0, Math.toRadians(270));
+            drive.setPoseEstimate(startPose);
+        } else if (gamepad1.dpad_left) {
+            startPose = new Pose2d(0, 0, Math.toRadians(90));
+            drive.setPoseEstimate(startPose);
+        } else if (gamepad1.dpad_up) {
+            startPose = new Pose2d(0, 0, Math.toRadians(0));
+            drive.setPoseEstimate(startPose);
         }
 
         // This button choice was made so that it is hard to hit on accident,
         // it can be freely changed based on preference.
         // The equivalent button is start on Xbox-style controllers.
 
+        // Read pose
+        Pose2d poseEstimate = drive.getPoseEstimate();
 
-        double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS)-Math.toRadians(90);
+        // Create a vector from the gamepad x/y inputs
+        // Then, rotate that vector by the inverse of that heading
 
-        // Rotate the movement direction counter to the bot's rotation
-        double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
-        double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
+        Vector2d input = new Vector2d(
+                -y,
+                -x
+        ).rotated(-poseEstimate.getHeading());
 
-        rotX = rotX * 1.1;  // Counteract imperfect strafing
+        // Pass in the rotated input + right stick value for rotation
+        // Rotation is not part of the rotated input thus must be passed in separately
+        drive.setWeightedDrivePower(
+                new Pose2d(
+                        input.getX(),
+                        input.getY(),
+                        -rx
+                )
+        );
 
-        // Denominator is the largest motor power (absolute value) or 1
-        // This ensures all the powers maintain the same ratio,
-        // but only if at least one is out of the range [-1, 1]
-        double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
-        double frontLeftPower = (rotY + rotX + rx) / denominator;
-        double backLeftPower = (rotY - rotX + rx) / denominator;
-        double frontRightPower = (rotY - rotX - rx) / denominator;
-        double backRightPower = (rotY + rotX - rx) / denominator;
+        // Update everything. Odometry. Etc.
+        drive.update();
 
-        motorFrontLeft.setPower(frontLeftPower);
-        motorBackLeft.setPower(backLeftPower);
-        motorFrontRight.setPower(frontRightPower);
-        motorBackRight.setPower(backRightPower);
+        // Print pose to telemetry
+        telemetry.addData("x", poseEstimate.getX());
+        telemetry.addData("y", poseEstimate.getY());
+        telemetry.addData("heading", poseEstimate.getHeading());
+        telemetry.update();
+
+//        double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS)-Math.toRadians(90);
+//
+//        // Rotate the movement direction counter to the bot's rotation
+//        double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
+//        double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
+//
+//        rotX = rotX * 1.1;  // Counteract imperfect strafing
+//
+//        // Denominator is the largest motor power (absolute value) or 1
+//        // This ensures all the powers maintain the same ratio,
+//        // but only if at least one is out of the range [-1, 1]
+//        double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
+//        double frontLeftPower = (rotY + rotX + rx) / denominator;
+//        double backLeftPower = (rotY - rotX + rx) / denominator;
+//        double frontRightPower = (rotY - rotX - rx) / denominator;
+//        double backRightPower = (rotY + rotX - rx) / denominator;
+//
+//        motorFrontLeft.setPower(frontLeftPower);
+//        motorBackLeft.setPower(backLeftPower);
+//        motorFrontRight.setPower(frontRightPower);
+//        motorBackRight.setPower(backRightPower);
 
 
 //            telemetry.addData("odometer middle pos", motorBackRight.getCurrentPosition());
@@ -456,7 +514,7 @@ public class FO_Tournament_Blue extends OpMode {
             motorSlideLeft.setVelocity(speed);
             prevposition=position;
         }
-        telemetry.addData("heading", Math.toDegrees(botHeading));
+//        telemetry.addData("heading", Math.toDegrees(botHeading));
         telemetry.addData("position", position);
         telemetry.addData("right", motorSlideRight.getCurrentPosition());
         telemetry.addData("positionReal", motorSlideRight.getTargetPosition());
