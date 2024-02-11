@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -22,15 +23,9 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 @TeleOp(group = "FINALCODE")
 public class FO_Blue_Sensors extends OpMode {
-
-    //Center Odometery Wheel in Motor Port 0 (motor1 encoder)
-    //Right Odometery Wheel in Motor Port 1 (motor2 encoder)
-    //Left Odometery Wheel in Motor Port 2 (motor3 encoder)
-
-//    DcMotor motorBackRight;
-//    DcMotor motorFrontRight;
-//    DcMotor motorBackLeft;
-//    DcMotor motorFrontLeft;
+//    Center Odometery Wheel in Motor Port 0 (motor1 encoder)
+//    Right Odometery Wheel in Motor Port 1 (motor2 encoder)
+//    Left Odometery Wheel in Motor Port 2 (motor3 encoder)
     DcMotor motorIntake;
     DcMotor motorLauncher;
     DcMotorEx motorSlideLeft;
@@ -43,10 +38,14 @@ public class FO_Blue_Sensors extends OpMode {
     Servo servoTOT;
     Servo servoBOT;
     Servo servoFL;
+
     SampleMecanumDrive drive;
     Pose2d startPose;
+
     private ColorSensor colorFlap;
     private ColorSensor colorHook;
+    RevBlinkinLedDriver lights;
+
     private DistanceSensor distanceLeft;
     private DistanceSensor distanceRight;
     private DistanceSensor distanceFront;
@@ -64,9 +63,13 @@ public class FO_Blue_Sensors extends OpMode {
     long end = 0;
     boolean settime = false;
 
-    //Color Sensor
-    float hsvValues[] = {0F, 0F, 0F};
-    final float values[] = hsvValues;
+    float hsvFlapValues[] = {0F, 0F, 0F};
+    final float valuesF[] = hsvFlapValues;
+    boolean flapLightOn = false;
+    float hsvHookValues[] = {0F, 0F, 0F};
+    final float valuesH[] = hsvHookValues;
+    boolean hookLightOn = false;
+
     final double SCALE_FACTOR = 8;
     int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
     final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
@@ -126,6 +129,11 @@ public class FO_Blue_Sensors extends OpMode {
         ColorSensor colorHook = hardwareMap.get(ColorSensor.class, "colorHook");
         colorFlap.enableLed(bLedOn);
         colorHook.enableLed(bLedOn);
+        lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
+        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+
+        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET);
 
 //        DistanceSensor distanceLeft = hardwareMap.get(DistanceSensor.class, "distanceLeft");
 //        DistanceSensor distanceRight = hardwareMap.get(DistanceSensor.class, "distanceRight");
@@ -152,7 +160,45 @@ public class FO_Blue_Sensors extends OpMode {
         Color.RGBToHSV((int) (colorFlap.red() * SCALE_FACTOR),
                 (int) (colorFlap.green() * SCALE_FACTOR),
                 (int) (colorFlap.blue() * SCALE_FACTOR),
-                hsvValues);
+                hsvFlapValues);
+        Color.RGBToHSV((int) (colorHook.red() * SCALE_FACTOR),
+                (int) (colorHook.green() * SCALE_FACTOR),
+                (int) (colorHook.blue() * SCALE_FACTOR),
+                hsvHookValues);
+
+        if (Color.HSVToColor(0xff, valuesF) >= 85 && Color.HSVToColor(0xff, valuesF) <= 105) {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+            flapLightOn = true;
+        } else if (Color.HSVToColor(0xff, valuesF) >= 205 && Color.HSVToColor(0xff, valuesF) <= 225) {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET);
+            flapLightOn = true;
+        } else if (Color.HSVToColor(0xff, valuesF) >= 125 && Color.HSVToColor(0xff, valuesF) <= 145) {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            flapLightOn = true;
+        } else if (Color.HSVToColor(0xff, valuesF) >= 170 && Color.HSVToColor(0xff, valuesF) <= 190) {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+            flapLightOn = true;
+        } else {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+            flapLightOn = false;
+        }
+
+        if (Color.HSVToColor(0xff, valuesH) >= 85 && Color.HSVToColor(0xff, valuesH) <= 105) {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+            flapLightOn = true;
+        } else if (Color.HSVToColor(0xff, valuesH) >= 205 && Color.HSVToColor(0xff, valuesH) <= 225) {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET);
+            flapLightOn = true;
+        } else if (Color.HSVToColor(0xff, valuesH) >= 125 && Color.HSVToColor(0xff, valuesH) <= 145) {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            flapLightOn = true;
+        } else if (Color.HSVToColor(0xff, valuesH) >= 170 && Color.HSVToColor(0xff, valuesH) <= 190) {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+            flapLightOn = true;
+        } else {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+            flapLightOn = false;
+        }
     }
 
     public void loop() {
@@ -238,7 +284,7 @@ public class FO_Blue_Sensors extends OpMode {
         switch (hState) {
             case Out:
                 if (hookTimer.milliseconds() > 300) {
-                    if (gamepad2.right_bumper && armState == ArmState.Bottom) {
+                    if (gamepad2.right_bumper && armState == ArmState.Bottom || flapLightOn && hookLightOn) {
                         servoHOT.setPosition(0.67);
                         hookTimer.reset();
                         hState = HookState.In;

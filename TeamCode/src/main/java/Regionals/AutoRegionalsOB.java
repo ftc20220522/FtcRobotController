@@ -60,14 +60,16 @@ public class AutoRegionalsOB extends LinearOpMode {
                 .lineToConstantHeading(new Vector2d(-38,31))
                 .lineToConstantHeading(new Vector2d(-32,31))
                 .build();
-        TrajectorySequence getToPosL = drive.trajectorySequenceBuilder(purpleL.end())
-                .lineToConstantHeading(new Vector2d(-35,31))
-                .lineToConstantHeading(new Vector2d(-44,10))
+        //Common
+        TrajectorySequence whiteL = drive.trajectorySequenceBuilder(purpleL.end())
+                .lineToLinearHeading(new Pose2d(-62, 36, 0))
                 .build();
-        TrajectorySequence toBoardL = drive.trajectorySequenceBuilder(getToPosL.end())
-                .turn(Math.toRadians(-90))
-                .lineToConstantHeading(new Vector2d(44,10))
+        TrajectorySequence toBoardL = drive.trajectorySequenceBuilder(whiteL.end())
+                .lineToConstantHeading(new Vector2d(-58,34.5))
+                .lineToConstantHeading(new Vector2d(-58,11.5))
+                .lineToConstantHeading(new Vector2d(20,11.5))
                 .build();
+        //Board Pixel
         TrajectorySequence posL = drive.trajectorySequenceBuilder(toBoardL.end())
                 .lineToConstantHeading(new Vector2d(46,40))
                 .lineToConstantHeading(new Vector2d(55.5,40))
@@ -80,15 +82,16 @@ public class AutoRegionalsOB extends LinearOpMode {
 
         //Middle Movement
         TrajectorySequence purpleM = drive.trajectorySequenceBuilder(startPose)
-                .lineToConstantHeading(new Vector2d(-41,24))
+                .lineToLinearHeading(new Pose2d(-35, 29, 0))
                 .build();
-        TrajectorySequence getToPosM = drive.trajectorySequenceBuilder(purpleM.end())
-                .lineToConstantHeading(new Vector2d(-44,24))
-                .lineToConstantHeading(new Vector2d(-44,10))
+        //Common
+        TrajectorySequence whiteM = drive.trajectorySequenceBuilder(purpleM.end())
+                .lineToLinearHeading(new Pose2d(-62, 36, 0))
                 .build();
-        TrajectorySequence toBoardM = drive.trajectorySequenceBuilder(getToPosM.end())
-                .turn(Math.toRadians(-90))
-                .lineToConstantHeading(new Vector2d(44,10))
+        TrajectorySequence toBoardM = drive.trajectorySequenceBuilder(whiteM.end())
+                .lineToConstantHeading(new Vector2d(-58,34.5))
+                .lineToConstantHeading(new Vector2d(-58,11.5))
+                .lineToConstantHeading(new Vector2d(20,11.5))
                 .build();
         TrajectorySequence posM = drive.trajectorySequenceBuilder(toBoardM.end())
                 .lineToConstantHeading(new Vector2d(46,33))
@@ -104,6 +107,7 @@ public class AutoRegionalsOB extends LinearOpMode {
         TrajectorySequence purpleR = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(-46,30,0))
                 .build();
+        //Common
         TrajectorySequence whiteR = drive.trajectorySequenceBuilder(purpleR.end())
                 .lineToConstantHeading(new Vector2d(-46,36))
                 .lineToConstantHeading(new Vector2d(-62,36))
@@ -113,6 +117,7 @@ public class AutoRegionalsOB extends LinearOpMode {
                 .lineToConstantHeading(new Vector2d(-58,11.5))
                 .lineToConstantHeading(new Vector2d(20,11.5))
                 .build();
+        //Board Pixel
         TrajectorySequence posR = drive.trajectorySequenceBuilder(toBoardR.end())
                 .lineToConstantHeading(new Vector2d(46,29))
                 .lineToConstantHeading(new Vector2d(55.5,29))
@@ -170,10 +175,15 @@ public class AutoRegionalsOB extends LinearOpMode {
         if (location == 1) {
             drive.followTrajectorySequence(purpleL);
             servoClamp.setPosition(0.1);
-            sleep(300);
-            drive.followTrajectorySequence(getToPosL);
+            sleep(50);
 
-            //To Backboard
+            //White & Move
+            drive.followTrajectorySequence(whiteL);
+//            servoHOT.setPosition(0.52);
+//            motorIntake.setPower(1);
+            sleep(1000);
+//            motorIntake.setPower(0);
+//            servoHOT.setPosition(0.67);
             drive.followTrajectorySequence(toBoardL);
 
             //Viper Slides Up & Set
@@ -186,20 +196,19 @@ public class AutoRegionalsOB extends LinearOpMode {
             sleep(250);
             servoTOT.setPosition(0.54);
             servoBOT.setPosition(0.47);
-            sleep(1200);
+            sleep(700);
             motorSlideRight.setTargetPosition(0);
             motorSlideLeft.setTargetPosition(0);
             motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
-            sleep(5000);
 
             //Position to Board
             drive.followTrajectorySequence(posL);
-            sleep(300);
+            sleep(50);
             servoFOT.setPosition(0.66);
-            sleep(200);
+            sleep(50);
 
             //End
             drive.followTrajectorySequence(endL);
@@ -213,7 +222,7 @@ public class AutoRegionalsOB extends LinearOpMode {
             servoBOT.setPosition(0.69);
             servoFOT.setPosition(0.51);
             servoHOT.setPosition(0.52);
-            sleep(2000);
+            sleep(1300);
             motorSlideRight.setTargetPosition(0);
             motorSlideLeft.setTargetPosition(0);
             motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -224,10 +233,15 @@ public class AutoRegionalsOB extends LinearOpMode {
         } else if (location == 2) {
             drive.followTrajectorySequence(purpleM);
             servoClamp.setPosition(0.1);
-            sleep(300);
-            drive.followTrajectorySequence(getToPosM);
+            sleep(50);
 
-            //To Backboard
+            //White & Move
+            drive.followTrajectorySequence(whiteM);
+//            servoHOT.setPosition(0.52);
+//            motorIntake.setPower(1);
+            sleep(1000);
+//            motorIntake.setPower(0);
+//            servoHOT.setPosition(0.67);
             drive.followTrajectorySequence(toBoardM);
 
             //Viper Slides Up & Set
@@ -240,20 +254,19 @@ public class AutoRegionalsOB extends LinearOpMode {
             sleep(250);
             servoTOT.setPosition(0.54);
             servoBOT.setPosition(0.47);
-            sleep(1200);
+            sleep(700);
             motorSlideRight.setTargetPosition(0);
             motorSlideLeft.setTargetPosition(0);
             motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
-            sleep(5000);
 
             //Position to Board
             drive.followTrajectorySequence(posM);
-            sleep(300);
+            sleep(50);
             servoFOT.setPosition(0.66);
-            sleep(200);
+            sleep(50);
 
             //End
             drive.followTrajectorySequence(endM);
@@ -267,7 +280,7 @@ public class AutoRegionalsOB extends LinearOpMode {
             servoBOT.setPosition(0.69);
             servoFOT.setPosition(0.51);
             servoHOT.setPosition(0.52);
-            sleep(2000);
+            sleep(1300);
             motorSlideRight.setTargetPosition(0);
             motorSlideLeft.setTargetPosition(0);
             motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -280,6 +293,7 @@ public class AutoRegionalsOB extends LinearOpMode {
             drive.followTrajectorySequence(purpleR);
             servoClamp.setPosition(0.1);
             sleep(50);
+
             //White & Move
             drive.followTrajectorySequence(whiteR);
 //            servoHOT.setPosition(0.52);
