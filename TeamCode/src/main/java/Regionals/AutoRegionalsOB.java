@@ -4,12 +4,15 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -19,6 +22,8 @@ import java.util.concurrent.TimeUnit;
 public class AutoRegionalsOB extends LinearOpMode {
     private final int READ_PERIOD = 2;
     int location = 0;
+    double distance;
+
     @Override
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
@@ -34,6 +39,7 @@ public class AutoRegionalsOB extends LinearOpMode {
         DcMotorEx motorSlideRight = hardwareMap.get(DcMotorEx.class, "motor6");
         motorSlideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorSlideRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        DistanceSensor dSensor = hardwareMap.get(DistanceSensor.class, "distance");
 
         Servo servoClamp = hardwareMap.servo.get("servo1");
         Servo servoHOT = hardwareMap.servo.get("servo5"); //Hook ot
@@ -71,8 +77,11 @@ public class AutoRegionalsOB extends LinearOpMode {
                 .build();
         //Board Pixel
         TrajectorySequence posL = drive.trajectorySequenceBuilder(toBoardL.end())
-                .lineToConstantHeading(new Vector2d(46,40))
-                .lineToConstantHeading(new Vector2d(55.5,40))
+                .lineToConstantHeading(new Vector2d(53,40))
+                .addDisplacementMarker(() -> {
+                    distance = dSensor.getDistance(DistanceUnit.INCH);
+                })
+                .lineToConstantHeading(new Vector2d(53+distance-3, 40))
                 .build();
         TrajectorySequence endL = drive.trajectorySequenceBuilder(posL.end())
                 .lineToConstantHeading(new Vector2d(46,40))
