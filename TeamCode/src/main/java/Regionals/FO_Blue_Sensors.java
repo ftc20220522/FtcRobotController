@@ -71,8 +71,8 @@ public class FO_Blue_Sensors extends OpMode {
     boolean hookLightOn = false;
 
     final double SCALE_FACTOR = 8;
-    int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
-    final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+    int relativeLayoutId;
+
     boolean bPrevState = false;
     boolean bCurrState = false;
     boolean bLedOn = true;
@@ -125,6 +125,9 @@ public class FO_Blue_Sensors extends OpMode {
         motorSlideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorSlideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
+        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+
         ColorSensor colorFlap = hardwareMap.get(ColorSensor.class, "colorFlap");
         ColorSensor colorHook = hardwareMap.get(ColorSensor.class, "colorHook");
         colorFlap.enableLed(bLedOn);
@@ -157,48 +160,7 @@ public class FO_Blue_Sensors extends OpMode {
         servoFOT.setPosition(0.51);
         servoHOT.setPosition(0.52);
 
-        Color.RGBToHSV((int) (colorFlap.red() * SCALE_FACTOR),
-                (int) (colorFlap.green() * SCALE_FACTOR),
-                (int) (colorFlap.blue() * SCALE_FACTOR),
-                hsvFlapValues);
-        Color.RGBToHSV((int) (colorHook.red() * SCALE_FACTOR),
-                (int) (colorHook.green() * SCALE_FACTOR),
-                (int) (colorHook.blue() * SCALE_FACTOR),
-                hsvHookValues);
 
-        if (Color.HSVToColor(0xff, valuesF) >= 85 && Color.HSVToColor(0xff, valuesF) <= 105) {
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
-            flapLightOn = true;
-        } else if (Color.HSVToColor(0xff, valuesF) >= 205 && Color.HSVToColor(0xff, valuesF) <= 225) {
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET);
-            flapLightOn = true;
-        } else if (Color.HSVToColor(0xff, valuesF) >= 125 && Color.HSVToColor(0xff, valuesF) <= 145) {
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-            flapLightOn = true;
-        } else if (Color.HSVToColor(0xff, valuesF) >= 170 && Color.HSVToColor(0xff, valuesF) <= 190) {
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
-            flapLightOn = true;
-        } else {
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
-            flapLightOn = false;
-        }
-
-        if (Color.HSVToColor(0xff, valuesH) >= 85 && Color.HSVToColor(0xff, valuesH) <= 105) {
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
-            flapLightOn = true;
-        } else if (Color.HSVToColor(0xff, valuesH) >= 205 && Color.HSVToColor(0xff, valuesH) <= 225) {
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET);
-            flapLightOn = true;
-        } else if (Color.HSVToColor(0xff, valuesH) >= 125 && Color.HSVToColor(0xff, valuesH) <= 145) {
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-            flapLightOn = true;
-        } else if (Color.HSVToColor(0xff, valuesH) >= 170 && Color.HSVToColor(0xff, valuesH) <= 190) {
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
-            flapLightOn = true;
-        } else {
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
-            flapLightOn = false;
-        }
     }
 
     public void loop() {
@@ -455,8 +417,51 @@ public class FO_Blue_Sensors extends OpMode {
         // Print pose to telemetry
         telemetry.addData("x", poseEstimate.getX());
         telemetry.addData("y", poseEstimate.getY());
-        telemetry.addData("heading", poseEstimate.getHeading());
+
         telemetry.update();
+
+        Color.RGBToHSV((int) (colorFlap.red() * SCALE_FACTOR),
+                (int) (colorFlap.green() * SCALE_FACTOR),
+                (int) (colorFlap.blue() * SCALE_FACTOR),
+                hsvFlapValues);
+        Color.RGBToHSV((int) (colorHook.red() * SCALE_FACTOR),
+                (int) (colorHook.green() * SCALE_FACTOR),
+                (int) (colorHook.blue() * SCALE_FACTOR),
+                hsvHookValues);
+
+        if (Color.HSVToColor(0xff, valuesF) >= 85 && Color.HSVToColor(0xff, valuesF) <= 105) {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+            flapLightOn = true;
+        } else if (Color.HSVToColor(0xff, valuesF) >= 205 && Color.HSVToColor(0xff, valuesF) <= 225) {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET);
+            flapLightOn = true;
+        } else if (Color.HSVToColor(0xff, valuesF) >= 125 && Color.HSVToColor(0xff, valuesF) <= 145) {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            flapLightOn = true;
+        } else if (Color.HSVToColor(0xff, valuesF) >= 170 && Color.HSVToColor(0xff, valuesF) <= 190) {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+            flapLightOn = true;
+        } else {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+            flapLightOn = false;
+        }
+
+        if (Color.HSVToColor(0xff, valuesH) >= 85 && Color.HSVToColor(0xff, valuesH) <= 105) {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+            flapLightOn = true;
+        } else if (Color.HSVToColor(0xff, valuesH) >= 205 && Color.HSVToColor(0xff, valuesH) <= 225) {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET);
+            flapLightOn = true;
+        } else if (Color.HSVToColor(0xff, valuesH) >= 125 && Color.HSVToColor(0xff, valuesH) <= 145) {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            flapLightOn = true;
+        } else if (Color.HSVToColor(0xff, valuesH) >= 170 && Color.HSVToColor(0xff, valuesH) <= 190) {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+            flapLightOn = true;
+        } else {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+            flapLightOn = false;
+        }
 
         //Viper Slide Preset
         if (gamepad2.x) {
@@ -509,6 +514,7 @@ public class FO_Blue_Sensors extends OpMode {
             prevposition=position;
         }
 //        telemetry.addData("heading", Math.toDegrees(botHeading));
+        telemetry.addData("heading", poseEstimate.getHeading());
         telemetry.addData("position", position);
         telemetry.addData("right", motorSlideRight.getCurrentPosition());
         telemetry.addData("positionReal", motorSlideRight.getTargetPosition());
