@@ -46,10 +46,6 @@ public class FO_Blue_Sensors extends OpMode {
     private ColorSensor colorHook;
     RevBlinkinLedDriver lights;
 
-    private DistanceSensor distanceLeft;
-    private DistanceSensor distanceRight;
-    private DistanceSensor distanceFront;
-
     double y;
     double x;
     double rx;
@@ -128,19 +124,11 @@ public class FO_Blue_Sensors extends OpMode {
         relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
         final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
 
-        ColorSensor colorFlap = hardwareMap.get(ColorSensor.class, "colorFlap");
-        ColorSensor colorHook = hardwareMap.get(ColorSensor.class, "colorHook");
+        colorFlap = hardwareMap.get(ColorSensor.class, "colorFlap");
+        colorHook = hardwareMap.get(ColorSensor.class, "colorHook");
         colorFlap.enableLed(bLedOn);
         colorHook.enableLed(bLedOn);
         lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
-        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
-        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-
-        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET);
-
-//        DistanceSensor distanceLeft = hardwareMap.get(DistanceSensor.class, "distanceLeft");
-//        DistanceSensor distanceRight = hardwareMap.get(DistanceSensor.class, "distanceRight");
-//        DistanceSensor distanceFront = hardwareMap.get(DistanceSensor.class, "distanceFront");
 
         drive = new SampleMecanumDrive(hardwareMap);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
