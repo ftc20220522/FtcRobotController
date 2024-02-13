@@ -1,22 +1,26 @@
 package Regionals;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.qualcomm.hardware.dfrobot.HuskyLens;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.hardware.dfrobot.HuskyLens;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
+
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+
 import java.util.concurrent.TimeUnit;
 
-@Autonomous(name="AutoOutsideBlue")
-public class AutoRegionalsOB extends LinearOpMode {
+@Autonomous(name="AutoOutsideRed")
+public class AutoRegionalsOR extends LinearOpMode {
     private final int READ_PERIOD = 2;
     int location = 0;
     @Override
@@ -34,6 +38,7 @@ public class AutoRegionalsOB extends LinearOpMode {
         DcMotorEx motorSlideRight = hardwareMap.get(DcMotorEx.class, "motor6");
         motorSlideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorSlideRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        DistanceSensor distance = hardwareMap.get(DistanceSensor.class, "distance");
 
         Servo servoClamp = hardwareMap.servo.get("servo1");
         Servo servoHOT = hardwareMap.servo.get("servo5"); //Hook ot
@@ -43,7 +48,7 @@ public class AutoRegionalsOB extends LinearOpMode {
         Servo servoFL = hardwareMap.servo.get("servo6");
 
         HuskyLens huskyLens = hardwareMap.get(HuskyLens.class, "huskylens");
-        Pose2d startPose = new Pose2d(-38, 61, Math.toRadians(90));
+        Pose2d startPose = new Pose2d(-38, -61, Math.toRadians(270));
         drive.setPoseEstimate(startPose);
 
         motorSlideLeft.setTargetPosition(0);
@@ -57,74 +62,69 @@ public class AutoRegionalsOB extends LinearOpMode {
 
         //Left Movement
         TrajectorySequence purpleL = drive.trajectorySequenceBuilder(startPose)
-                .lineToConstantHeading(new Vector2d(-38,31))
-                .lineToConstantHeading(new Vector2d(-32,31))
+                .lineToLinearHeading(new Pose2d(-46,-30, 0))
                 .build();
         //Common
         TrajectorySequence whiteL = drive.trajectorySequenceBuilder(purpleL.end())
-                .lineToLinearHeading(new Pose2d(-62, 36, 0))
+                .lineToConstantHeading(new Vector2d(-62, -11.5))
                 .build();
         TrajectorySequence toBoardL = drive.trajectorySequenceBuilder(whiteL.end())
-                .lineToConstantHeading(new Vector2d(-58,34.5))
-                .lineToConstantHeading(new Vector2d(-58,11.5))
-                .lineToConstantHeading(new Vector2d(20,11.5))
+                .lineToConstantHeading(new Vector2d(20,-11.5))
                 .build();
         //Board Pixel
         TrajectorySequence posL = drive.trajectorySequenceBuilder(toBoardL.end())
-                .lineToConstantHeading(new Vector2d(46,40))
-                .lineToConstantHeading(new Vector2d(55.5,40))
-                .build();
-        TrajectorySequence endL = drive.trajectorySequenceBuilder(posL.end())
-                .lineToConstantHeading(new Vector2d(46,40))
+                .lineToConstantHeading(new Vector2d(55.5,-40))
+                .addDisplacementMarker(() -> {
+                    sleep(50);
+                    servoFOT.setPosition(0.66);
+                    sleep(50);
+                })
+                .lineToConstantHeading(new Vector2d(46,-40))
                 .build();
 
 
 
         //Middle Movement
         TrajectorySequence purpleM = drive.trajectorySequenceBuilder(startPose)
-                .lineToLinearHeading(new Pose2d(-35, 29, 0))
+                .lineToLinearHeading(new Pose2d(-35, -15, 0))
                 .build();
         //Common
         TrajectorySequence whiteM = drive.trajectorySequenceBuilder(purpleM.end())
-                .lineToLinearHeading(new Pose2d(-62, 36, 0))
+                .lineToConstantHeading(new Vector2d(-62, -11.5))
                 .build();
         TrajectorySequence toBoardM = drive.trajectorySequenceBuilder(whiteM.end())
-                .lineToConstantHeading(new Vector2d(-58,34.5))
-                .lineToConstantHeading(new Vector2d(-58,11.5))
-                .lineToConstantHeading(new Vector2d(20,11.5))
+                .lineToConstantHeading(new Vector2d(20,-11.5))
                 .build();
         //Board Pixel
         TrajectorySequence posM = drive.trajectorySequenceBuilder(toBoardM.end())
-                .lineToConstantHeading(new Vector2d(46,33))
-                .lineToConstantHeading(new Vector2d(55.5,33))
+                .lineToConstantHeading(new Vector2d(46,-33))
+                .lineToConstantHeading(new Vector2d(55.5,-33))
                 .build();
         TrajectorySequence endM = drive.trajectorySequenceBuilder(posM.end())
-                .lineToConstantHeading(new Vector2d(46,33))
+                .lineToConstantHeading(new Vector2d(46,-33))
                 .build();
 
 
 
         //Right Movement
         TrajectorySequence purpleR = drive.trajectorySequenceBuilder(startPose)
-                .lineToLinearHeading(new Pose2d(-46,30,0))
+                .lineToConstantHeading(new Vector2d(-38,-31))
+                .lineToConstantHeading(new Vector2d(-32,-31))
                 .build();
         //Common
         TrajectorySequence whiteR = drive.trajectorySequenceBuilder(purpleR.end())
-                .lineToConstantHeading(new Vector2d(-46,36))
-                .lineToConstantHeading(new Vector2d(-62,36))
+                .lineToLinearHeading(new Pose2d(-62, -11.5, 0))
                 .build();
         TrajectorySequence toBoardR = drive.trajectorySequenceBuilder(whiteR.end())
-                .lineToConstantHeading(new Vector2d(-58,34.5))
-                .lineToConstantHeading(new Vector2d(-58,11.5))
-                .lineToConstantHeading(new Vector2d(20,11.5))
+                .lineToConstantHeading(new Vector2d(20,-11.5))
                 .build();
         //Board Pixel
         TrajectorySequence posR = drive.trajectorySequenceBuilder(toBoardR.end())
-                .lineToConstantHeading(new Vector2d(46,29))
-                .lineToConstantHeading(new Vector2d(55.5,29))
+                .lineToConstantHeading(new Vector2d(46,-29))
+                .lineToConstantHeading(new Vector2d(55.5,-29))
                 .build();
         TrajectorySequence endR = drive.trajectorySequenceBuilder(posR.end())
-                .lineToConstantHeading(new Vector2d(46,29))
+                .lineToConstantHeading(new Vector2d(46,-29))
                 .build();
 
 
@@ -207,12 +207,8 @@ public class AutoRegionalsOB extends LinearOpMode {
 
             //Position to Board
             drive.followTrajectorySequence(posL);
-            sleep(50);
-            servoFOT.setPosition(0.66);
-            sleep(50);
 
             //End
-            drive.followTrajectorySequence(endL);
             motorSlideRight.setTargetPosition(1000);
             motorSlideLeft.setTargetPosition(1000);
             motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);

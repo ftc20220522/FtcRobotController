@@ -14,11 +14,11 @@ public class servoTest extends LinearOpMode{
         if (isStopRequested()) return;
         while (opModeIsActive()) {
             while (gamepad1.a) {
-                servo.setPosition(1);
+                servo.setPosition(0.435);
                 TimeUnit.MILLISECONDS.sleep(250);
             }
             while (gamepad1.b) {
-                servo.setPosition(0);
+                servo.setPosition(0.345);
                 TimeUnit.MILLISECONDS.sleep(250);
             }
             telemetry.addData("servo pos.", servo.getPosition());

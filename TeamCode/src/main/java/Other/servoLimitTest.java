@@ -13,10 +13,10 @@ public class servoLimitTest extends LinearOpMode{
     //0.83->0.55 TOT - Top
     //0-0.21 BOT - Bottom
     //0.1-0.2
+    //0.435  -->  0.35
     //Flap: close 0.51, open 0,66
     public void runOpMode() throws InterruptedException {
-        Servo servoBOT = hardwareMap.servo.get("servo3");
-        Servo servoTOT = hardwareMap.servo.get("servo2");
+        Servo servoBOT = hardwareMap.servo.get("servo7");
         waitForStart();
         if (isStopRequested()) return;
         while (opModeIsActive()) {
@@ -38,24 +38,7 @@ public class servoLimitTest extends LinearOpMode{
                 servoBOT.setPosition(servoBOT.getPosition()+0.01);
                 TimeUnit.MILLISECONDS.sleep(350);
             }
-            if (gamepad1.dpad_down) {
-                servoTOT.setPosition(servoTOT.getPosition()+0.05);
-                TimeUnit.MILLISECONDS.sleep(350);
-            }
-            if (gamepad1.dpad_right) {
-                servoTOT.setPosition(servoTOT.getPosition()-0.05);
-                TimeUnit.MILLISECONDS.sleep(350);
-            }
-            if (gamepad1.dpad_left) {
-                servoTOT.setPosition(servoTOT.getPosition()-0.01);
-                TimeUnit.MILLISECONDS.sleep(350);
-            }
-            if (gamepad1.dpad_up) {
-                servoTOT.setPosition(servoTOT.getPosition()+0.01);
-                TimeUnit.MILLISECONDS.sleep(350);
-            }
             telemetry.addData("servo pos.", servoBOT.getPosition());
-            telemetry.addData("servo pos.", servoTOT.getPosition());
             telemetry.update();
         }
     }
