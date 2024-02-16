@@ -1,6 +1,7 @@
 package Regionals;
 
 import static java.lang.Math.signum;
+import static java.lang.Math.toRadians;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -269,7 +270,7 @@ public class FO_Blue_Sensors extends OpMode {
                         motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                         motorSlideRight.setVelocity(1000);
                         motorSlideLeft.setVelocity(1000);
-                        position = 500;
+                        position = 1000;
                         prevposition = position;
                     }
                     liftTimer.reset();
@@ -283,7 +284,7 @@ public class FO_Blue_Sensors extends OpMode {
                 }
                 break;
             case RotateUp:
-                if (motorSlideRight.getCurrentPosition()>480) {
+                if (liftTimer.milliseconds() >= 250) {
                     servoTOT.setPosition(0.54);
                     servoBOT.setPosition(0.47);
                     liftTimer.reset();
@@ -291,7 +292,15 @@ public class FO_Blue_Sensors extends OpMode {
                 }
                 break;
             case Drop:
-                if (liftTimer.seconds() >= 1) {
+                if (liftTimer.milliseconds() >= 700) {
+                    motorSlideRight.setTargetPosition(25);
+                    motorSlideLeft.setTargetPosition(25);
+                    motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    motorSlideRight.setVelocity(25);
+                    motorSlideLeft.setVelocity(25);
+                    position = 25;
+                    prevposition = position;
                     if (gamepad2.dpad_down) {
                         servoFOT.setPosition(0.66);
                         liftTimer.reset();
@@ -521,10 +530,10 @@ public class FO_Blue_Sensors extends OpMode {
             motorIntake.setPower(0);
         }
 
-        if (gamepad2.back) {
-            motorLauncher.setPower(1);
-        } else {
-            motorLauncher.setPower(0);
-        }
+//        if (gamepad2.back) {
+//            motorLauncher.setPower(1);
+//        } else {
+//            motorLauncher.setPower(0);
+//        }
     }
 }
