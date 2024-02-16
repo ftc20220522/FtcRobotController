@@ -24,7 +24,8 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import java.util.concurrent.TimeUnit;
 
 @Autonomous(name="AutoOutsideBlue")
-public class AutoRegionalsOB extends LinearOpMode {
+public class
+AutoRegionalsOB extends LinearOpMode {
     private final int READ_PERIOD = 1;
     int location = 0;
     double distance;
@@ -57,13 +58,13 @@ public class AutoRegionalsOB extends LinearOpMode {
         motorSlideRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         DistanceSensor dSensor = hardwareMap.get(DistanceSensor.class, "distance");
-        relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
-        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
-        ColorSensor colorFlap = hardwareMap.get(ColorSensor.class, "colorFlap");
-        ColorSensor colorHook = hardwareMap.get(ColorSensor.class, "colorHook");
-        colorFlap.enableLed(bLedOn);
-        colorHook.enableLed(bLedOn);
-        RevBlinkinLedDriver lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
+//        relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
+//        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+//        ColorSensor colorFlap = hardwareMap.get(ColorSensor.class, "colorFlap");
+//        ColorSensor colorHook = hardwareMap.get(ColorSensor.class, "colorHook");
+//        colorFlap.enableLed(bLedOn);
+//        colorHook.enableLed(bLedOn);
+//        RevBlinkinLedDriver lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
 
         Servo servoClamp = hardwareMap.servo.get("servo1");
         Servo servoHOT = hardwareMap.servo.get("servo5"); //Hook ot
@@ -112,9 +113,9 @@ public class AutoRegionalsOB extends LinearOpMode {
                 .addDisplacementMarker(() -> {
                     distance = dSensor.getDistance(DistanceUnit.INCH);
                 })
-                .lineToConstantHeading(new Vector2d(53+distance-1.5, 40))
+                .lineToConstantHeading(new Vector2d(53+distance-1.98, 40))
                 .addDisplacementMarker(() -> {
-                    sleep(50);
+                    sleep(200);
                     servoFOT.setPosition(0.66);
                     sleep(50);
                 })
@@ -149,9 +150,9 @@ public class AutoRegionalsOB extends LinearOpMode {
                 .addDisplacementMarker(() -> {
                     distance = dSensor.getDistance(DistanceUnit.INCH);
                 })
-                .lineToConstantHeading(new Vector2d(53+distance-1.5, 33))
+                .lineToConstantHeading(new Vector2d(53+distance-1.98, 33))
                 .addDisplacementMarker(() -> {
-                    sleep(50);
+                    sleep(200);
                     servoFOT.setPosition(0.66);
                     sleep(50);
                 })
@@ -165,8 +166,8 @@ public class AutoRegionalsOB extends LinearOpMode {
                 .lineToLinearHeading(new Pose2d(-46,30,0))
                 .addDisplacementMarker(() -> {
                     servoClamp.setPosition(0.1);
-                    sleep(50);
                 })
+                .waitSeconds(0.5)
                 .lineToConstantHeading(new Vector2d(-46,36))
                 .lineToConstantHeading(new Vector2d(-62,36))
                 .addDisplacementMarker(() -> {
@@ -187,12 +188,11 @@ public class AutoRegionalsOB extends LinearOpMode {
                 .addDisplacementMarker(() -> {
                     distance = dSensor.getDistance(DistanceUnit.INCH);
                 })
-                .lineToConstantHeading(new Vector2d(53+distance-1.5, 29))
+                .lineToConstantHeading(new Vector2d(53+distance-1.98, 29))
                 .addDisplacementMarker(() -> {
-                    sleep(50);
                     servoFOT.setPosition(0.66);
-                    sleep(50);
                 })
+                .waitSeconds(0.5)
                 .lineToConstantHeading(new Vector2d(46,29))
                 .build();
 
@@ -252,8 +252,8 @@ public class AutoRegionalsOB extends LinearOpMode {
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
             sleep(250);
-            servoTOT.setPosition(0.54);
-            servoBOT.setPosition(0.47);
+            servoTOT.setPosition(0.53);
+            servoBOT.setPosition(0.37);
             sleep(700);
             motorSlideRight.setTargetPosition(0);
             motorSlideLeft.setTargetPosition(0);
@@ -292,8 +292,8 @@ public class AutoRegionalsOB extends LinearOpMode {
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
             sleep(250);
-            servoTOT.setPosition(0.54);
-            servoBOT.setPosition(0.47);
+            servoTOT.setPosition(0.53);
+            servoBOT.setPosition(0.37);
             sleep(700);
             motorSlideRight.setTargetPosition(0);
             motorSlideLeft.setTargetPosition(0);
@@ -332,8 +332,8 @@ public class AutoRegionalsOB extends LinearOpMode {
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
             sleep(250);
-            servoTOT.setPosition(0.54);
-            servoBOT.setPosition(0.47);
+            servoTOT.setPosition(0.53);
+            servoBOT.setPosition(0.37);
             sleep(700);
             motorSlideRight.setTargetPosition(0);
             motorSlideLeft.setTargetPosition(0);

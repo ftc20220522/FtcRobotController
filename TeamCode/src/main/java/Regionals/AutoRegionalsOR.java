@@ -110,7 +110,7 @@ public class AutoRegionalsOR extends LinearOpMode {
                 .addDisplacementMarker(() -> {
                     distance = dSensor.getDistance(DistanceUnit.INCH);
                 })
-                .lineToConstantHeading(new Vector2d(53+distance-1.5, -29))
+                .lineToConstantHeading(new Vector2d(53+distance-1.98, -29))
                 .addDisplacementMarker(() -> {
                     sleep(50);
                     servoFOT.setPosition(0.66);
@@ -145,7 +145,7 @@ public class AutoRegionalsOR extends LinearOpMode {
                 .addDisplacementMarker(() -> {
                     distance = dSensor.getDistance(DistanceUnit.INCH);
                 })
-                .lineToConstantHeading(new Vector2d(53+distance-1.5, -33))
+                .lineToConstantHeading(new Vector2d(53+distance-1.98, -33))
                 .addDisplacementMarker(() -> {
                     sleep(50);
                     servoFOT.setPosition(0.66);
@@ -181,7 +181,7 @@ public class AutoRegionalsOR extends LinearOpMode {
                 .addDisplacementMarker(() -> {
                     distance = dSensor.getDistance(DistanceUnit.INCH);
                 })
-                .lineToConstantHeading(new Vector2d(53+distance-1.5, -40))
+                .lineToConstantHeading(new Vector2d(53+distance-1.98, -40))
                 .addDisplacementMarker(() -> {
                     sleep(50);
                     servoFOT.setPosition(0.66);
@@ -246,8 +246,8 @@ public class AutoRegionalsOR extends LinearOpMode {
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
             sleep(250);
-            servoTOT.setPosition(0.54);
-            servoBOT.setPosition(0.47);
+            servoTOT.setPosition(0.53);
+            servoBOT.setPosition(0.37);
             sleep(700);
             motorSlideRight.setTargetPosition(0);
             motorSlideLeft.setTargetPosition(0);
@@ -285,8 +285,8 @@ public class AutoRegionalsOR extends LinearOpMode {
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
             sleep(250);
-            servoTOT.setPosition(0.54);
-            servoBOT.setPosition(0.47);
+            servoTOT.setPosition(0.53);
+            servoBOT.setPosition(0.37);
             sleep(700);
             motorSlideRight.setTargetPosition(0);
             motorSlideLeft.setTargetPosition(0);
@@ -325,8 +325,8 @@ public class AutoRegionalsOR extends LinearOpMode {
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
             sleep(250);
-            servoTOT.setPosition(0.54);
-            servoBOT.setPosition(0.47);
+            servoTOT.setPosition(0.53);
+            servoBOT.setPosition(0.37);
             sleep(700);
             motorSlideRight.setTargetPosition(0);
             motorSlideLeft.setTargetPosition(0);
