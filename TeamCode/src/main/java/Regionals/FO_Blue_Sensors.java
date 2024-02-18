@@ -39,12 +39,15 @@ public class FO_Blue_Sensors extends OpMode {
     Servo servoTOT;
     Servo servoBOT;
     Servo servoFL;
+    Servo servoWhite;
 
     SampleMecanumDrive drive;
     Pose2d startPose;
 
-    private ColorSensor colorFlap;
-    private ColorSensor colorHook;
+    ColorSensor colorFlap;
+    ColorSensor colorHook;
+    DistanceSensor distanceOuttake;
+    DistanceSensor distanceIntake;
     RevBlinkinLedDriver lights;
 
     double y;
@@ -116,6 +119,7 @@ public class FO_Blue_Sensors extends OpMode {
         servoTOT = hardwareMap.servo.get("servo2"); // top ot
         servoBOT = hardwareMap.servo.get("servo3"); // bottom ot
         servoFL = hardwareMap.servo.get("servo6");
+        servoWhite = hardwareMap.servo.get("servo7");
         motorSlideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorSlideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorSlideRight.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -124,6 +128,9 @@ public class FO_Blue_Sensors extends OpMode {
 
         relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
         final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+
+        distanceOuttake = hardwareMap.get(DistanceSensor.class, "distanceOT");
+        distanceIntake = hardwareMap.get(DistanceSensor.class, "distanceIT");
 
         colorFlap = hardwareMap.get(ColorSensor.class, "colorFlap");
         colorHook = hardwareMap.get(ColorSensor.class, "colorHook");
@@ -148,8 +155,7 @@ public class FO_Blue_Sensors extends OpMode {
         servoBOT.setPosition(0.7);
         servoFOT.setPosition(0.51);
         servoHOT.setPosition(0.52);
-
-
+        servoWhite.setPosition(0.37);
     }
 
     public void loop() {
@@ -529,11 +535,5 @@ public class FO_Blue_Sensors extends OpMode {
         } else {
             motorIntake.setPower(0);
         }
-
-//        if (gamepad2.back) {
-//            motorLauncher.setPower(1);
-//        } else {
-//            motorLauncher.setPower(0);
-//        }
     }
 }
