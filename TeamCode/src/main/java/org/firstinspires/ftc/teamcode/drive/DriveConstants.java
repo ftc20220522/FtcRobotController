@@ -65,10 +65,10 @@ public class DriveConstants {
      * small and gradually increase them later after everything is working. All distance units are
      * inches.
      */
-    public static double MAX_VEL = 45.5009538935208;
-    public static double MAX_ACCEL = 45.5009538935208;
-    public static double MAX_ANG_VEL = 3.330588544418358;
-    public static double MAX_ANG_ACCEL = 3.330588544418358;
+    public static double MAX_VEL = 51.172821627874946;
+    public static double MAX_ACCEL = 51.172821627874946;
+    public static double MAX_ANG_VEL = 4.070456760395564;
+    public static double MAX_ANG_ACCEL = 4.070456760395564;
 
     /*
      * Adjust the orientations here to match your robot. See the FTC SDK documentation for details.

@@ -360,8 +360,8 @@ public class FO_Blue_Sensors extends OpMode {
                     motorSlideLeft.setTargetPosition(55);
                     motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    motorSlideRight.setVelocity(2500);
-                    motorSlideLeft.setVelocity(2500);
+                    motorSlideRight.setVelocity(1000);
+                    motorSlideLeft.setVelocity(1000);
                     position = 55;
                     prevposition = position;
                     liftTimer.reset();
