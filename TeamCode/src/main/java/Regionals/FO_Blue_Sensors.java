@@ -20,6 +20,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 @TeleOp(group = "FINALCODE")
@@ -63,15 +64,15 @@ public class FO_Blue_Sensors extends OpMode {
     long end = 0;
     boolean settime = false;
 
-    float hsvFlapValues[] = {0F, 0F, 0F};
-    final float valuesF[] = hsvFlapValues;
+//    float hsvFlapValues[] = {0F, 0F, 0F};
+//    float valuesF[] = hsvFlapValues;
     boolean flapLightOn = false;
-    float hsvHookValues[] = {0F, 0F, 0F};
-    final float valuesH[] = hsvHookValues;
+//    float hsvHookValues[] = {0F, 0F, 0F};
+//    float valuesH[] = hsvHookValues;
     boolean hookLightOn = false;
 
     final double SCALE_FACTOR = 8;
-    int relativeLayoutId;
+//    int relativeLayoutId;
 
     boolean bPrevState = false;
     boolean bCurrState = false;
@@ -126,17 +127,17 @@ public class FO_Blue_Sensors extends OpMode {
         motorSlideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorSlideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
-        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
 
-        distanceOuttake = hardwareMap.get(DistanceSensor.class, "distanceOT");
-        distanceIntake = hardwareMap.get(DistanceSensor.class, "distanceIT");
+//        distanceOuttake = hardwareMap.get(DistanceSensor.class, "distanceOT");
+//        distanceIntake = hardwareMap.get(DistanceSensor.class, "distanceIT");
 
         colorFlap = hardwareMap.get(ColorSensor.class, "colorFlap");
+        //^^I2C bus 1^^
         colorHook = hardwareMap.get(ColorSensor.class, "colorHook");
+        //^^I2C bus 2^^
         colorFlap.enableLed(bLedOn);
         colorHook.enableLed(bLedOn);
-        lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
+        lights = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
 
         drive = new SampleMecanumDrive(hardwareMap);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -153,8 +154,8 @@ public class FO_Blue_Sensors extends OpMode {
         motorSlideRight.setTargetPosition(78);
         servoTOT.setPosition(0.83);
         servoBOT.setPosition(0.7);
-        servoFOT.setPosition(0.51);
-        servoHOT.setPosition(0.52);
+        servoFOT.setPosition(0.52);
+        servoHOT.setPosition(0.54);
         servoWhite.setPosition(0.37);
     }
 
@@ -251,7 +252,7 @@ public class FO_Blue_Sensors extends OpMode {
             case In:
                 if (hookTimer.milliseconds() > 300) {
                     if (gamepad2.right_bumper && armState == ArmState.Bottom) {
-                        servoHOT.setPosition(0.52);
+                        servoHOT.setPosition(0.54);
                         hookTimer.reset();
                         hState = HookState.Out;
                     }
@@ -274,8 +275,8 @@ public class FO_Blue_Sensors extends OpMode {
                         motorSlideLeft.setTargetPosition(1000);
                         motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                         motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        motorSlideRight.setVelocity(1000);
-                        motorSlideLeft.setVelocity(1000);
+                        motorSlideRight.setVelocity(1500);
+                        motorSlideLeft.setVelocity(1500);
                         position = 1000;
                         prevposition = position;
                     }
@@ -303,8 +304,8 @@ public class FO_Blue_Sensors extends OpMode {
                     motorSlideLeft.setTargetPosition(25);
                     motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    motorSlideRight.setVelocity(25);
-                    motorSlideLeft.setVelocity(25);
+                    motorSlideRight.setVelocity(1500);
+                    motorSlideLeft.setVelocity(1500);
                     position = 25;
                     prevposition = position;
                     if (gamepad2.dpad_down) {
@@ -312,11 +313,11 @@ public class FO_Blue_Sensors extends OpMode {
                         liftTimer.reset();
                         armState = ArmState.Drop2;
                     } else if (gamepad2.dpad_up) {
-                        servoFOT.setPosition(0.66);
-                        servoHOT.setPosition(0.52);
+                        servoFOT.setPosition(0.67);
+                        servoHOT.setPosition(0.54);
                         hState = HookState.Out;
                     } else if (gamepad2.left_bumper) {
-                        servoFOT.setPosition(0.51);
+                        servoFOT.setPosition(0.52);
                         servoTOT.setPosition(0.83);
                         servoBOT.setPosition(0.68);
                         liftTimer.reset();
@@ -327,10 +328,10 @@ public class FO_Blue_Sensors extends OpMode {
             case Drop2:
                 if (liftTimer.milliseconds() > 350) {
                     if (gamepad2.dpad_down) {
-                        servoHOT.setPosition(0.52);
+                        servoHOT.setPosition(0.54);
                         hState = HookState.Out;
                     } else if (gamepad2.left_bumper) {
-                        servoFOT.setPosition(0.51);
+                        servoFOT.setPosition(0.52);
                         servoTOT.setPosition(0.83);
                         servoBOT.setPosition(0.68);
                         liftTimer.reset();
@@ -359,8 +360,8 @@ public class FO_Blue_Sensors extends OpMode {
                     motorSlideLeft.setTargetPosition(55);
                     motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    motorSlideRight.setVelocity(1000);
-                    motorSlideLeft.setVelocity(1000);
+                    motorSlideRight.setVelocity(2500);
+                    motorSlideLeft.setVelocity(2500);
                     position = 55;
                     prevposition = position;
                     liftTimer.reset();
@@ -421,49 +422,74 @@ public class FO_Blue_Sensors extends OpMode {
         telemetry.addData("x", poseEstimate.getX());
         telemetry.addData("y", poseEstimate.getY());
 
-        telemetry.update();
+//        telemetry.update();
 
-        Color.RGBToHSV((int) (colorFlap.red() * SCALE_FACTOR),
-                (int) (colorFlap.green() * SCALE_FACTOR),
-                (int) (colorFlap.blue() * SCALE_FACTOR),
-                hsvFlapValues);
-        Color.RGBToHSV((int) (colorHook.red() * SCALE_FACTOR),
-                (int) (colorHook.green() * SCALE_FACTOR),
-                (int) (colorHook.blue() * SCALE_FACTOR),
-                hsvHookValues);
+//        Color.RGBToHSV((int) (colorFlap.red() * SCALE_FACTOR),
+//                (int) (colorFlap.green() * SCALE_FACTOR),
+//                (int) (colorFlap.blue() * SCALE_FACTOR),
+//                hsvFlapValues);
+//        Color.RGBToHSV((int) (colorHook.red() * SCALE_FACTOR),
+//                (int) (colorHook.green() * SCALE_FACTOR),
+//                (int) (colorHook.blue() * SCALE_FACTOR),
+//                hsvHookValues);
 
-        if (Color.HSVToColor(0xff, valuesF) >= 85 && Color.HSVToColor(0xff, valuesF) <= 105) {
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+//        valuesF=hsvFlapValues;
+//        valuesH=hsvHookValues;
+
+//        if (Color.HSVToColor(0xff, valuesF) >= 85 && Color.HSVToColor(0xff, valuesF) <= 105) {
+//            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+//            flapLightOn = true;
+//        } else if (Color.HSVToColor(0xff, valuesF) >= 205 && Color.HSVToColor(0xff, valuesF) <= 225) {
+//            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET);
+//            flapLightOn = true;
+//        } else if (Color.HSVToColor(0xff, valuesF) >= 125 && Color.HSVToColor(0xff, valuesF) <= 145) {
+//            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+//            flapLightOn = true;
+//        } else if (Color.HSVToColor(0xff, valuesF) >= 170 && Color.HSVToColor(0xff, valuesF) <= 190) {
+//            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+//            flapLightOn = true;
+//        } else {
+//            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+//            flapLightOn = false;
+//        }
+
+//        if (Color.HSVToColor(0xff, valuesH) >= 85 && Color.HSVToColor(0xff, valuesH) <= 105) {
+//            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+//            hookLightOn = true;
+//        } else if (Color.HSVToColor(0xff, valuesH) >= 205 && Color.HSVToColor(0xff, valuesH) <= 225) {
+//            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET);
+//            hookLightOn = true;
+//        } else if (Color.HSVToColor(0xff, valuesH) >= 125 && Color.HSVToColor(0xff, valuesH) <= 145) {
+//            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+//            hookLightOn = true;
+//        } else if (Color.HSVToColor(0xff, valuesH) >= 170 && Color.HSVToColor(0xff, valuesH) <= 190) {
+//            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+//            hookLightOn = true;
+//        } else {
+//            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+//            hookLightOn = false;
+//        }
+
+        if (((DistanceSensor) colorFlap).getDistance(DistanceUnit.CM)<2) {
             flapLightOn = true;
-        } else if (Color.HSVToColor(0xff, valuesF) >= 205 && Color.HSVToColor(0xff, valuesF) <= 225) {
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET);
-            flapLightOn = true;
-        } else if (Color.HSVToColor(0xff, valuesF) >= 125 && Color.HSVToColor(0xff, valuesF) <= 145) {
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-            flapLightOn = true;
-        } else if (Color.HSVToColor(0xff, valuesF) >= 170 && Color.HSVToColor(0xff, valuesF) <= 190) {
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
-            flapLightOn = true;
+//            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_2_NO_BLENDING);
         } else {
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
             flapLightOn = false;
+//            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_HEARTBEAT_FAST);
         }
-
-        if (Color.HSVToColor(0xff, valuesH) >= 85 && Color.HSVToColor(0xff, valuesH) <= 105) {
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
-            flapLightOn = true;
-        } else if (Color.HSVToColor(0xff, valuesH) >= 205 && Color.HSVToColor(0xff, valuesH) <= 225) {
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET);
-            flapLightOn = true;
-        } else if (Color.HSVToColor(0xff, valuesH) >= 125 && Color.HSVToColor(0xff, valuesH) <= 145) {
+        if (((DistanceSensor) colorHook).getDistance(DistanceUnit.CM)<2) {
+            hookLightOn = true;
+        } else {
+            hookLightOn = false;
+        }
+        if (flapLightOn && hookLightOn) {
             lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-            flapLightOn = true;
-        } else if (Color.HSVToColor(0xff, valuesH) >= 170 && Color.HSVToColor(0xff, valuesH) <= 190) {
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
-            flapLightOn = true;
+        } else if (flapLightOn && !hookLightOn) {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+        } else if (!flapLightOn && hookLightOn){
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
         } else {
             lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
-            flapLightOn = false;
         }
 
         //Viper Slide Preset
@@ -525,10 +551,15 @@ public class FO_Blue_Sensors extends OpMode {
         telemetry.addData("leftOdometry", temp.getCurrentPosition());
         telemetry.addData("rightOdometry", temp.getCurrentPosition());
         telemetry.addData("midOdometry", temp.getCurrentPosition());
+        telemetry.addData("", "");
+        telemetry.addData("FLAP DETECT?", flapLightOn);
+        telemetry.addData("HOOK DETECT?", hookLightOn);
+
+        telemetry.update();
 
         if (gamepad1.left_bumper) {
             motorIntake.setPower(1);
-            servoHOT.setPosition(0.52);
+            servoHOT.setPosition(0.54);
             hState = HookState.Out;
         } else if (gamepad1.right_bumper) {
             motorIntake.setPower(-1);
