@@ -20,8 +20,12 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcontroller.external.samples.SampleRevBlinkinLedDriver;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+
+import java.util.concurrent.TimeUnit;
 
 @TeleOp(group = "FINALCODE")
 public class FO_Blue_Sensors extends OpMode {
@@ -54,6 +58,7 @@ public class FO_Blue_Sensors extends OpMode {
     double y;
     double x;
     double rx;
+    int intakePos = 6;
     int position = 60;
     int prevposition = 0;
     boolean a = false;
@@ -63,6 +68,8 @@ public class FO_Blue_Sensors extends OpMode {
     long start;
     long end = 0;
     boolean settime = false;
+
+    Deadline gamepadRateLimit;
 
 //    float hsvFlapValues[] = {0F, 0F, 0F};
 //    float valuesF[] = hsvFlapValues;
@@ -81,6 +88,7 @@ public class FO_Blue_Sensors extends OpMode {
     public enum ArmState {
         Bottom,
         RotateUp,
+        UpDown,
         Drop,
         Drop2,
         DownCheck,
@@ -144,6 +152,9 @@ public class FO_Blue_Sensors extends OpMode {
         drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         startPose = new Pose2d(0, 0, Math.toRadians(90));
         drive.setPoseEstimate(startPose);
+
+        gamepadRateLimit = new Deadline(300, TimeUnit.MILLISECONDS);
+
         liftTimer.reset();
         hookTimer.reset();
     }
@@ -295,10 +306,10 @@ public class FO_Blue_Sensors extends OpMode {
                     servoTOT.setPosition(0.54);
                     servoBOT.setPosition(0.47);
                     liftTimer.reset();
-                    armState = ArmState.Drop;
+                    armState = ArmState.UpDown;
                 }
                 break;
-            case Drop:
+            case UpDown:
                 if (liftTimer.milliseconds() >= 700) {
                     motorSlideRight.setTargetPosition(25);
                     motorSlideLeft.setTargetPosition(25);
@@ -308,21 +319,24 @@ public class FO_Blue_Sensors extends OpMode {
                     motorSlideLeft.setVelocity(1500);
                     position = 25;
                     prevposition = position;
-                    if (gamepad2.dpad_down) {
-                        servoFOT.setPosition(0.66);
-                        liftTimer.reset();
-                        armState = ArmState.Drop2;
-                    } else if (gamepad2.dpad_up) {
-                        servoFOT.setPosition(0.67);
-                        servoHOT.setPosition(0.54);
-                        hState = HookState.Out;
-                    } else if (gamepad2.left_bumper) {
-                        servoFOT.setPosition(0.52);
-                        servoTOT.setPosition(0.83);
-                        servoBOT.setPosition(0.68);
-                        liftTimer.reset();
-                        armState = ArmState.DownCheck;
-                    }
+                    armState = ArmState.Drop;
+                }
+                break;
+            case Drop:
+                if (gamepad2.dpad_down) {
+                    servoFOT.setPosition(0.66);
+                    liftTimer.reset();
+                    armState = ArmState.Drop2;
+                } else if (gamepad2.dpad_up) {
+                    servoFOT.setPosition(0.67);
+                    servoHOT.setPosition(0.54);
+                    hState = HookState.Out;
+                } else if (gamepad2.left_bumper) {
+                    servoFOT.setPosition(0.52);
+                    servoTOT.setPosition(0.83);
+                    servoBOT.setPosition(0.68);
+                    liftTimer.reset();
+                    armState = ArmState.DownCheck;
                 }
                 break;
             case Drop2:
@@ -355,7 +369,7 @@ public class FO_Blue_Sensors extends OpMode {
                     armState = ArmState.RotateDown;
                 }
             case RotateDown:
-                if (liftTimer.milliseconds()>1000) {
+                if (liftTimer.milliseconds()>1200) {
                     motorSlideRight.setTargetPosition(55);
                     motorSlideLeft.setTargetPosition(55);
                     motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -492,6 +506,20 @@ public class FO_Blue_Sensors extends OpMode {
             lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
         }
 
+        gamepadIntake();
+
+        if (intakePos == 6) {
+            servoWhite.setPosition(0.37);
+        } else if (intakePos == 5) {
+            servoWhite.setPosition(0.55);
+        } else if (intakePos == 4) {
+            servoWhite.setPosition(0.6);
+        } else if (intakePos == 3) {
+            servoWhite.setPosition(0.65);
+        } else if (intakePos == 2) {
+            servoWhite.setPosition(0.7);
+        }
+
         //Viper Slide Preset
         if (gamepad2.x) {
             speed=4000;
@@ -543,6 +571,7 @@ public class FO_Blue_Sensors extends OpMode {
             prevposition=position;
         }
 //        telemetry.addData("heading", Math.toDegrees(botHeading));
+        telemetry.addData("intake", intakePos);
         telemetry.addData("heading", poseEstimate.getHeading());
         telemetry.addData("position", position);
         telemetry.addData("right", motorSlideRight.getCurrentPosition());
@@ -565,6 +594,29 @@ public class FO_Blue_Sensors extends OpMode {
             motorIntake.setPower(-1);
         } else {
             motorIntake.setPower(0);
+        }
+    }
+    protected void gamepadIntake()
+    {
+        if (!gamepadRateLimit.hasExpired()) {
+            return;
+        }
+
+        if (gamepad1.a && intakePos>2) {
+            intakePos--;
+            gamepadRateLimit.reset();
+
+        } else if (gamepad1.y && intakePos < 6) {
+            intakePos++;
+            gamepadRateLimit.reset();
+        }
+        if (gamepad1.b) {
+            intakePos = 6;
+            gamepadRateLimit.reset();
+        }
+        if (gamepad1.x) {
+            intakePos = 2;
+            gamepadRateLimit.reset();
         }
     }
 }
