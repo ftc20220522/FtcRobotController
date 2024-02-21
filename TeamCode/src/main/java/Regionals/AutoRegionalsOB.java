@@ -99,7 +99,7 @@ AutoRegionalsOB extends LinearOpMode {
                     servoClamp.setPosition(0.1);
                     distance = distanceIntake.getDistance(DistanceUnit.INCH);
                 })
-                .lineToConstantHeading(new Vector2d(-32,31))
+//                .lineToConstantHeading(new Vector2d(-32,31))
                 .lineToLinearHeading(new Pose2d(-58, 11, 0))
                 .addDisplacementMarker(() -> {
                     servoWhite.setPosition(0.55);
