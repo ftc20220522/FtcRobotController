@@ -59,8 +59,10 @@ AutoRegionalsOB extends LinearOpMode {
 
         DistanceSensor distanceOuttake = hardwareMap.get(DistanceSensor.class, "distanceOT");
         DistanceSensor distanceIntake = hardwareMap.get(DistanceSensor.class, "distanceIT");
+//
 //        relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
 //        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+//
 //        ColorSensor colorFlap = hardwareMap.get(ColorSensor.class, "colorFlap");
 //        ColorSensor colorHook = hardwareMap.get(ColorSensor.class, "colorHook");
 //        colorFlap.enableLed(bLedOn);
@@ -97,6 +99,7 @@ AutoRegionalsOB extends LinearOpMode {
                     servoClamp.setPosition(0.1);
                     distance = distanceIntake.getDistance(DistanceUnit.INCH);
                 })
+                .lineToConstantHeading(new Vector2d(-32,31))
                 .lineToLinearHeading(new Pose2d(-58, 11, 0))
                 .addDisplacementMarker(() -> {
                     servoWhite.setPosition(0.55);
@@ -107,8 +110,9 @@ AutoRegionalsOB extends LinearOpMode {
                     motorIntake.setPower(1);
                     sleep(2000);
                     servoHOT.setPosition(0.67);
-                    servoWhite.setPosition(0.75);
                     motorIntake.setPower(-1);
+                    sleep(500);
+                    servoWhite.setPosition(0.75);
                     sleep(200);
                 })
                 .lineToConstantHeading(new Vector2d(-58,11.5))
@@ -145,8 +149,9 @@ AutoRegionalsOB extends LinearOpMode {
                     motorIntake.setPower(1);
                     sleep(2000);
                     servoHOT.setPosition(0.67);
-                    servoWhite.setPosition(0.75);
                     motorIntake.setPower(-1);
+                    sleep(500);
+                    servoWhite.setPosition(0.75);
                     sleep(200);
                 })
                 .lineToConstantHeading(new Vector2d(-58,11.5))
@@ -173,18 +178,21 @@ AutoRegionalsOB extends LinearOpMode {
                     servoClamp.setPosition(0.1);
                     distance = distanceIntake.getDistance(DistanceUnit.INCH);
                 })
-                .waitSeconds(0.5)
-                .lineToConstantHeading(new Vector2d(-46,36))
-                .lineToConstantHeading(new Vector2d(-62,36))
+                .lineToLinearHeading(new Pose2d(-58, 11, 0))
                 .addDisplacementMarker(() -> {
-//                    servoHOT.setPosition(0.52);
-//                    motorIntake.setPower(1);
-//                    servoWhite.setPosition(0.75);
-                    sleep(1000);
-//                    motorIntake.setPower(0);
-//                    servoHOT.setPosition(0.67);
+                    servoWhite.setPosition(0.55);
                 })
-                .lineToConstantHeading(new Vector2d(-58,34.5))
+                .lineToLinearHeading(new Pose2d(-58+distance-2, 11, 0))
+                .addDisplacementMarker(() -> {
+                    servoHOT.setPosition(0.52);
+                    motorIntake.setPower(1);
+                    sleep(2000);
+                    servoHOT.setPosition(0.67);
+                    motorIntake.setPower(-1);
+                    sleep(500);
+                    servoWhite.setPosition(0.75);
+                    sleep(200);
+                })
                 .lineToConstantHeading(new Vector2d(-58,11.5))
                 .lineToConstantHeading(new Vector2d(30,11.5))
                 .build();
