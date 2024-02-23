@@ -165,7 +165,7 @@ public class FO_Blue_Sensors extends OpMode {
         motorSlideRight.setTargetPosition(78);
         servoTOT.setPosition(0.83);
         servoBOT.setPosition(0.7);
-        servoFOT.setPosition(0.52);
+        servoFOT.setPosition(0.53);
         servoHOT.setPosition(0.54);
         servoWhite.setPosition(0.37);
     }
@@ -328,11 +328,11 @@ public class FO_Blue_Sensors extends OpMode {
                     liftTimer.reset();
                     armState = ArmState.Drop2;
                 } else if (gamepad2.dpad_up) {
-                    servoFOT.setPosition(0.67);
+                    servoFOT.setPosition(0.66);
                     servoHOT.setPosition(0.54);
                     hState = HookState.Out;
                 } else if (gamepad2.left_bumper) {
-                    servoFOT.setPosition(0.52);
+                    servoFOT.setPosition(0.53);
                     servoTOT.setPosition(0.83);
                     servoBOT.setPosition(0.68);
                     liftTimer.reset();
@@ -345,7 +345,7 @@ public class FO_Blue_Sensors extends OpMode {
                         servoHOT.setPosition(0.54);
                         hState = HookState.Out;
                     } else if (gamepad2.left_bumper) {
-                        servoFOT.setPosition(0.52);
+                        servoFOT.setPosition(0.53);
                         servoTOT.setPosition(0.83);
                         servoBOT.setPosition(0.68);
                         liftTimer.reset();

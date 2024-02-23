@@ -3,6 +3,12 @@ package Regionals;
 import android.app.Activity;
 import android.view.View;
 
+import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.TranslationalVelocityConstraint;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -21,11 +27,20 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 @Autonomous(name="AutoOutsideBlue")
 public class
 AutoRegionalsOB extends LinearOpMode {
+    TrajectoryVelocityConstraint velConstraint = new MinVelocityConstraint(Arrays.asList(
+            new TranslationalVelocityConstraint(25),
+            new AngularVelocityConstraint(2)
+    ));
+
+    TrajectoryAccelerationConstraint accelConstraint = new ProfileAccelerationConstraint(25);
+
     private final int READ_PERIOD = 1;
     int location = 0;
     double distance;
@@ -63,8 +78,8 @@ AutoRegionalsOB extends LinearOpMode {
 //        relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
 //        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
 //
-//        ColorSensor colorFlap = hardwareMap.get(ColorSensor.class, "colorFlap");
-//        ColorSensor colorHook = hardwareMap.get(ColorSensor.class, "colorHook");
+        ColorSensor colorFlap = hardwareMap.get(ColorSensor.class, "colorFlap");
+        ColorSensor colorHook = hardwareMap.get(ColorSensor.class, "colorHook");
 //        colorFlap.enableLed(bLedOn);
 //        colorHook.enableLed(bLedOn);
 //        RevBlinkinLedDriver lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
@@ -86,126 +101,152 @@ AutoRegionalsOB extends LinearOpMode {
         servoClamp.setPosition(0.6);
         servoTOT.setPosition(0.83);
         servoBOT.setPosition(0.69);
-        servoFOT.setPosition(0.51);
+        servoFOT.setPosition(0.53);
         servoHOT.setPosition(0.67);
         servoFL.setPosition(0.69);
         servoWhite.setPosition(0.37);  //Down - 0.75   //Top of 5 pixel stack - 0.55
+
+        motorSlideRight.setTargetPosition(60);
+        motorSlideLeft.setTargetPosition(60);
+        motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorSlideRight.setVelocity(1500);
+        motorSlideLeft.setVelocity(1500);
 
         //Left Movement
         TrajectorySequence purpleL = drive.trajectorySequenceBuilder(startPose)
                 .lineToConstantHeading(new Vector2d(-38,31))
                 .lineToConstantHeading(new Vector2d(-32,31))
-                .addDisplacementMarker(() -> {
-                    servoClamp.setPosition(0.1);
-                    distance = distanceIntake.getDistance(DistanceUnit.INCH);
-                })
-//                .lineToConstantHeading(new Vector2d(-32,31))
-                .lineToLinearHeading(new Pose2d(-58, 11, 0))
-                .addDisplacementMarker(() -> {
-                    servoWhite.setPosition(0.55);
-                })
-                .lineToLinearHeading(new Pose2d(-58+distance-2, 11, 0))
+                .build();
+        TrajectorySequence moveL = drive.trajectorySequenceBuilder(purpleL.end())
+                .lineToConstantHeading(new Vector2d(-38,31))
+                .lineToLinearHeading(new Pose2d(-36,9,0))
+                .build();
+        TrajectorySequence whiteL = drive.trajectorySequenceBuilder(moveL.end())
                 .addDisplacementMarker(() -> {
                     servoHOT.setPosition(0.52);
-                    motorIntake.setPower(1);
-                    sleep(2000);
-                    servoHOT.setPosition(0.67);
-                    motorIntake.setPower(-1);
-                    sleep(500);
-                    servoWhite.setPosition(0.75);
-                    sleep(200);
+                    distance = distanceIntake.getDistance(DistanceUnit.INCH);
                 })
-                .lineToConstantHeading(new Vector2d(-58,11.5))
-                .lineToConstantHeading(new Vector2d(30,11.5))
+                .lineToConstantHeading(new Vector2d(-58.25+distance-1,7.5))
+                .build();
+        TrajectorySequence whiteL2 = drive.trajectorySequenceBuilder(whiteL.end())
+                .lineToConstantHeading(new Vector2d(-58.25+distance+8,7.5))
+                .addDisplacementMarker(() -> {
+                    servoWhite.setPosition(0.37);
+                    motorIntake.setPower(1);
+                })
+                .setConstraints(velConstraint, accelConstraint)
+                .lineToConstantHeading(new Vector2d(-58.25+distance-0.5,7.5))
+                .resetConstraints()
+                .waitSeconds(0.2)
+                .lineToConstantHeading(new Vector2d(-48, 7.5))
+                .build();
+        TrajectorySequence backL = drive.trajectorySequenceBuilder(whiteL2.end())
+                .lineToConstantHeading(new Vector2d(38, 13))
                 .build();
         //Board Pixel
-        TrajectorySequence yellowL = drive.trajectorySequenceBuilder(purpleL.end())
-                .lineToConstantHeading(new Vector2d(53,40))
+        TrajectorySequence yellowL = drive.trajectorySequenceBuilder(backL.end())
+                .lineToConstantHeading(new Vector2d(50,38))
                 .addDisplacementMarker(() -> {
                     distance = distanceOuttake.getDistance(DistanceUnit.INCH);
                 })
-                .lineToConstantHeading(new Vector2d(53+distance-1.98, 40))
+                .lineToConstantHeading(new Vector2d(50+distance+3, 38))
                 .build();
-        TrajectorySequence endL = drive.trajectorySequenceBuilder(yellowL.end())
-                .lineToConstantHeading(new Vector2d(46,40))
+        TrajectorySequence endL = drive.trajectorySequenceBuilder((yellowL.end()))
+                .lineToConstantHeading(new Vector2d(45,38))
                 .build();
+
 
 
 
         //Middle Movement
         TrajectorySequence purpleM = drive.trajectorySequenceBuilder(startPose)
-                .lineToConstantHeading(new Vector2d(-35, 29))
-                .addDisplacementMarker(() -> {
-                    servoClamp.setPosition(0.1);
-                    distance = distanceIntake.getDistance(DistanceUnit.INCH);
-                })
-                .lineToLinearHeading(new Pose2d(-58, 11, 0))
-                .addDisplacementMarker(() -> {
-                    servoWhite.setPosition(0.55);
-                })
-                .lineToLinearHeading(new Pose2d(-58+distance-2, 11, 0))
+                .lineToConstantHeading(new Vector2d(-45, 20))
+                .lineToConstantHeading(new Vector2d(-42, 25))
+                .build();
+        TrajectorySequence moveM = drive.trajectorySequenceBuilder(purpleM.end())
+                .lineToConstantHeading(new Vector2d(-50, 25))
+                .lineToLinearHeading(new Pose2d(-36,9,0))
+                .build();
+        TrajectorySequence whiteM = drive.trajectorySequenceBuilder(moveM.end())
                 .addDisplacementMarker(() -> {
                     servoHOT.setPosition(0.52);
-                    motorIntake.setPower(1);
-                    sleep(2000);
-                    servoHOT.setPosition(0.67);
-                    motorIntake.setPower(-1);
-                    sleep(500);
-                    servoWhite.setPosition(0.75);
-                    sleep(200);
+                    distance = distanceIntake.getDistance(DistanceUnit.INCH);
                 })
-                .lineToConstantHeading(new Vector2d(-58,11.5))
-                .lineToConstantHeading(new Vector2d(30,11.5))
+                .lineToConstantHeading(new Vector2d(-58.25+distance-2,7.5))
+                .build();
+        TrajectorySequence whiteM2 = drive.trajectorySequenceBuilder(whiteM.end())
+                .lineToConstantHeading(new Vector2d(-58.25+distance+8,7.5))
+                .addDisplacementMarker(() -> {
+                    servoWhite.setPosition(0.37);
+                    motorIntake.setPower(1);
+                })
+                .setConstraints(velConstraint, accelConstraint)
+                .lineToConstantHeading(new Vector2d(-58.25+distance-0.5,7.5))
+                .resetConstraints()
+                .waitSeconds(0.2)
+                .lineToConstantHeading(new Vector2d(-48, 7.5))
+                .build();
+        TrajectorySequence backM = drive.trajectorySequenceBuilder(whiteM2.end())
+                .lineToConstantHeading(new Vector2d(38, 13))
                 .build();
         //Board Pixel
-        TrajectorySequence yellowM = drive.trajectorySequenceBuilder(purpleM.end())
-                .lineToConstantHeading(new Vector2d(53,33))
+        TrajectorySequence yellowM = drive.trajectorySequenceBuilder(backM.end())
+                .lineToConstantHeading(new Vector2d(50,33))
                 .addDisplacementMarker(() -> {
                     distance = distanceOuttake.getDistance(DistanceUnit.INCH);
                 })
-                .lineToConstantHeading(new Vector2d(53+distance-1.98, 33))
+                .lineToConstantHeading(new Vector2d(50+distance+3, 33))
                 .build();
-        TrajectorySequence endM = drive.trajectorySequenceBuilder(yellowM.end())
-                .lineToConstantHeading(new Vector2d(46,33))
+        TrajectorySequence endM = drive.trajectorySequenceBuilder((yellowM.end()))
+                .lineToConstantHeading(new Vector2d(45,33))
                 .build();
+
 
 
 
         //Right Movement
         TrajectorySequence purpleR = drive.trajectorySequenceBuilder(startPose)
-                .lineToLinearHeading(new Pose2d(-46,30,0))
-                .addDisplacementMarker(() -> {
-                    servoClamp.setPosition(0.1);
-                    distance = distanceIntake.getDistance(DistanceUnit.INCH);
-                })
-                .lineToLinearHeading(new Pose2d(-58, 11, 0))
-                .addDisplacementMarker(() -> {
-                    servoWhite.setPosition(0.55);
-                })
-                .lineToLinearHeading(new Pose2d(-58+distance-2, 11, 0))
+                .lineToLinearHeading(new Pose2d(-46, 37, 0))
+
+                .build();
+        TrajectorySequence moveR = drive.trajectorySequenceBuilder(purpleR.end())
+                .lineToConstantHeading(new Vector2d(-46,43))
+                .lineToConstantHeading(new Vector2d(-36,43))
+                .lineToConstantHeading(new Vector2d(-36,9))
+                .build();
+        TrajectorySequence whiteR = drive.trajectorySequenceBuilder(moveR.end())
                 .addDisplacementMarker(() -> {
                     servoHOT.setPosition(0.52);
-                    motorIntake.setPower(1);
-                    sleep(2000);
-                    servoHOT.setPosition(0.67);
-                    motorIntake.setPower(-1);
-                    sleep(500);
-                    servoWhite.setPosition(0.75);
-                    sleep(200);
+                    distance = distanceIntake.getDistance(DistanceUnit.INCH);
                 })
-                .lineToConstantHeading(new Vector2d(-58,11.5))
-                .lineToConstantHeading(new Vector2d(30,11.5))
+                .lineToConstantHeading(new Vector2d(-58.25+distance-1,7.5))
+                .build();
+        TrajectorySequence whiteR2 = drive.trajectorySequenceBuilder(whiteR.end())
+                .lineToConstantHeading(new Vector2d(-58.25+distance+8,7.5))
+                .addDisplacementMarker(() -> {
+                    servoWhite.setPosition(0.37);
+                    motorIntake.setPower(1);
+                })
+                .setConstraints(velConstraint, accelConstraint)
+                .lineToConstantHeading(new Vector2d(-58.25+distance-0.5,7.5))
+                .resetConstraints()
+                .waitSeconds(0.2)
+                .lineToConstantHeading(new Vector2d(-48, 7.5))
+                .build();
+        TrajectorySequence backR = drive.trajectorySequenceBuilder(whiteR2.end())
+                .lineToConstantHeading(new Vector2d(38, 13))
                 .build();
         //Board Pixel
-        TrajectorySequence yellowR = drive.trajectorySequenceBuilder(purpleR.end())
-                .lineToConstantHeading(new Vector2d(53,29))
+        TrajectorySequence yellowR = drive.trajectorySequenceBuilder(backR.end())
+                .lineToConstantHeading(new Vector2d(50,31.25))
                 .addDisplacementMarker(() -> {
                     distance = distanceOuttake.getDistance(DistanceUnit.INCH);
                 })
-                .lineToConstantHeading(new Vector2d(53+distance-1.98, 29))
+                .lineToConstantHeading(new Vector2d(50+distance+3, 31.25))
                 .build();
         TrajectorySequence endR = drive.trajectorySequenceBuilder((yellowR.end()))
-                .lineToConstantHeading(new Vector2d(46,29))
+                .lineToConstantHeading(new Vector2d(45,31.25))
                 .build();
 
 
@@ -257,6 +298,29 @@ AutoRegionalsOB extends LinearOpMode {
         if (location == 1) {
             //Purple Pixel
             drive.followTrajectorySequence(purpleL);
+            sleep(250);
+            servoClamp.setPosition(0.1);
+            sleep(250);
+
+            //White Pixel
+            drive.followTrajectorySequence(moveL);
+            do {
+                drive.followTrajectorySequence(whiteL);
+                sleep(200);
+                servoWhite.setPosition(0.58);
+                sleep(400);
+                drive.followTrajectorySequence(whiteL2);
+                servoHOT.setPosition(0.67);
+                motorIntake.setPower(-0.5);
+                sleep(200);
+                servoWhite.setPosition(0.37);
+                sleep(200);
+                motorIntake.setPower(0);
+                sleep(200);
+            } while (((DistanceSensor) colorFlap).getDistance(DistanceUnit.CM) > 2 && ((DistanceSensor) colorHook).getDistance(DistanceUnit.CM) > 2 && timer.seconds()>18);
+            drive.followTrajectorySequence(backL);
+
+
             motorSlideRight.setTargetPosition(1000);
             motorSlideLeft.setTargetPosition(1000);
             motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -276,12 +340,25 @@ AutoRegionalsOB extends LinearOpMode {
 
             //Yellow Pixel
             drive.followTrajectorySequence(yellowL);
-            sleep(50);
-            servoFOT.setPosition(0.66);
-            sleep(50);
+
+            if (((DistanceSensor) colorFlap).getDistance(DistanceUnit.CM) < 2 && ((DistanceSensor) colorHook).getDistance(DistanceUnit.CM) < 2) {
+                sleep(50);
+                servoFOT.setPosition(0.66);
+                sleep(150);
+                drive.followTrajectorySequence(endL);
+                sleep(150);
+                servoHOT.setPosition(0.52);
+                sleep(250);
+            } else {
+                sleep(50);
+                servoHOT.setPosition(0.52);
+                sleep(100);
+                servoFOT.setPosition(0.66);
+                sleep(150);
+                drive.followTrajectorySequence(endL);
+            }
 
             //Park
-            drive.followTrajectorySequence(endL);
             motorSlideRight.setTargetPosition(1000);
             motorSlideLeft.setTargetPosition(1000);
             motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -290,7 +367,7 @@ AutoRegionalsOB extends LinearOpMode {
             motorSlideLeft.setVelocity(1000);
             servoTOT.setPosition(0.83);
             servoBOT.setPosition(0.69);
-            servoFOT.setPosition(0.51);
+            servoFOT.setPosition(0.53);
             servoHOT.setPosition(0.52);
             sleep(1300);
             motorSlideRight.setTargetPosition(0);
@@ -303,6 +380,29 @@ AutoRegionalsOB extends LinearOpMode {
         } else if (location == 2) {
             //Purple Pixel
             drive.followTrajectorySequence(purpleM);
+            sleep(250);
+            servoClamp.setPosition(0.1);
+            sleep(250);
+
+            //White Pixel
+            drive.followTrajectorySequence(moveM);
+            do {
+                drive.followTrajectorySequence(whiteM);
+                sleep(200);
+                servoWhite.setPosition(0.58);
+                sleep(400);
+                drive.followTrajectorySequence(whiteM2);
+                servoHOT.setPosition(0.67);
+                motorIntake.setPower(-0.5);
+                sleep(200);
+                servoWhite.setPosition(0.37);
+                sleep(200);
+                motorIntake.setPower(0);
+                sleep(200);
+            } while (((DistanceSensor) colorFlap).getDistance(DistanceUnit.CM) > 2 && ((DistanceSensor) colorHook).getDistance(DistanceUnit.CM) > 2 && timer.seconds()>18);
+            drive.followTrajectorySequence(backM);
+
+
             motorSlideRight.setTargetPosition(1000);
             motorSlideLeft.setTargetPosition(1000);
             motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -322,12 +422,25 @@ AutoRegionalsOB extends LinearOpMode {
 
             //Yellow Pixel
             drive.followTrajectorySequence(yellowM);
-            sleep(50);
-            servoFOT.setPosition(0.66);
-            sleep(50);
+
+            if (((DistanceSensor) colorFlap).getDistance(DistanceUnit.CM) < 2 && ((DistanceSensor) colorHook).getDistance(DistanceUnit.CM) < 2) {
+                sleep(50);
+                servoFOT.setPosition(0.66);
+                sleep(150);
+                drive.followTrajectorySequence(endM);
+                sleep(150);
+                servoHOT.setPosition(0.52);
+                sleep(250);
+            } else {
+                sleep(50);
+                servoHOT.setPosition(0.52);
+                sleep(100);
+                servoFOT.setPosition(0.66);
+                sleep(150);
+                drive.followTrajectorySequence(endM);
+            }
 
             //Park
-            drive.followTrajectorySequence(endM);
             motorSlideRight.setTargetPosition(1000);
             motorSlideLeft.setTargetPosition(1000);
             motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -336,7 +449,7 @@ AutoRegionalsOB extends LinearOpMode {
             motorSlideLeft.setVelocity(1000);
             servoTOT.setPosition(0.83);
             servoBOT.setPosition(0.69);
-            servoFOT.setPosition(0.51);
+            servoFOT.setPosition(0.53);
             servoHOT.setPosition(0.52);
             sleep(1300);
             motorSlideRight.setTargetPosition(0);
@@ -346,9 +459,34 @@ AutoRegionalsOB extends LinearOpMode {
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
             sleep(2000);
+
+
         } else if (location == 3) {
             //Purple Pixel
             drive.followTrajectorySequence(purpleR);
+            sleep(250);
+            servoClamp.setPosition(0.1);
+            sleep(250);
+
+            //White Pixel
+            drive.followTrajectorySequence(moveR);
+            do {
+                drive.followTrajectorySequence(whiteR);
+                sleep(200);
+                servoWhite.setPosition(0.58);
+                sleep(400);
+                drive.followTrajectorySequence(whiteR2);
+                servoHOT.setPosition(0.67);
+                motorIntake.setPower(-0.5);
+                sleep(200);
+                servoWhite.setPosition(0.37);
+                sleep(200);
+                motorIntake.setPower(0);
+                sleep(200);
+            } while (((DistanceSensor) colorFlap).getDistance(DistanceUnit.CM) > 2 && ((DistanceSensor) colorHook).getDistance(DistanceUnit.CM) > 2 && timer.seconds()>18);
+            drive.followTrajectorySequence(backR);
+
+
             motorSlideRight.setTargetPosition(1000);
             motorSlideLeft.setTargetPosition(1000);
             motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -370,10 +508,21 @@ AutoRegionalsOB extends LinearOpMode {
             drive.followTrajectorySequence(yellowR);
             sleep(50);
             servoFOT.setPosition(0.66);
-            sleep(50);
+            sleep(300);
+            if (((DistanceSensor) colorFlap).getDistance(DistanceUnit.CM) < 2 && ((DistanceSensor) colorHook).getDistance(DistanceUnit.CM) < 2) {
+                drive.followTrajectorySequence(endR);
+                sleep(150);
+                servoHOT.setPosition(0.52);
+                sleep(250);
+            } else {
+                sleep(150);
+                servoHOT.setPosition(0.52);
+                sleep(500);
+                drive.followTrajectorySequence(endR);
+            }
+
 
             //Park
-            drive.followTrajectorySequence(endR);
             motorSlideRight.setTargetPosition(1000);
             motorSlideLeft.setTargetPosition(1000);
             motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -382,7 +531,7 @@ AutoRegionalsOB extends LinearOpMode {
             motorSlideLeft.setVelocity(1000);
             servoTOT.setPosition(0.83);
             servoBOT.setPosition(0.69);
-            servoFOT.setPosition(0.51);
+            servoFOT.setPosition(0.53);
             servoHOT.setPosition(0.52);
             sleep(1300);
             motorSlideRight.setTargetPosition(0);
