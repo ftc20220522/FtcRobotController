@@ -47,23 +47,23 @@ public class MeepMeepIB {
                 );
 
         // Declare out third bot
-        RoadRunnerBotEntity myThirdBot = new DefaultBotBuilder(meepMeep)
-                // We set this bot to be red
-                .setColorScheme(new ColorSchemeRedLight())
-                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
-                .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(14, 61, Math.toRadians(270)))
-                                .lineToConstantHeading(new Vector2d(14,34))
-                                .turn(Math.toRadians(180))
-                                .lineToConstantHeading(new Vector2d(9,34))
-                                .lineToConstantHeading(new Vector2d(16,34))
-                                .turn(Math.toRadians(-90))
-                                .lineToConstantHeading(new Vector2d(46,28))
-                                .lineToConstantHeading(new Vector2d(46,58))
-                                .lineToConstantHeading(new Vector2d(60,58))
-                                .build()
-                );
-
+//        RoadRunnerBotEntity myThirdBot = new DefaultBotBuilder(meepMeep)
+//                // We set this bot to be red
+//                .setColorScheme(new ColorSchemeRedLight())
+//                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
+//                .followTrajectorySequence(drive ->
+//                        drive.trajectorySequenceBuilder(new Pose2d(14, 61, Math.toRadians(270)))
+//                                .lineToConstantHeading(new Vector2d(14,34))
+//                                .turn(Math.toRadians(180))
+//                                .lineToConstantHeading(new Vector2d(9,34))
+//                                .lineToConstantHeading(new Vector2d(16,34))
+//                                .turn(Math.toRadians(-90))
+//                                .lineToConstantHeading(new Vector2d(46,28))
+//                                .lineToConstantHeading(new Vector2d(46,58))
+//                                .lineToConstantHeading(new Vector2d(60,58))
+//                                .build()
+//                );
+//
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
@@ -71,7 +71,7 @@ public class MeepMeepIB {
                 // Add both of our declared bot entities
 //                .addEntity(myFirstBot)
                 .addEntity(mySecondBot)
-                .addEntity(myThirdBot)
+//                .addEntity(myThirdBot)
                 .start();
     }
 }
