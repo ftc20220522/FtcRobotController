@@ -1,11 +1,6 @@
 package Regionals;
 
 import static java.lang.Math.signum;
-import static java.lang.Math.toRadians;
-
-import android.app.Activity;
-import android.graphics.Color;
-import android.view.View;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -20,7 +15,6 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.SampleRevBlinkinLedDriver;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -28,7 +22,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import java.util.concurrent.TimeUnit;
 
 @TeleOp(group = "FINALCODE")
-public class FO_Blue_Sensors extends OpMode {
+public class FO_Red_Sensors extends OpMode {
 //    Center Odometery Wheel in Motor Port 0 (motor1 encoder)
 //    Right Odometery Wheel in Motor Port 1 (motor2 encoder)
 //    Left Odometery Wheel in Motor Port 2 (motor3 encoder)
@@ -150,7 +144,7 @@ public class FO_Blue_Sensors extends OpMode {
         drive = new SampleMecanumDrive(hardwareMap);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        startPose = new Pose2d(0, 0, Math.toRadians(90));
+        startPose = new Pose2d(0, 0, Math.toRadians(270));
         drive.setPoseEstimate(startPose);
 
         gamepadRateLimit = new Deadline(300, TimeUnit.MILLISECONDS);
@@ -379,8 +373,13 @@ public class FO_Blue_Sensors extends OpMode {
                     motorSlideLeft.setTargetPosition(55);
                     motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    motorSlideRight.setVelocity(2500);
-                    motorSlideLeft.setVelocity(2500);
+                    if (motorSlideRight.getCurrentPosition()>1200) {
+                        motorSlideRight.setVelocity(2500);
+                        motorSlideLeft.setVelocity(2500);
+                    } else {
+                        motorSlideRight.setVelocity(1000);
+                        motorSlideLeft.setVelocity(1000);
+                    }
                     position = 55;
                     prevposition = position;
                     liftTimer.reset();
