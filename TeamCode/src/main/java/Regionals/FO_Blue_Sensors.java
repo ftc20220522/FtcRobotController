@@ -259,6 +259,7 @@ public class FO_Blue_Sensors extends OpMode {
                         hState = HookState.In;
                     }
                     if (flapLightOn && hookLightOn && !toggle) {
+                        servoHOT.setPosition(0.67);
                         hookTimer.reset();
                         hState = HookState.In;
                     }
@@ -268,11 +269,6 @@ public class FO_Blue_Sensors extends OpMode {
                 if (hookTimer.milliseconds() > 300) {
                     if (gamepad2.right_bumper && armState == ArmState.Bottom) {
                         servoHOT.setPosition(0.54);
-                        if (toggle) {
-                            toggle = false;
-                        } else {
-                            toggle = true;
-                        }
                         hookTimer.reset();
                         hState = HookState.Out;
                     }
@@ -592,10 +588,12 @@ public class FO_Blue_Sensors extends OpMode {
         telemetry.addData("", "");
         telemetry.addData("FLAP DETECT?", flapLightOn);
         telemetry.addData("HOOK DETECT?", hookLightOn);
+        telemetry.addData("toggle?", toggle);
 
         telemetry.update();
 
         if (gamepad1.left_bumper) {
+            toggle = false;
             motorIntake.setPower(1);
             servoHOT.setPosition(0.54);
             hState = HookState.Out;
@@ -603,6 +601,9 @@ public class FO_Blue_Sensors extends OpMode {
             motorIntake.setPower(-1);
         } else {
             motorIntake.setPower(0);
+        }
+        if (gamepad2.right_bumper) {
+            toggle = true;
         }
     }
     protected void gamepadIntake()
