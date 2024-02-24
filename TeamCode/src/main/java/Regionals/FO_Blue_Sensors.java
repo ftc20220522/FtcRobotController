@@ -62,7 +62,7 @@ public class FO_Blue_Sensors extends OpMode {
     int position = 60;
     int prevposition = 0;
     boolean a = false;
-    boolean pull = false;
+    boolean toggle = false;
     boolean intrun = false;
     int speed = 4000;
     long start;
@@ -253,8 +253,12 @@ public class FO_Blue_Sensors extends OpMode {
         switch (hState) {
             case Out:
                 if (hookTimer.milliseconds() > 300) {
-                    if (gamepad2.right_bumper && armState == ArmState.Bottom || flapLightOn && hookLightOn) {
+                    if (gamepad2.right_bumper && armState == ArmState.Bottom) {
                         servoHOT.setPosition(0.67);
+                        hookTimer.reset();
+                        hState = HookState.In;
+                    }
+                    if (flapLightOn && hookLightOn && !toggle) {
                         hookTimer.reset();
                         hState = HookState.In;
                     }
@@ -264,6 +268,11 @@ public class FO_Blue_Sensors extends OpMode {
                 if (hookTimer.milliseconds() > 300) {
                     if (gamepad2.right_bumper && armState == ArmState.Bottom) {
                         servoHOT.setPosition(0.54);
+                        if (toggle) {
+                            toggle = false;
+                        } else {
+                            toggle = true;
+                        }
                         hookTimer.reset();
                         hState = HookState.Out;
                     }
@@ -311,8 +320,8 @@ public class FO_Blue_Sensors extends OpMode {
                 break;
             case UpDown:
                 if (liftTimer.milliseconds() >= 700) {
-                    motorSlideRight.setTargetPosition(25);
-                    motorSlideLeft.setTargetPosition(25);
+                    motorSlideRight.setTargetPosition(700);
+                    motorSlideLeft.setTargetPosition(700);
                     motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     motorSlideRight.setVelocity(1500);

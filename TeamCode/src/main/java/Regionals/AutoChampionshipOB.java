@@ -1,15 +1,11 @@
 package Regionals;
 
-import android.app.Activity;
-import android.view.View;
-
 import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TranslationalVelocityConstraint;
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -32,8 +28,7 @@ import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 @Autonomous(name="AutoOutsideBlue")
-public class
-AutoRegionalsOB extends LinearOpMode {
+public class AutoChampionshipOB extends LinearOpMode {
     TrajectoryVelocityConstraint velConstraint = new MinVelocityConstraint(Arrays.asList(
             new TranslationalVelocityConstraint(25),
             new AngularVelocityConstraint(2)
@@ -96,8 +91,7 @@ AutoRegionalsOB extends LinearOpMode {
         Pose2d startPose = new Pose2d(-38, 61, Math.toRadians(90));
         drive.setPoseEstimate(startPose);
 
-        motorSlideLeft.setTargetPosition(0);
-        motorSlideRight.setTargetPosition(0);
+
         servoClamp.setPosition(0.6);
         servoTOT.setPosition(0.83);
         servoBOT.setPosition(0.69);
@@ -220,7 +214,7 @@ AutoRegionalsOB extends LinearOpMode {
                     servoHOT.setPosition(0.52);
                     distance = distanceIntake.getDistance(DistanceUnit.INCH);
                 })
-                .lineToConstantHeading(new Vector2d(-58.25+distance-1,7.5))
+                .lineToConstantHeading(new Vector2d(-58.25+distance-2,7.5))
                 .build();
         TrajectorySequence whiteR2 = drive.trajectorySequenceBuilder(whiteR.end())
                 .lineToConstantHeading(new Vector2d(-58.25+distance+8,7.5))
@@ -239,14 +233,14 @@ AutoRegionalsOB extends LinearOpMode {
                 .build();
         //Board Pixel
         TrajectorySequence yellowR = drive.trajectorySequenceBuilder(backR.end())
-                .lineToConstantHeading(new Vector2d(50,31.25))
+                .lineToConstantHeading(new Vector2d(50,32.2))
                 .addDisplacementMarker(() -> {
                     distance = distanceOuttake.getDistance(DistanceUnit.INCH);
                 })
-                .lineToConstantHeading(new Vector2d(50+distance+3, 31.25))
+                .lineToConstantHeading(new Vector2d(50+distance+3, 32.2))
                 .build();
         TrajectorySequence endR = drive.trajectorySequenceBuilder((yellowR.end()))
-                .lineToConstantHeading(new Vector2d(45,31.25))
+                .lineToConstantHeading(new Vector2d(45,32.2))
                 .build();
 
 
@@ -298,7 +292,6 @@ AutoRegionalsOB extends LinearOpMode {
         if (location == 1) {
             //Purple Pixel
             drive.followTrajectorySequence(purpleL);
-            sleep(250);
             servoClamp.setPosition(0.1);
             sleep(250);
 
