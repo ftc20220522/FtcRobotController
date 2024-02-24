@@ -121,7 +121,7 @@ public class AutoChampionshipOB extends LinearOpMode {
                     servoHOT.setPosition(0.52);
                     distance = distanceIntake.getDistance(DistanceUnit.INCH);
                 })
-                .lineToConstantHeading(new Vector2d(-58.25+distance-2,7.5))
+                .lineToConstantHeading(new Vector2d(-58.25+distance-3,7.5))
                 .build();
         TrajectorySequence whiteL2 = drive.trajectorySequenceBuilder(whiteL.end())
                 .lineToConstantHeading(new Vector2d(-58.25+distance+8,7.5))
@@ -130,7 +130,7 @@ public class AutoChampionshipOB extends LinearOpMode {
                     motorIntake.setPower(1);
                 })
                 .setConstraints(velConstraint, accelConstraint)
-                .lineToConstantHeading(new Vector2d(-58.25+distance-0.5,7.5))
+                .lineToConstantHeading(new Vector2d(-58.25+distance-1,7.5))
                 .resetConstraints()
                 .waitSeconds(0.2)
                 .lineToConstantHeading(new Vector2d(-48, 7.5))
@@ -167,7 +167,7 @@ public class AutoChampionshipOB extends LinearOpMode {
                     servoHOT.setPosition(0.52);
                     distance = distanceIntake.getDistance(DistanceUnit.INCH);
                 })
-                .lineToConstantHeading(new Vector2d(-58.25+distance-2,7.5))
+                .lineToConstantHeading(new Vector2d(-58.25+distance-3,7.5))
                 .build();
         TrajectorySequence whiteM2 = drive.trajectorySequenceBuilder(whiteM.end())
                 .lineToConstantHeading(new Vector2d(-58.25+distance+8,7.5))
@@ -176,7 +176,7 @@ public class AutoChampionshipOB extends LinearOpMode {
                     motorIntake.setPower(1);
                 })
                 .setConstraints(velConstraint, accelConstraint)
-                .lineToConstantHeading(new Vector2d(-58.25+distance-0.5,7.5))
+                .lineToConstantHeading(new Vector2d(-58.25+distance-1,7.5))
                 .resetConstraints()
                 .waitSeconds(0.2)
                 .lineToConstantHeading(new Vector2d(-48, 7.5))
@@ -214,7 +214,7 @@ public class AutoChampionshipOB extends LinearOpMode {
                     servoHOT.setPosition(0.52);
                     distance = distanceIntake.getDistance(DistanceUnit.INCH);
                 })
-                .lineToConstantHeading(new Vector2d(-58.25+distance-2,7.5))
+                .lineToConstantHeading(new Vector2d(-58.25+distance-3,7.5))
                 .build();
         TrajectorySequence whiteR2 = drive.trajectorySequenceBuilder(whiteR.end())
                 .lineToConstantHeading(new Vector2d(-58.25+distance+8,7.5))
@@ -223,7 +223,7 @@ public class AutoChampionshipOB extends LinearOpMode {
                     motorIntake.setPower(1);
                 })
                 .setConstraints(velConstraint, accelConstraint)
-                .lineToConstantHeading(new Vector2d(-58.25+distance-0.5,7.5))
+                .lineToConstantHeading(new Vector2d(-58.25+distance-1,7.5))
                 .resetConstraints()
                 .waitSeconds(0.2)
                 .lineToConstantHeading(new Vector2d(-48, 7.5))
@@ -237,7 +237,7 @@ public class AutoChampionshipOB extends LinearOpMode {
                 .addDisplacementMarker(() -> {
                     distance = distanceOuttake.getDistance(DistanceUnit.INCH);
                 })
-                .lineToConstantHeading(new Vector2d(50+distance+3, 32.2))
+                .lineToConstantHeading(new Vector2d(50+distance+3.5, 32.2))
                 .build();
         TrajectorySequence endR = drive.trajectorySequenceBuilder((yellowR.end()))
                 .lineToConstantHeading(new Vector2d(45,32.2))
