@@ -6,12 +6,15 @@ import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -26,6 +29,7 @@ public class AutoChampionshipOB extends LinearOpMode {
     String mode = "TAG";
     String pos;
     int location = 0;
+    double distance;
     @Override
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
@@ -40,6 +44,12 @@ public class AutoChampionshipOB extends LinearOpMode {
         motorSlideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorSlideRight.setDirection(DcMotorSimple.Direction.REVERSE);
         DcMotor temp = hardwareMap.dcMotor.get("motor7");
+
+        DistanceSensor distanceOuttake = hardwareMap.get(DistanceSensor.class, "distanceOT");
+        DistanceSensor distanceIntake = hardwareMap.get(DistanceSensor.class, "distanceIT");
+
+        ColorSensor colorFlap = hardwareMap.get(ColorSensor.class, "colorFlap");
+        ColorSensor colorHook = hardwareMap.get(ColorSensor.class, "colorHook");
 
         Servo servoClamp = hardwareMap.servo.get("servo1"); //Purple Pixel Clamp
         Servo servoHOT = hardwareMap.servo.get("servo5"); //Hook ot
@@ -69,16 +79,18 @@ public class AutoChampionshipOB extends LinearOpMode {
                 .lineToConstantHeading(new Vector2d(-32,31))
                 .build();
         TrajectorySequence getToPosL = drive.trajectorySequenceBuilder(purpleL.end())
-                .lineToConstantHeading(new Vector2d(-35,31))
-                .lineToConstantHeading(new Vector2d(-44,10))
+                .lineToConstantHeading(new Vector2d(-38,31))
+                .lineToLinearHeading(new Pose2d(-44,10,0))
                 .build();
         TrajectorySequence toBoardL = drive.trajectorySequenceBuilder(getToPosL.end())
-                .turn(Math.toRadians(-90))
-                .lineToConstantHeading(new Vector2d(44,10))
+                .lineToConstantHeading(new Vector2d(38, 10))
                 .build();
         TrajectorySequence posL = drive.trajectorySequenceBuilder(toBoardL.end())
-                .lineToConstantHeading(new Vector2d(46,40))
-                .lineToConstantHeading(new Vector2d(55.5,40))
+                .lineToConstantHeading(new Vector2d(50,40))
+                .addDisplacementMarker(() -> {
+                    distance = distanceOuttake.getDistance(DistanceUnit.INCH);
+                })
+                .lineToConstantHeading(new Vector2d(50+distance+3, 40))
                 .build();
         TrajectorySequence endL = drive.trajectorySequenceBuilder(posL.end())
                 .lineToConstantHeading(new Vector2d(46,40))
@@ -91,16 +103,18 @@ public class AutoChampionshipOB extends LinearOpMode {
                 .lineToConstantHeading(new Vector2d(-41,24))
                 .build();
         TrajectorySequence getToPosM = drive.trajectorySequenceBuilder(purpleM.end())
-                .lineToConstantHeading(new Vector2d(-44,24))
-                .lineToConstantHeading(new Vector2d(-44,10))
+                .lineToConstantHeading(new Vector2d(-48,24))
+                .lineToLinearHeading(new Pose2d(-48,10,0))
                 .build();
         TrajectorySequence toBoardM = drive.trajectorySequenceBuilder(getToPosM.end())
-                .turn(Math.toRadians(-90))
-                .lineToConstantHeading(new Vector2d(44,10))
+                .lineToConstantHeading(new Vector2d(38, 10))
                 .build();
         TrajectorySequence posM = drive.trajectorySequenceBuilder(toBoardM.end())
-                .lineToConstantHeading(new Vector2d(46,33))
-                .lineToConstantHeading(new Vector2d(55.5,33))
+                .lineToConstantHeading(new Vector2d(50,33))
+                .addDisplacementMarker(() -> {
+                    distance = distanceOuttake.getDistance(DistanceUnit.INCH);
+                })
+                .lineToConstantHeading(new Vector2d(50+distance+3, 33))
                 .build();
         TrajectorySequence endM = drive.trajectorySequenceBuilder(posM.end())
                 .lineToConstantHeading(new Vector2d(46,33))
@@ -110,22 +124,22 @@ public class AutoChampionshipOB extends LinearOpMode {
 
         //Right Movement
         TrajectorySequence purpleR = drive.trajectorySequenceBuilder(startPose)
-                .lineToConstantHeading(new Vector2d(-47,27))
-                .lineToConstantHeading(new Vector2d(-56.75,31))
+                .lineToLinearHeading(new Pose2d(-46, 37, 0))
                 .build();
         TrajectorySequence getToPosR = drive.trajectorySequenceBuilder(purpleR.end())
-                .lineToConstantHeading(new Vector2d(-58.5,31))
-                .lineToConstantHeading(new Vector2d(-58.5,45))
-                .lineToConstantHeading(new Vector2d(-35,45))
-                .lineToConstantHeading(new Vector2d(-35,10))
+                .lineToConstantHeading(new Vector2d(-46,43))
+                .lineToConstantHeading(new Vector2d(-36,43))
+                .lineToConstantHeading(new Vector2d(-36,10))
                 .build();
         TrajectorySequence toBoardR = drive.trajectorySequenceBuilder(getToPosR.end())
-                .turn(Math.toRadians(-90))
-                .lineToConstantHeading(new Vector2d(44,10))
+                .lineToConstantHeading(new Vector2d(38, 10))
                 .build();
         TrajectorySequence posR = drive.trajectorySequenceBuilder(toBoardR.end())
-                .lineToConstantHeading(new Vector2d(46,28))
-                .lineToConstantHeading(new Vector2d(55.5,28))
+                .lineToConstantHeading(new Vector2d(50,28))
+                .addDisplacementMarker(() -> {
+                    distance = distanceOuttake.getDistance(DistanceUnit.INCH);
+                })
+                .lineToConstantHeading(new Vector2d(50+distance+3,28))
                 .build();
         TrajectorySequence endR = drive.trajectorySequenceBuilder(posR.end())
                 .lineToConstantHeading(new Vector2d(46,28))
@@ -212,7 +226,7 @@ public class AutoChampionshipOB extends LinearOpMode {
         if (location == 1) {
             drive.followTrajectorySequence(purpleL);
             servoClamp.setPosition(0.1);
-            sleep(300);
+            sleep(250);
             drive.followTrajectorySequence(getToPosL);
 
             //To Backboard
@@ -226,9 +240,9 @@ public class AutoChampionshipOB extends LinearOpMode {
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
             sleep(250);
-            servoTOT.setPosition(0.54);
-            servoBOT.setPosition(0.47);
-            sleep(1200);
+            servoTOT.setPosition(0.53);
+            servoBOT.setPosition(0.37);
+            sleep(700);
             motorSlideRight.setTargetPosition(0);
             motorSlideLeft.setTargetPosition(0);
             motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -239,9 +253,10 @@ public class AutoChampionshipOB extends LinearOpMode {
 
             //Position to Board
             drive.followTrajectorySequence(posL);
-            sleep(300);
-            servoFOT.setPosition(0.66);
-            sleep(200);
+            sleep(50);
+            servoFOT.setPosition(0.71);
+            servoHOT.setPosition(0.52);
+            sleep(50);
 
             //End
             drive.followTrajectorySequence(endL);
@@ -253,9 +268,8 @@ public class AutoChampionshipOB extends LinearOpMode {
             motorSlideLeft.setVelocity(1000);
             servoTOT.setPosition(0.83);
             servoBOT.setPosition(0.69);
-            servoFOT.setPosition(0.51);
-            servoHOT.setPosition(0.52);
-            sleep(2000);
+            servoFOT.setPosition(0.53);
+            sleep(1300);
             motorSlideRight.setTargetPosition(0);
             motorSlideLeft.setTargetPosition(0);
             motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -266,7 +280,7 @@ public class AutoChampionshipOB extends LinearOpMode {
         } else if (location == 2) {
             drive.followTrajectorySequence(purpleM);
             servoClamp.setPosition(0.1);
-            sleep(300);
+            sleep(250);
             drive.followTrajectorySequence(getToPosM);
 
             //To Backboard
@@ -280,9 +294,9 @@ public class AutoChampionshipOB extends LinearOpMode {
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
             sleep(250);
-            servoTOT.setPosition(0.54);
-            servoBOT.setPosition(0.47);
-            sleep(1200);
+            servoTOT.setPosition(0.53);
+            servoBOT.setPosition(0.37);
+            sleep(700);
             motorSlideRight.setTargetPosition(0);
             motorSlideLeft.setTargetPosition(0);
             motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -293,9 +307,10 @@ public class AutoChampionshipOB extends LinearOpMode {
 
             //Position to Board
             drive.followTrajectorySequence(posM);
-            sleep(300);
-            servoFOT.setPosition(0.66);
-            sleep(200);
+            sleep(50);
+            servoFOT.setPosition(0.71);
+            servoHOT.setPosition(0.52);
+            sleep(50);
 
             //End
             drive.followTrajectorySequence(endM);
@@ -307,9 +322,8 @@ public class AutoChampionshipOB extends LinearOpMode {
             motorSlideLeft.setVelocity(1000);
             servoTOT.setPosition(0.83);
             servoBOT.setPosition(0.69);
-            servoFOT.setPosition(0.51);
-            servoHOT.setPosition(0.52);
-            sleep(2000);
+            servoFOT.setPosition(0.53);
+            sleep(1300);
             motorSlideRight.setTargetPosition(0);
             motorSlideLeft.setTargetPosition(0);
             motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -320,7 +334,7 @@ public class AutoChampionshipOB extends LinearOpMode {
         } else if (location == 3) {
             drive.followTrajectorySequence(purpleR);
             servoClamp.setPosition(0.1);
-            sleep(300);
+            sleep(250);
             drive.followTrajectorySequence(getToPosR);
 
             //To Backboard
@@ -334,22 +348,23 @@ public class AutoChampionshipOB extends LinearOpMode {
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
             sleep(250);
-            servoTOT.setPosition(0.54);
-            servoBOT.setPosition(0.47);
-            sleep(1200);
+            servoTOT.setPosition(0.53);
+            servoBOT.setPosition(0.37);
+            sleep(700);
             motorSlideRight.setTargetPosition(0);
             motorSlideLeft.setTargetPosition(0);
             motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorSlideRight.setVelocity(1000);
             motorSlideLeft.setVelocity(1000);
-            sleep(1000);
+            sleep(5000);
 
             //Position to Board
             drive.followTrajectorySequence(posR);
-            sleep(300);
-            servoFOT.setPosition(0.66);
-            sleep(200);
+            sleep(50);
+            servoFOT.setPosition(0.71);
+            servoHOT.setPosition(0.52);
+            sleep(50);
 
             //End
             drive.followTrajectorySequence(endR);
@@ -361,9 +376,8 @@ public class AutoChampionshipOB extends LinearOpMode {
             motorSlideLeft.setVelocity(1000);
             servoTOT.setPosition(0.83);
             servoBOT.setPosition(0.69);
-            servoFOT.setPosition(0.51);
-            servoHOT.setPosition(0.52);
-            sleep(2000);
+            servoFOT.setPosition(0.53);
+            sleep(1300);
             motorSlideRight.setTargetPosition(0);
             motorSlideLeft.setTargetPosition(0);
             motorSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
