@@ -30,11 +30,11 @@ import java.util.concurrent.TimeUnit;
 public class AutoChampionshipIB extends LinearOpMode {
 
     TrajectoryVelocityConstraint velConstraint = new MinVelocityConstraint(Arrays.asList(
-            new TranslationalVelocityConstraint(15),
+            new TranslationalVelocityConstraint(5),
             new AngularVelocityConstraint(2)
     ));
 
-    TrajectoryAccelerationConstraint accelConstraint = new ProfileAccelerationConstraint(15);
+    TrajectoryAccelerationConstraint accelConstraint = new ProfileAccelerationConstraint(5);
 
     private final int READ_PERIOD = 1;
     int location = 0;
@@ -82,20 +82,20 @@ public class AutoChampionshipIB extends LinearOpMode {
                 .lineToLinearHeading(new Pose2d(24,35,0))
                 .build();
         TrajectorySequence getToPosL = drive.trajectorySequenceBuilder(purpleL.end())
-                .lineToConstantHeading(new Vector2d(22,42.8))
+                .lineToConstantHeading(new Vector2d(22,44.3))
                 .build();
         TrajectorySequence toBoardL = drive.trajectorySequenceBuilder(getToPosL.end())
                 .addDisplacementMarker(() -> {
                     distance = distanceOuttake.getDistance(DistanceUnit.INCH);
                 })
-                .lineToConstantHeading(new Vector2d(50+distance+3.3, 42.8))
+                .lineToConstantHeading(new Vector2d(50+distance+3.3, 44.3))
                 .build();
         TrajectorySequence posL = drive.trajectorySequenceBuilder(toBoardL.end())
                 .setConstraints(velConstraint, accelConstraint)
-                .lineToConstantHeading(new Vector2d(46,42.8))
+                .lineToConstantHeading(new Vector2d(46,44.3))
                 .resetConstraints()
                 .waitSeconds(0.2)
-                .lineToConstantHeading(new Vector2d(46,61))
+                .lineToConstantHeading(new Vector2d(46,11))
                 .build();
 
 
@@ -118,7 +118,7 @@ public class AutoChampionshipIB extends LinearOpMode {
                 .lineToConstantHeading(new Vector2d(46,37))
                 .resetConstraints()
                 .waitSeconds(0.25)
-                .lineToConstantHeading(new Vector2d(46,61))
+                .lineToConstantHeading(new Vector2d(46,11))
                 .build();
 
 
@@ -128,24 +128,24 @@ public class AutoChampionshipIB extends LinearOpMode {
         TrajectorySequence purpleR = drive.trajectorySequenceBuilder(startPose)
                 .lineToConstantHeading(new Vector2d(14,31))
                 .turn(Math.toRadians(180))
-                .lineToConstantHeading(new Vector2d(8,31))
+                .lineToConstantHeading(new Vector2d(7.5,31))
                 .build();
         TrajectorySequence getToPosR = drive.trajectorySequenceBuilder(purpleR.end())
                 .lineToConstantHeading(new Vector2d(14,31))
-                .lineToLinearHeading(new Pose2d(30,31,0))
+                .lineToLinearHeading(new Pose2d(30,29,0))
                 .build();
         TrajectorySequence toBoardR = drive.trajectorySequenceBuilder(getToPosR.end())
                 .addDisplacementMarker(() -> {
                     distance = distanceOuttake.getDistance(DistanceUnit.INCH);
                 })
-                .lineToConstantHeading(new Vector2d(50+distance+3, 31))
+                .lineToConstantHeading(new Vector2d(50+distance+3.3, 29))
                 .build();
         TrajectorySequence posR = drive.trajectorySequenceBuilder(toBoardR.end())
                 .setConstraints(velConstraint, accelConstraint)
-                .lineToConstantHeading(new Vector2d(46,31))
+                .lineToConstantHeading(new Vector2d(46,29))
                 .resetConstraints()
                 .waitSeconds(0.25)
-                .lineToConstantHeading(new Vector2d(46,61))
+                .lineToConstantHeading(new Vector2d(46,11))
                 .build();
 
 

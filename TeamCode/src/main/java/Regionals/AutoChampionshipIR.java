@@ -9,6 +9,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAcceleration
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TranslationalVelocityConstraint;
 import com.qualcomm.hardware.dfrobot.HuskyLens;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -31,11 +32,11 @@ import java.util.concurrent.TimeUnit;
 public class AutoChampionshipIR extends LinearOpMode {
 
     TrajectoryVelocityConstraint velConstraint = new MinVelocityConstraint(Arrays.asList(
-            new TranslationalVelocityConstraint(15),
+            new TranslationalVelocityConstraint(5),
             new AngularVelocityConstraint(2)
     ));
 
-    TrajectoryAccelerationConstraint accelConstraint = new ProfileAccelerationConstraint(15);
+    TrajectoryAccelerationConstraint accelConstraint = new ProfileAccelerationConstraint(5);
 
     private final int READ_PERIOD = 1;
     int location = 0;
@@ -69,6 +70,9 @@ public class AutoChampionshipIR extends LinearOpMode {
 
         DistanceSensor distanceOuttake = hardwareMap.get(DistanceSensor.class, "distanceOT");
 
+        RevBlinkinLedDriver lights = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
+
+
 
         servoClamp.setPosition(0.6);
         servoTOT.setPosition(0.83);
@@ -85,17 +89,17 @@ public class AutoChampionshipIR extends LinearOpMode {
                 .build();
         TrajectorySequence getToPosL = drive.trajectorySequenceBuilder(purpleL.end())
                 .lineToConstantHeading(new Vector2d(16,-34))
-                .lineToLinearHeading(new Pose2d(40, -26, 0))
+                .lineToLinearHeading(new Pose2d(40, -26.5, 0))
                 .build();
         TrajectorySequence toBoardL = drive.trajectorySequenceBuilder(getToPosL.end())
                 .addDisplacementMarker(() -> {
                     distance = distanceOuttake.getDistance(DistanceUnit.INCH);
                 })
-                .lineToConstantHeading(new Vector2d(50+distance+3, -26))
+                .lineToConstantHeading(new Vector2d(50+distance+3, -26.5))
                 .build();
         TrajectorySequence posL = drive.trajectorySequenceBuilder(toBoardL.end())
                 .setConstraints(velConstraint, accelConstraint)
-                .lineToConstantHeading(new Vector2d(46,-26))
+                .lineToConstantHeading(new Vector2d(46,-26.5))
                 .resetConstraints()
                 .waitSeconds(0.2)
                 .lineToConstantHeading(new Vector2d(46,-61))
@@ -115,7 +119,7 @@ public class AutoChampionshipIR extends LinearOpMode {
                 .addDisplacementMarker(() -> {
                     distance = distanceOuttake.getDistance(DistanceUnit.INCH);
                 })
-                .lineToConstantHeading(new Vector2d(50+distance+3, -36))
+                .lineToConstantHeading(new Vector2d(50+distance+4.5, -36))
                 .build();
         TrajectorySequence posM = drive.trajectorySequenceBuilder(toBoardM.end())
                 .setConstraints(velConstraint, accelConstraint)
@@ -130,24 +134,24 @@ public class AutoChampionshipIR extends LinearOpMode {
 
         //Right Movement
         TrajectorySequence purpleR = drive.trajectorySequenceBuilder(startPose)
-                .lineToConstantHeading(new Vector2d(32,-31))
+                .lineToConstantHeading(new Vector2d(33,-29))
                 .build();
         TrajectorySequence getToPosR = drive.trajectorySequenceBuilder(purpleR.end())
-                .lineToConstantHeading(new Vector2d(40,-31))
-                .lineToLinearHeading(new Pose2d(40,-40,0))
+                .lineToConstantHeading(new Vector2d(40,-29))
+                .lineToLinearHeading(new Pose2d(40,-43,0))
                 .build();
         TrajectorySequence toBoardR = drive.trajectorySequenceBuilder(getToPosR.end())
                 .addDisplacementMarker(() -> {
                     distance = distanceOuttake.getDistance(DistanceUnit.INCH);
                 })
-                .lineToConstantHeading(new Vector2d(50+distance+3, -40))
+                .lineToConstantHeading(new Vector2d(50+distance+4, -43))
                 .build();
         TrajectorySequence posR = drive.trajectorySequenceBuilder(toBoardR.end())
                 .setConstraints(velConstraint, accelConstraint)
-                .lineToConstantHeading(new Vector2d(46,-40))
+                .lineToConstantHeading(new Vector2d(48,-43))
                 .resetConstraints()
                 .waitSeconds(0.25)
-                .lineToConstantHeading(new Vector2d(46,-61))
+                .lineToConstantHeading(new Vector2d(48,-61))
                 .build();
 
 
